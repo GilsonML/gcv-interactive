@@ -40,6 +40,17 @@
                top: 0; 
                width: 100%;
                padding: 15mm;
+               background: white;
+               color: black;
+           }
+           .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900 {
+               color: black !important;
+           }
+           .bg-gray-100, .bg-gray-50 {
+               background: transparent !important;
+           }
+           .border, .border-r, .border-b, .border-gray-200 {
+               border-color: #cccccc !important;
            }
        }
 
@@ -161,11 +172,10 @@
        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
        
-       /* ===== MODO DESENVOLVEDOR (INVISÍVEL PARA USUÁRIOS NORMAIS) ===== */
+       /* ===== MODO DESENVOLVEDOR ===== */
        .dev-only { display: none; }
        .dev-mode .dev-only { display: block; }
        
-       /* Badge de contador - invisível por padrão */
        .download-counter-badge {
            position: fixed;
            bottom: 20px;
@@ -183,15 +193,12 @@
            display: none;
            align-items: center;
            gap: 12px;
-           letter-spacing: 0.5px;
        }
        
-       /* Só aparece em modo desenvolvedor */
        .dev-mode .download-counter-badge {
            display: flex !important;
        }
        
-       /* Painel de estatísticas completo */
        .dev-stats-panel {
            position: fixed;
            top: 80px;
@@ -207,7 +214,6 @@
            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
            border-left: 4px solid #10b981;
            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-           backdrop-filter: blur(10px);
        }
        
        .dev-mode .dev-stats-panel { 
@@ -228,7 +234,6 @@
            font-weight: 700;
            color: #10b981;
            text-transform: uppercase;
-           letter-spacing: 1px;
        }
        
        .dev-stats-header span {
@@ -313,15 +318,12 @@
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
 
-   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR ===== -->
-   
-   <!-- Indicador de Modo Dev (topo) -->
+   <!-- Elementos do Modo Desenvolvedor -->
    <div class="dev-indicator no-print">
        <i class="fas fa-code"></i> MODO DESENVOLVEDOR ATIVO
        <span class="bg-black text-white px-2 py-0.5 rounded text-xs">Ctrl+Shift+D</span>
    </div>
    
-   <!-- Badge de contador de downloads (só visível em modo dev) -->
    <div class="download-counter-badge no-print" id="downloadCounterBadge">
        <i class="fas fa-download text-xl"></i>
        <div class="flex flex-col">
@@ -335,7 +337,6 @@
        </div>
    </div>
    
-   <!-- Painel completo de estatísticas (só visível em modo dev) -->
    <div class="dev-stats-panel no-print" id="devStatsPanel">
        <div class="dev-stats-header">
            <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
@@ -439,12 +440,12 @@
                        <header class="flex gap-6 mb-6 border-b-2 pb-6 items-start" style="border-color: #1e293b;">
                            <div id="preview-photo" class="w-24 h-24 rounded-lg bg-gray-200 bg-cover bg-center flex-shrink-0 hidden"></div>
                            <div class="flex-1">
-                               <h1 class="text-3xl font-bold text-gray-900 mb-1" id="preview-name">Ana Silva</h1>
+                               <h1 class="text-3xl font-bold text-gray-900 mb-1" id="preview-name">Layonel Silva</h1>
                                <p class="text-lg mb-3" style="color: #1e293b;" id="preview-title">Designer de Produto Sênior</p>
                                <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
-                                   <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">ana@email.com</span></span>
-                                   <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">(11) 98765-4321</span></span>
-                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">São Paulo</span></span>
+                                   <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">layor.silva@exemplo.com</span></span>
+                                   <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 933333333</span></span>
+                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Luanda, Angola</span></span>
                                </div>
                            </div>
                        </header>
@@ -489,33 +490,34 @@
 
    <!-- Footer -->
    <footer class="bg-white border-t border-gray-200 py-3 px-6 text-center text-sm text-gray-600 no-print">
-       © 2026 GCV-INTERACTIVE - Gilson Fernandes. Todos os direitos reservados.
+       © 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana
    </footer>
 
    <script>
        (function() {
-           // Dados padrão
+           // Dados padrão adaptados para Angola
            const defaultData = {
                name: "Layonel Silva",
                title: "Designer de Produto Sênior",
                email: "layor.silva@exemplo.com",
                phone: "+244 933333333",
-               location: "Luanda, LDA",
-               summary: "Designer de Produto criativo e detalhista com mais de 6 anos de experiência na construção de produtos digitais para fintechs e healthtechs. Especialista em design systems e experiência do usuário.",
+               location: "Luanda, Angola",
+               summary: "Designer de Produto criativo e detalhista com mais de 6 anos de experiência na construção de produtos digitais. Especialista em design systems e experiência do usuário.",
                skills: ["Figma", "UI/UX", "React", "Tailwind", "Prototipagem", "Design Systems"],
                experience: [
                    { role: "Designer Sênior", company: "TechFlow", date: "2021-Presente", description: "Liderando sistema de design que atende 5 produtos digitais." },
-                   { role: "Designer UI/UX", company: "GCV", date: "2018-2021", description: "Design de apps para fintech e saúde com mais de 1M de usuários." }
+                   { role: "Designer UI/UX", company: "GCV", date: "2018-2021", description: "Design de apps com mais de 1M de usuários." }
                ],
                education: [
-                   { degree: "Bacharel em Design", school: "UAN", date: "2014-2018" }
+                   { degree: "Bacharel em Design", school: "Universidade Agostinho Neto", date: "2014-2018" }
                ],
                awards: [
-                   { title: "Melhor App Design", organization: "Premios", year: "2023" }
+                   { title: "Melhor App Design", organization: "Prêmios Angola", year: "2023" }
                ],
                languages: [
                    { name: "Português", level: "Nativo" },
-                   { name: "Inglês", level: "Fluente" }
+                   { name: "Inglês", level: "Fluente" },
+                   { name: "Umbundo", level: "Intermediário" }
                ],
                theme: "modern",
                photo: null
@@ -524,7 +526,7 @@
            let cvData = JSON.parse(JSON.stringify(defaultData));
            let currentZoom = 0.9;
            
-           // ===== SISTEMA DE CONTADOR DE DOWNLOADS (INVISÍVEL PARA USUÁRIOS) =====
+           // Sistema de contador de downloads
            let downloadStats = {
                total: 0,
                today: 0,
@@ -533,7 +535,7 @@
                history: []
            };
            
-           // Modo desenvolvedor (inicialmente desativado)
+           // Modo desenvolvedor
            let devMode = false;
            
            // Carregar estatísticas do localStorage
@@ -544,16 +546,13 @@
                        downloadStats = JSON.parse(saved);
                        const today = new Date().toDateString();
                        
-                       // Resetar contador diário se for um novo dia
                        if (downloadStats.lastReset !== today) {
                            downloadStats.today = 0;
                            downloadStats.lastReset = today;
                        }
                        
-                       // Garantir que session comece em 0
                        downloadStats.session = 0;
                    } else {
-                       // Inicializar com valores padrão
                        saveDownloadStats();
                    }
                } catch (e) {
@@ -570,19 +569,16 @@
                }
            }
            
-           // Incrementar contador (chamado a cada download)
            function incrementCounter() {
                downloadStats.total++;
                downloadStats.today++;
                downloadStats.session++;
                
-               // Adicionar ao histórico
                downloadStats.history.push({
                    timestamp: new Date().toISOString(),
                    name: cvData.name || 'Desconhecido'
                });
                
-               // Manter apenas os últimos 100 registros
                if (downloadStats.history.length > 100) {
                    downloadStats.history = downloadStats.history.slice(-100);
                }
@@ -592,7 +588,6 @@
                return downloadStats;
            }
            
-           // Atualizar todos os displays
            function updateDisplay() {
                document.getElementById('downloadCountDisplay').textContent = downloadStats.total;
                document.getElementById('todayCountDisplay').textContent = downloadStats.today;
@@ -601,13 +596,11 @@
                document.getElementById('statSessionDownloads').textContent = downloadStats.session;
                document.getElementById('statLastReset').textContent = downloadStats.lastReset;
                
-               // Calcular média
                const daysActive = Math.ceil((new Date() - new Date(downloadStats.lastReset)) / (1000 * 60 * 60 * 24)) || 1;
                const average = Math.round(downloadStats.total / daysActive);
                document.getElementById('statAverage').textContent = average;
            }
            
-           // Resetar contadores (apenas para desenvolvedor)
            window.resetDownloadCounter = function() {
                if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores de download!\n\nTem certeza?')) {
                    downloadStats = {
@@ -620,7 +613,6 @@
                    saveDownloadStats();
                    updateDisplay();
                    
-                   // Feedback visual
                    const btn = event?.target;
                    if (btn) {
                        const originalText = btn.innerHTML;
@@ -636,22 +628,12 @@
                }
            };
            
-           // ===== MODO DESENVOLVEDOR (Ctrl+Shift+D) =====
            function toggleDevMode() {
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
-               
-               // Feedback visual
-               if (devMode) {
-                   console.log('🔧 Modo Desenvolvedor ATIVADO - Contadores visíveis');
-               } else {
-                   console.log('🔧 Modo Desenvolvedor DESATIVADO');
-               }
            }
            
-           // Atalho de teclado para modo desenvolvedor
            document.addEventListener('keydown', (e) => {
-               // Ctrl+Shift+D (Windows/Linux) ou Cmd+Shift+D (Mac)
                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                    e.preventDefault();
                    toggleDevMode();
@@ -667,7 +649,6 @@
                        cvData.photo = e.target.result;
                        updatePhotoPreview();
                        
-                       // Salvar no localStorage para persistência
                        try {
                            localStorage.setItem('gcv_photo', cvData.photo);
                        } catch (e) {
@@ -679,7 +660,6 @@
                }
            };
 
-           // Função para remover foto
            window.removePhoto = function() {
                cvData.photo = null;
                updatePhotoPreview();
@@ -690,7 +670,6 @@
                }
            };
 
-           // Atualizar preview da foto
            function updatePhotoPreview() {
                const previewPhoto = document.getElementById('preview-photo');
                const photoContainer = document.getElementById('photo-container-preview');
@@ -732,37 +711,89 @@
                }
            }
 
-           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD (com contador) =====
+           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD MELHORADA =====
            window.downloadPDF = async function() {
                try {
-                   // Incrementar contador (apenas para estatísticas do dev)
+                   // Incrementar contador
                    incrementCounter();
                    
                    // Mostrar indicador de loading
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
                    if (btn) {
-                       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
+                       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando PDF...';
                        btn.disabled = true;
                    }
                    
                    // Nome do arquivo
                    const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
                    
-                   // Elemento a ser capturado
-                   const element = document.getElementById('cv-content');
-                   if (!element) throw new Error('Elemento do currículo não encontrado');
+                   // Elemento original
+                   const originalElement = document.getElementById('cv-content');
+                   if (!originalElement) throw new Error('Elemento do currículo não encontrado');
+                   
+                   // Clonar o elemento para não afetar a visualização
+                   const cloneElement = originalElement.cloneNode(true);
+                   
+                   // Configurar o clone para captura perfeita
+                   cloneElement.id = 'cv-content-clone';
+                   cloneElement.style.width = '210mm';
+                   cloneElement.style.minHeight = '297mm';
+                   cloneElement.style.padding = '15mm';
+                   cloneElement.style.margin = '0';
+                   cloneElement.style.position = 'absolute';
+                   cloneElement.style.left = '-9999px';
+                   cloneElement.style.top = '0';
+                   cloneElement.style.background = 'white';
+                   cloneElement.style.color = 'black';
+                   cloneElement.style.boxShadow = 'none';
+                   cloneElement.style.transform = 'none';
+                   cloneElement.style.overflow = 'visible';
+                   cloneElement.style.fontFamily = 'Inter, sans-serif';
+                   
+                   // Garantir que todas as cores fiquem visíveis no PDF
+                   const allTextElements = cloneElement.querySelectorAll('*');
+                   allTextElements.forEach(el => {
+                       if (el.style) {
+                           // Garantir contraste para impressão
+                           if (el.classList.contains('text-gray-600') || 
+                               el.classList.contains('text-gray-500') ||
+                               el.classList.contains('text-gray-400')) {
+                               el.style.color = '#333333';
+                           }
+                           if (el.classList.contains('bg-gray-100') || 
+                               el.classList.contains('bg-gray-50')) {
+                               el.style.background = 'transparent';
+                           }
+                       }
+                   });
+                   
+                   // Adicionar ao corpo temporariamente
+                   document.body.appendChild(cloneElement);
+                   
+                   // Aguardar um momento para o CSS ser aplicado
+                   await new Promise(resolve => setTimeout(resolve, 100));
                    
                    // Configurações para melhor qualidade
-                   const canvas = await html2canvas(element, {
-                       scale: 2,
+                   const canvas = await html2canvas(cloneElement, {
+                       scale: 3, // Alta qualidade
                        backgroundColor: '#ffffff',
                        logging: false,
                        allowTaint: false,
                        useCORS: true,
-                       windowWidth: element.scrollWidth,
-                       windowHeight: element.scrollHeight
+                       windowWidth: cloneElement.scrollWidth,
+                       windowHeight: cloneElement.scrollHeight,
+                       onclone: function(clonedDoc) {
+                           // Ajustes adicionais no clone
+                           const cloned = clonedDoc.getElementById('cv-content-clone');
+                           if (cloned) {
+                               cloned.style.overflow = 'visible';
+                           }
+                       }
                    });
+                   
+                   // Remover o clone
+                   document.body.removeChild(cloneElement);
                    
                    // Criar PDF
                    const { jsPDF } = window.jspdf;
@@ -774,15 +805,35 @@
                    
                    // Criar PDF no formato A4
                    const doc = new jsPDF({
-                       orientation: imgHeight > pageHeight ? 'portrait' : 'portrait',
+                       orientation: 'portrait',
                        unit: 'mm',
                        format: 'a4'
                    });
                    
-                   // Adicionar imagem
-                   const imgData = canvas.toDataURL('image/png');
+                   // Adicionar imagem com qualidade máxima
+                   const imgData = canvas.toDataURL('image/jpeg', 1.0);
                    
-                   doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+                   // Verificar se precisa de múltiplas páginas
+                   if (imgHeight <= pageHeight) {
+                       // Cabe em uma página
+                       doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+                   } else {
+                       // Dividir em múltiplas páginas
+                       let heightLeft = imgHeight;
+                       let position = 0;
+                       let page = 1;
+                       
+                       doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+                       heightLeft -= pageHeight;
+                       
+                       while (heightLeft > 0) {
+                           position = heightLeft - imgHeight;
+                           doc.addPage();
+                           doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+                           heightLeft -= pageHeight;
+                           page++;
+                       }
+                   }
                    
                    // Salvar PDF
                    doc.save(nomeArquivo);
@@ -795,7 +846,7 @@
                    
                } catch (error) {
                    console.error('Erro detalhado:', error);
-                   alert('Erro ao gerar PDF. Por favor, tente novamente.');
+                   alert('Erro ao gerar PDF. Por favor, tente novamente.\n\nDetalhes: ' + error.message);
                    
                    // Restaurar botão em caso de erro
                    const btn = event?.target?.closest('button');
@@ -803,16 +854,73 @@
                        btn.innerHTML = '<i class="fas fa-download"></i> Baixar PDF';
                        btn.disabled = false;
                    }
+                   
+                   // Tentar fallback
+                   downloadPDFFallback();
                }
            };
 
-           // Funções auxiliares (mantidas do código anterior)
+           // ===== FUNÇÃO DE FALLBACK =====
+           function downloadPDFFallback() {
+               try {
+                   const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
+                   const { jsPDF } = window.jspdf;
+                   const doc = new jsPDF();
+                   
+                   // Configurar fontes
+                   doc.setFont('helvetica', 'normal');
+                   
+                   // Título
+                   doc.setFontSize(22);
+                   doc.setFont('helvetica', 'bold');
+                   doc.text(cvData.name || 'Nome Completo', 20, 20);
+                   
+                   // Cargo
+                   doc.setFontSize(14);
+                   doc.setFont('helvetica', 'normal');
+                   doc.setTextColor(0, 102, 204);
+                   doc.text(cvData.title || 'Cargo', 20, 30);
+                   
+                   // Linha separadora
+                   doc.setDrawColor(200, 200, 200);
+                   doc.line(20, 35, 190, 35);
+                   
+                   // Contato
+                   doc.setFontSize(10);
+                   doc.setTextColor(80, 80, 80);
+                   doc.text('Email: ' + (cvData.email || ''), 20, 45);
+                   doc.text('Telefone: ' + (cvData.phone || ''), 20, 52);
+                   doc.text('Local: ' + (cvData.location || ''), 20, 59);
+                   
+                   // Perfil
+                   doc.setFontSize(14);
+                   doc.setTextColor(0, 0, 0);
+                   doc.setFont('helvetica', 'bold');
+                   doc.text('PERFIL', 20, 75);
+                   
+                   doc.setFontSize(10);
+                   doc.setFont('helvetica', 'normal');
+                   doc.setTextColor(80, 80, 80);
+                   
+                   const linhasResumo = doc.splitTextToSize(cvData.summary || '', 170);
+                   doc.text(linhasResumo, 20, 85);
+                   
+                   // Salvar PDF
+                   doc.save(nomeArquivo);
+                   
+               } catch (error) {
+                   console.error('Erro no fallback:', error);
+                   alert('Não foi possível gerar o PDF. Tente novamente mais tarde.');
+               }
+           }
+
+           // Funções auxiliares do editor
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
                        cvData[e.target.dataset.field] = e.target.value;
                        updatePreviewField(e.target.dataset.field, e.target.value);
-                       updatePhotoPreview(); // Atualizar inicial da foto se necessário
+                       updatePhotoPreview();
                    });
                });
            }
@@ -1088,7 +1196,6 @@
                const cv = document.getElementById('cv-content');
                cv.className = cv.className.replace(/theme-\w+/, `theme-${theme}`);
                
-               // Atualizar cores baseadas no tema
                const accentColor = theme === 'modern' ? '#1e293b' : 
                                   theme === 'classic' ? '#8b5a2b' :
                                   theme === 'vibrant' ? '#7c3aed' : '#374151';
@@ -1172,7 +1279,7 @@
                            <div id="photo-container-preview" class="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
                                ${cvData.photo ? 
                                    `<img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded-lg">
                                         <label class="cursor-pointer text-white hover:text-blue-300">
                                             <i class="fas fa-camera"></i>
                                             <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
