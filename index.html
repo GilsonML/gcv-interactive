@@ -22,13 +22,14 @@
        .a4-paper { 
            width: 210mm; 
            min-height: 297mm; 
+           max-height: 297mm; /* Altura máxima fixa para evitar páginas extras */
            background: white; 
            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
            margin: 0 auto; 
            position: relative; 
-           overflow: visible;
+           overflow: hidden; /* Esconde conteúdo que ultrapassar */
            box-sizing: border-box; 
-           padding: 15mm !important;
+           padding: 12mm !important; /* Reduzi o padding para caber mais conteúdo */
        }
 
        @media print {
@@ -39,9 +40,10 @@
                left: 0; 
                top: 0; 
                width: 100%;
-               padding: 15mm;
+               padding: 12mm;
                background: white;
                color: black;
+               overflow: hidden;
            }
            .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900 {
                color: black !important;
@@ -52,6 +54,42 @@
            .border, .border-r, .border-b, .border-gray-200 {
                border-color: #cccccc !important;
            }
+       }
+
+       /* Ajustes de espaçamento para caber em uma página */
+       .cv-content-compact p, 
+       .cv-content-compact section,
+       .cv-content-compact .mb-6,
+       .cv-content-compact .mb-4,
+       .cv-content-compact .mb-3,
+       .cv-content-compact .space-y-6 > *,
+       .cv-content-compact .space-y-5 > *,
+       .cv-content-compact .space-y-3 > * {
+           margin-bottom: 0.4rem !important;
+       }
+       
+       .cv-content-compact .text-lg {
+           font-size: 1rem !important;
+       }
+       
+       .cv-content-compact .text-3xl {
+           font-size: 1.8rem !important;
+       }
+       
+       .cv-content-compact .text-sm {
+           font-size: 0.75rem !important;
+       }
+       
+       .cv-content-compact .text-xs {
+           font-size: 0.65rem !important;
+       }
+       
+       .cv-content-compact .gap-6 {
+           gap: 0.8rem !important;
+       }
+       
+       .cv-content-compact .p-8 {
+           padding: 0.8rem !important;
        }
 
        /* Modo de Simulação PDF */
@@ -105,8 +143,8 @@
        /* Estilos de Foto */
        .photo-container {
            position: relative;
-           width: 120px;
-           height: 120px;
+           width: 100px; /* Reduzi tamanho */
+           height: 100px;
            border-radius: 50%;
            overflow: hidden;
            border: 3px solid #e5e7eb;
@@ -133,7 +171,7 @@
            align-items: center;
            justify-content: center;
            color: white;
-           font-size: 48px;
+           font-size: 40px;
            font-weight: bold;
        }
 
@@ -143,8 +181,8 @@
            right: 0;
            background: #3b82f6;
            color: white;
-           width: 32px;
-           height: 32px;
+           width: 28px;
+           height: 28px;
            border-radius: 50%;
            display: flex;
            align-items: center;
@@ -172,48 +210,53 @@
        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
        
-       /* ===== MODO DESENVOLVEDOR ===== */
+       /* ===== MODO DESENVOLVEDOR (VISÍVEL APENAS PARA VOCÊ) ===== */
        .dev-only { display: none; }
        .dev-mode .dev-only { display: block; }
        
+       /* Badge de contador - aparece apenas com Ctrl+Shift+D */
        .download-counter-badge {
            position: fixed;
            bottom: 20px;
            left: 20px;
-           background: rgba(0,0,0,0.9);
+           background: rgba(0,0,0,0.95);
            color: #10b981;
-           padding: 12px 20px;
-           border-radius: 40px;
-           font-size: 14px;
+           padding: 15px 25px;
+           border-radius: 50px;
+           font-size: 16px;
            font-weight: 600;
            z-index: 10001;
-           backdrop-filter: blur(8px);
-           border: 1px solid #10b981;
-           box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+           backdrop-filter: blur(10px);
+           border: 2px solid #10b981;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.7);
            display: none;
            align-items: center;
-           gap: 12px;
+           gap: 15px;
+           letter-spacing: 0.5px;
        }
        
+       /* Só aparece em modo desenvolvedor */
        .dev-mode .download-counter-badge {
            display: flex !important;
        }
        
+       /* Painel de estatísticas completo */
        .dev-stats-panel {
            position: fixed;
            top: 80px;
            left: 20px;
            background: rgba(17, 24, 39, 0.98);
            color: white;
-           padding: 20px;
-           border-radius: 16px;
-           border: 1px solid #10b981;
+           padding: 25px;
+           border-radius: 20px;
+           border: 2px solid #10b981;
            z-index: 10000;
-           width: 300px;
+           width: 320px;
            transform: translateX(-120%);
-           transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-           border-left: 4px solid #10b981;
-           box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+           transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+           border-left: 5px solid #10b981;
+           box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+           backdrop-filter: blur(15px);
        }
        
        .dev-mode .dev-stats-panel { 
@@ -224,68 +267,69 @@
            display: flex;
            justify-content: space-between;
            align-items: center;
-           margin-bottom: 16px;
-           padding-bottom: 12px;
-           border-bottom: 1px solid #374151;
+           margin-bottom: 20px;
+           padding-bottom: 15px;
+           border-bottom: 2px solid #374151;
        }
        
        .dev-stats-header h3 {
-           font-size: 16px;
+           font-size: 18px;
            font-weight: 700;
            color: #10b981;
            text-transform: uppercase;
+           letter-spacing: 1.5px;
        }
        
        .dev-stats-header span {
            background: #10b981;
            color: #111827;
-           padding: 4px 8px;
-           border-radius: 20px;
-           font-size: 11px;
+           padding: 5px 12px;
+           border-radius: 30px;
+           font-size: 12px;
            font-weight: 700;
        }
        
        .dev-stat-item {
            display: flex;
            justify-content: space-between;
-           margin-bottom: 12px;
-           font-size: 14px;
-           padding: 4px 0;
+           margin-bottom: 15px;
+           font-size: 15px;
+           padding: 5px 0;
        }
        
        .dev-stat-label { 
            color: #9ca3af;
            display: flex;
            align-items: center;
-           gap: 6px;
+           gap: 8px;
        }
        
        .dev-stat-value { 
            color: #10b981; 
            font-weight: 700;
-           font-size: 16px;
-           background: rgba(16, 185, 129, 0.1);
-           padding: 4px 12px;
-           border-radius: 20px;
-           border: 1px solid rgba(16, 185, 129, 0.3);
+           font-size: 18px;
+           background: rgba(16, 185, 129, 0.15);
+           padding: 5px 15px;
+           border-radius: 30px;
+           border: 1px solid rgba(16, 185, 129, 0.5);
        }
        
        .dev-reset-btn {
            width: 100%;
            background: #374151;
            color: #ef4444;
-           padding: 10px;
-           border-radius: 8px;
-           font-size: 13px;
-           margin-top: 16px;
+           padding: 12px;
+           border-radius: 12px;
+           font-size: 14px;
+           margin-top: 20px;
            cursor: pointer;
-           border: 1px solid #ef4444;
+           border: 2px solid #ef4444;
            font-weight: 600;
-           transition: all 0.2s;
+           transition: all 0.3s;
            display: flex;
            align-items: center;
            justify-content: center;
-           gap: 8px;
+           gap: 10px;
        }
        
        .dev-reset-btn:hover {
@@ -299,16 +343,16 @@
            right: 20px;
            background: #10b981;
            color: #111827;
-           padding: 8px 16px;
-           border-radius: 40px;
-           font-size: 13px;
+           padding: 12px 20px;
+           border-radius: 50px;
+           font-size: 14px;
            font-weight: 700;
            z-index: 10000;
            display: none;
            align-items: center;
-           gap: 8px;
-           box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-           border: 1px solid white;
+           gap: 10px;
+           box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
+           border: 2px solid white;
        }
        
        .dev-mode .dev-indicator {
@@ -318,25 +362,29 @@
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
 
-   <!-- Elementos do Modo Desenvolvedor -->
+   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR (Ctrl+Shift+D) ===== -->
+   
+   <!-- Indicador de Modo Dev (topo) -->
    <div class="dev-indicator no-print">
        <i class="fas fa-code"></i> MODO DESENVOLVEDOR ATIVO
-       <span class="bg-black text-white px-2 py-0.5 rounded text-xs">Ctrl+Shift+D</span>
+       <span class="bg-black text-white px-3 py-1 rounded text-xs">Ctrl+Shift+D</span>
    </div>
    
+   <!-- Badge de contador de downloads (só você vê) -->
    <div class="download-counter-badge no-print" id="downloadCounterBadge">
-       <i class="fas fa-download text-xl"></i>
+       <i class="fas fa-download text-2xl"></i>
        <div class="flex flex-col">
            <span class="text-xs text-gray-400">Total de Downloads</span>
-           <span class="text-2xl font-bold text-white" id="downloadCountDisplay">0</span>
+           <span class="text-3xl font-bold text-white" id="downloadCountDisplay">0</span>
        </div>
-       <div class="h-8 w-px bg-gray-600 mx-2"></div>
+       <div class="h-10 w-px bg-gray-600 mx-2"></div>
        <div class="flex flex-col">
            <span class="text-xs text-gray-400">Hoje</span>
-           <span class="text-lg font-bold text-white" id="todayCountDisplay">0</span>
+           <span class="text-2xl font-bold text-white" id="todayCountDisplay">0</span>
        </div>
    </div>
    
+   <!-- Painel completo de estatísticas (só você vê) -->
    <div class="dev-stats-panel no-print" id="devStatsPanel">
        <div class="dev-stats-header">
            <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
@@ -372,7 +420,7 @@
        </button>
        
        <p class="text-xs text-gray-600 text-center mt-3">
-           <i class="fas fa-eye-slash"></i> Invisível para usuários normais
+           <i class="fas fa-eye-slash"></i> Apenas você pode ver estas estatísticas
        </p>
    </div>
 
@@ -437,48 +485,48 @@
                <div id="cv-preview-container" class="transition-transform duration-200 origin-top" style="transform: scale(0.9);">
                    <div id="cv-content" class="a4-paper theme-modern text-gray-800">
                        <!-- Cabeçalho do CV com Foto -->
-                       <header class="flex gap-6 mb-6 border-b-2 pb-6 items-start" style="border-color: #1e293b;">
-                           <div id="preview-photo" class="w-24 h-24 rounded-lg bg-gray-200 bg-cover bg-center flex-shrink-0 hidden"></div>
+                       <header class="flex gap-4 mb-4 border-b-2 pb-3 items-start" style="border-color: #1e293b;">
+                           <div id="preview-photo" class="w-20 h-20 rounded-lg bg-gray-200 bg-cover bg-center flex-shrink-0 hidden"></div>
                            <div class="flex-1">
-                               <h1 class="text-3xl font-bold text-gray-900 mb-1" id="preview-name">Layonel Silva</h1>
-                               <p class="text-lg mb-3" style="color: #1e293b;" id="preview-title">Designer de Produto Sênior</p>
-                               <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
-                                   <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">layor.silva@exemplo.com</span></span>
-                                   <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 933333333</span></span>
-                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Luanda, Angola</span></span>
+                               <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
+                               <p class="text-base mb-2" style="color: #1e293b;" id="preview-title">Coordenador Geral do CNJ-AO</p>
+                               <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
+                                   <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
+                                   <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
+                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China</span></span>
                                </div>
                            </div>
                        </header>
 
-                       <div class="grid grid-cols-3 gap-6">
+                       <div class="grid grid-cols-3 gap-4">
                            <!-- Coluna Esquerda -->
-                           <div class="col-span-1 space-y-6 border-r border-gray-200 pr-6">
+                           <div class="col-span-1 space-y-4 border-r border-gray-200 pr-3">
                                <section>
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-3" style="color: #1e293b;">Habilidades</h2>
-                                   <div id="preview-skills" class="flex flex-wrap gap-2"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Habilidades</h2>
+                                   <div id="preview-skills" class="flex flex-wrap gap-1"></div>
                                </section>
                                <section>
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-3" style="color: #1e293b;">Idiomas</h2>
-                                   <div id="preview-languages" class="space-y-2"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Idiomas</h2>
+                                   <div id="preview-languages" class="space-y-1"></div>
                                </section>
                                <section>
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-3" style="color: #1e293b;">Educação</h2>
-                                   <div id="preview-education" class="space-y-3"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Educação</h2>
+                                   <div id="preview-education" class="space-y-2"></div>
                                </section>
                            </div>
                            <!-- Coluna Direita -->
                            <div class="col-span-2 pl-2">
-                               <section class="mb-6">
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-3" style="color: #1e293b;">Perfil</h2>
-                                   <p class="text-sm leading-relaxed text-gray-600" id="preview-summary"></p>
+                               <section class="mb-3">
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-1" style="color: #1e293b;">Perfil</h2>
+                                   <p class="text-xs leading-relaxed text-gray-600" id="preview-summary"></p>
                                </section>
-                               <section class="mb-6">
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: #1e293b;">Experiência</h2>
-                                   <div id="preview-experience" class="space-y-5"></div>
+                               <section class="mb-3">
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Experiência</h2>
+                                   <div id="preview-experience" class="space-y-3"></div>
                                </section>
                                <section>
-                                   <h2 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: #1e293b;">Prêmios</h2>
-                                   <div id="preview-awards" class="space-y-3"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Prêmios</h2>
+                                   <div id="preview-awards" class="space-y-2"></div>
                                </section>
                            </div>
                        </div>
@@ -489,34 +537,37 @@
    </div>
 
    <!-- Footer -->
-   <footer class="bg-white border-t border-gray-200 py-3 px-6 text-center text-sm text-gray-600 no-print">
+   <footer class="bg-white border-t border-gray-200 py-2 px-6 text-center text-xs text-gray-600 no-print">
        © 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana
    </footer>
 
    <script>
        (function() {
-           // Dados padrão adaptados para Angola
+           // Dados padrão adaptados para Angola - exemplo do Odair
            const defaultData = {
-               name: "Layonel Silva",
-               title: "Designer de Produto Sênior",
-               email: "layor.silva@exemplo.com",
-               phone: "+244 933333333",
-               location: "Luanda, Angola",
-               summary: "Designer de Produto criativo e detalhista com mais de 6 anos de experiência na construção de produtos digitais. Especialista em design systems e experiência do usuário.",
-               skills: ["Figma", "UI/UX", "React", "Tailwind", "Prototipagem", "Design Systems"],
+               name: "Odair Miguel Júlio",
+               title: "Coordenador Geral do CNJ-AO, CHINA",
+               email: "odair.julio@exemplo.com",
+               phone: "+244 923433343",
+               location: "Beijing, China, Rua N123",
+               summary: "Profissional com forte capacidade de liderança, articulação política e gestão de pessoas, dedicado a potencializar o protagonismo juvenil. Responsável por planejar, coordenar e monitorar as atividades da organização, garantindo que a missão institucional seja cumprida, os prazos respeitados e os jovens engajados de forma saudável e produtiva. Atua como facilitador e mentor, criando um ambiente seguro para o desenvolvimento de lideranças emergentes.",
+               skills: ["Prototipagem", "Design Systems", "Power BI", "Gestão de Liderança", "Visão de Longo Prazo", "Expressão e Comunicação", "CRM"],
                experience: [
-                   { role: "Designer Sênior", company: "TechFlow", date: "2021-Presente", description: "Liderando sistema de design que atende 5 produtos digitais." },
-                   { role: "Designer UI/UX", company: "GCV", date: "2018-2021", description: "Design de apps com mais de 1M de usuários." }
+                   { role: "Coordenador Geral", company: "Conselho Nacional da Juventude", date: "2023-Presente", description: "Liderando sistema de design que atende 5 produtos digitais." },
+                   { role: "Coordenador de Controlo e Imagem", company: "VITAL Lda", date: "2020-2023", description: "Design de apps com mais de 1M de usuários." }
                ],
                education: [
-                   { degree: "Bacharel em Design", school: "Universidade Agostinho Neto", date: "2014-2018" }
+                   { degree: "Licenciatura", school: "Beijing Normal University", date: "2014-2018" },
+                   { degree: "Mestrado", school: "Beijing University", date: "2018-2020" }
                ],
                awards: [
-                   { title: "Melhor App Design", organization: "Prêmios Angola", year: "2023" }
+                   { title: "Jovem de Excelência", organization: "CNJ-AO, CHINA", year: "2024" },
+                   { title: "Estudante de Mérito", organization: "Beijing University", year: "2023" }
                ],
                languages: [
                    { name: "Português", level: "Nativo" },
                    { name: "Inglês", level: "Fluente" },
+                   { name: "Mandarim", level: "Avançado" },
                    { name: "Umbundo", level: "Intermediário" }
                ],
                theme: "modern",
@@ -526,7 +577,7 @@
            let cvData = JSON.parse(JSON.stringify(defaultData));
            let currentZoom = 0.9;
            
-           // Sistema de contador de downloads
+           // Sistema de contador de downloads (APENAS PARA DESENVOLVEDOR)
            let downloadStats = {
                total: 0,
                today: 0,
@@ -535,7 +586,7 @@
                history: []
            };
            
-           // Modo desenvolvedor
+           // Modo desenvolvedor (inicialmente desativado - só você ativa)
            let devMode = false;
            
            // Carregar estatísticas do localStorage
@@ -631,8 +682,16 @@
            function toggleDevMode() {
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
+               
+               // Feedback visual no console
+               if (devMode) {
+                   console.log('🔧 Modo Desenvolvedor ATIVADO - Estatísticas visíveis');
+               } else {
+                   console.log('🔧 Modo Desenvolvedor DESATIVADO');
+               }
            }
            
+           // Atalho de teclado para modo desenvolvedor (Ctrl+Shift+D)
            document.addEventListener('keydown', (e) => {
                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                    e.preventDefault();
@@ -711,10 +770,10 @@
                }
            }
 
-           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD MELHORADA =====
+           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD (UMA ÚNICA PÁGINA) =====
            window.downloadPDF = async function() {
                try {
-                   // Incrementar contador
+                   // Incrementar contador (apenas você vê)
                    incrementCounter();
                    
                    // Mostrar indicador de loading
@@ -735,11 +794,12 @@
                    // Clonar o elemento para não afetar a visualização
                    const cloneElement = originalElement.cloneNode(true);
                    
-                   // Configurar o clone para captura perfeita
+                   // Configurar o clone para caber em UMA PÁGINA
                    cloneElement.id = 'cv-content-clone';
                    cloneElement.style.width = '210mm';
-                   cloneElement.style.minHeight = '297mm';
-                   cloneElement.style.padding = '15mm';
+                   cloneElement.style.minHeight = 'auto';
+                   cloneElement.style.maxHeight = '277mm'; // Altura reduzida para garantir que caiba
+                   cloneElement.style.padding = '10mm'; // Padding reduzido
                    cloneElement.style.margin = '0';
                    cloneElement.style.position = 'absolute';
                    cloneElement.style.left = '-9999px';
@@ -748,14 +808,30 @@
                    cloneElement.style.color = 'black';
                    cloneElement.style.boxShadow = 'none';
                    cloneElement.style.transform = 'none';
-                   cloneElement.style.overflow = 'visible';
+                   cloneElement.style.overflow = 'hidden';
                    cloneElement.style.fontFamily = 'Inter, sans-serif';
+                   
+                   // Aplicar classe compacta para reduzir espaçamentos
+                   cloneElement.classList.add('cv-content-compact');
+                   
+                   // Reduzir ainda mais os espaçamentos manualmente
+                   const sections = cloneElement.querySelectorAll('section');
+                   sections.forEach(section => {
+                       section.style.marginBottom = '0.3rem';
+                   });
+                   
+                   const headings = cloneElement.querySelectorAll('h1, h2, h3, p');
+                   headings.forEach(el => {
+                       if (el.tagName === 'H1') el.style.fontSize = '1.6rem';
+                       if (el.tagName === 'H2') el.style.fontSize = '0.8rem';
+                       if (el.tagName === 'P') el.style.fontSize = '0.7rem';
+                       el.style.marginBottom = '0.2rem';
+                   });
                    
                    // Garantir que todas as cores fiquem visíveis no PDF
                    const allTextElements = cloneElement.querySelectorAll('*');
                    allTextElements.forEach(el => {
                        if (el.style) {
-                           // Garantir contraste para impressão
                            if (el.classList.contains('text-gray-600') || 
                                el.classList.contains('text-gray-500') ||
                                el.classList.contains('text-gray-400')) {
@@ -774,22 +850,29 @@
                    // Aguardar um momento para o CSS ser aplicado
                    await new Promise(resolve => setTimeout(resolve, 100));
                    
-                   // Configurações para melhor qualidade
+                   // Calcular altura para garantir que cabe em uma página
+                   const elementHeight = cloneElement.scrollHeight;
+                   const maxHeight = 277; // mm em pixels aproximado
+                   
+                   console.log('Altura do elemento:', elementHeight, 'Limite:', maxHeight);
+                   
+                   // Se ainda estiver muito alto, aplicar mais reduções
+                   if (elementHeight > maxHeight) {
+                       const items = cloneElement.querySelectorAll('.mb-4, .mb-3, .mb-2, .space-y-3 > *, .space-y-4 > *');
+                       items.forEach(el => {
+                           el.style.marginBottom = '0.2rem';
+                       });
+                   }
+                   
+                   // Configurações para captura
                    const canvas = await html2canvas(cloneElement, {
-                       scale: 3, // Alta qualidade
+                       scale: 2.5, // Qualidade alta mas não exagerada
                        backgroundColor: '#ffffff',
                        logging: false,
                        allowTaint: false,
                        useCORS: true,
                        windowWidth: cloneElement.scrollWidth,
-                       windowHeight: cloneElement.scrollHeight,
-                       onclone: function(clonedDoc) {
-                           // Ajustes adicionais no clone
-                           const cloned = clonedDoc.getElementById('cv-content-clone');
-                           if (cloned) {
-                               cloned.style.overflow = 'visible';
-                           }
-                       }
+                       windowHeight: cloneElement.scrollHeight
                    });
                    
                    // Remover o clone
@@ -798,9 +881,9 @@
                    // Criar PDF
                    const { jsPDF } = window.jspdf;
                    
-                   // Calcular dimensões proporcionais
-                   const imgWidth = 210; // mm (A4 width)
-                   const pageHeight = 297; // mm (A4 height)
+                   // Calcular dimensões para caber em UMA página
+                   const imgWidth = 210; // mm
+                   const pageHeight = 297; // mm
                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
                    
                    // Criar PDF no formato A4
@@ -810,32 +893,22 @@
                        format: 'a4'
                    });
                    
-                   // Adicionar imagem com qualidade máxima
-                   const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                   // Redimensionar a imagem para caber na página se necessário
+                   let finalImgHeight = imgHeight;
+                   let finalY = 0;
                    
-                   // Verificar se precisa de múltiplas páginas
-                   if (imgHeight <= pageHeight) {
-                       // Cabe em uma página
-                       doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
-                   } else {
-                       // Dividir em múltiplas páginas
-                       let heightLeft = imgHeight;
-                       let position = 0;
-                       let page = 1;
-                       
-                       doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-                       heightLeft -= pageHeight;
-                       
-                       while (heightLeft > 0) {
-                           position = heightLeft - imgHeight;
-                           doc.addPage();
-                           doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-                           heightLeft -= pageHeight;
-                           page++;
-                       }
+                   if (imgHeight > pageHeight) {
+                       // Calcular fator de redução para caber
+                       const scaleFactor = pageHeight / imgHeight * 0.95; // 95% da página
+                       finalImgHeight = imgHeight * scaleFactor;
+                       console.log('Reduzindo imagem para caber:', finalImgHeight);
                    }
                    
-                   // Salvar PDF
+                   // Adicionar imagem centralizada
+                   const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                   doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalImgHeight, undefined, 'FAST');
+                   
+                   // Salvar PDF (uma única página)
                    doc.save(nomeArquivo);
                    
                    // Restaurar botão
@@ -848,73 +921,15 @@
                    console.error('Erro detalhado:', error);
                    alert('Erro ao gerar PDF. Por favor, tente novamente.\n\nDetalhes: ' + error.message);
                    
-                   // Restaurar botão em caso de erro
                    const btn = event?.target?.closest('button');
                    if (btn) {
                        btn.innerHTML = '<i class="fas fa-download"></i> Baixar PDF';
                        btn.disabled = false;
                    }
-                   
-                   // Tentar fallback
-                   downloadPDFFallback();
                }
            };
 
-           // ===== FUNÇÃO DE FALLBACK =====
-           function downloadPDFFallback() {
-               try {
-                   const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
-                   const { jsPDF } = window.jspdf;
-                   const doc = new jsPDF();
-                   
-                   // Configurar fontes
-                   doc.setFont('helvetica', 'normal');
-                   
-                   // Título
-                   doc.setFontSize(22);
-                   doc.setFont('helvetica', 'bold');
-                   doc.text(cvData.name || 'Nome Completo', 20, 20);
-                   
-                   // Cargo
-                   doc.setFontSize(14);
-                   doc.setFont('helvetica', 'normal');
-                   doc.setTextColor(0, 102, 204);
-                   doc.text(cvData.title || 'Cargo', 20, 30);
-                   
-                   // Linha separadora
-                   doc.setDrawColor(200, 200, 200);
-                   doc.line(20, 35, 190, 35);
-                   
-                   // Contato
-                   doc.setFontSize(10);
-                   doc.setTextColor(80, 80, 80);
-                   doc.text('Email: ' + (cvData.email || ''), 20, 45);
-                   doc.text('Telefone: ' + (cvData.phone || ''), 20, 52);
-                   doc.text('Local: ' + (cvData.location || ''), 20, 59);
-                   
-                   // Perfil
-                   doc.setFontSize(14);
-                   doc.setTextColor(0, 0, 0);
-                   doc.setFont('helvetica', 'bold');
-                   doc.text('PERFIL', 20, 75);
-                   
-                   doc.setFontSize(10);
-                   doc.setFont('helvetica', 'normal');
-                   doc.setTextColor(80, 80, 80);
-                   
-                   const linhasResumo = doc.splitTextToSize(cvData.summary || '', 170);
-                   doc.text(linhasResumo, 20, 85);
-                   
-                   // Salvar PDF
-                   doc.save(nomeArquivo);
-                   
-               } catch (error) {
-                   console.error('Erro no fallback:', error);
-                   alert('Não foi possível gerar o PDF. Tente novamente mais tarde.');
-               }
-           }
-
-           // Funções auxiliares do editor
+           // Funções auxiliares do editor (mantidas do código anterior)
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
@@ -1009,9 +1024,9 @@
                container.innerHTML = '';
                cvData.experience.forEach(job => {
                    container.innerHTML += `
-                       <div class="mb-4">
-                           <div class="flex justify-between items-baseline mb-1">
-                               <h3 class="font-bold text-gray-800 text-sm">${job.role || ''}</h3>
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
                                <span class="text-xs text-gray-500">${job.date || ''}</span>
                            </div>
                            <div class="text-xs font-semibold mb-1" style="color: #1e293b;">${job.company || ''}</div>
@@ -1046,8 +1061,8 @@
                container.innerHTML = '';
                cvData.education.forEach(edu => {
                    container.innerHTML += `
-                       <div class="mb-3">
-                           <h3 class="font-bold text-gray-800 text-sm">${edu.degree || ''}</h3>
+                       <div class="mb-2">
+                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
                            <div class="text-xs text-gray-600">${edu.school || ''}</div>
                            <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
                        </div>
@@ -1080,9 +1095,9 @@
                container.innerHTML = '';
                cvData.awards.forEach(award => {
                    container.innerHTML += `
-                       <div class="mb-3">
-                           <div class="flex justify-between items-baseline mb-1">
-                               <h3 class="font-bold text-gray-800 text-sm">${award.title || ''}</h3>
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
                                <span class="text-xs text-gray-500">${award.year || ''}</span>
                            </div>
                            <div class="text-xs font-semibold mb-1" style="color: #1e293b;">${award.organization || ''}</div>
@@ -1120,9 +1135,9 @@
                container.innerHTML = '';
                cvData.languages.forEach(lang => {
                    container.innerHTML += `
-                       <div class="flex justify-between items-center mb-2">
-                           <span class="text-sm text-gray-700">${lang.name || ''}</span>
-                           <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">${lang.level || ''}</span>
+                       <div class="flex justify-between items-center mb-1">
+                           <span class="text-xs text-gray-700">${lang.name || ''}</span>
+                           <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">${lang.level || ''}</span>
                        </div>
                    `;
                });
@@ -1145,7 +1160,7 @@
                if (!container) return;
                container.innerHTML = '';
                cvData.skills.forEach(skill => {
-                   container.innerHTML += `<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 border">${skill}</span>`;
+                   container.innerHTML += `<span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 border">${skill}</span>`;
                });
            }
 
@@ -1236,7 +1251,7 @@
                clone.style.transform = 'none';
                clone.style.margin = '0 auto';
                clone.style.width = '210mm';
-               clone.style.padding = '15mm';
+               clone.style.padding = '10mm';
                clone.classList.add('pdf-page');
                
                container.appendChild(clone);
@@ -1323,7 +1338,7 @@
                                <input type="text" data-field="title" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Cargo atual" value="${cvData.title.replace(/"/g, '&quot;')}">
                            </div>
                            <div class="col-span-2">
-                               <textarea data-field="summary" rows="3" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Resumo profissional">${cvData.summary.replace(/"/g, '&quot;')}</textarea>
+                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Resumo profissional">${cvData.summary.replace(/"/g, '&quot;')}</textarea>
                            </div>
                            <div>
                                <input type="email" data-field="email" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Email" value="${cvData.email.replace(/"/g, '&quot;')}">
