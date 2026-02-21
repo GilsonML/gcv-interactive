@@ -11,9 +11,6 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
    <!-- html2canvas -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-   <!-- Firebase SDK -->
-   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
    <style>
        /* Barra de Rolagem Personalizada */
        ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -25,14 +22,14 @@
        .a4-paper { 
            width: 210mm; 
            min-height: 297mm; 
-           max-height: 297mm;
+           max-height: 297mm; /* Altura máxima fixa para evitar páginas extras */
            background: white; 
            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
            margin: 0 auto; 
            position: relative; 
-           overflow: hidden;
+           overflow: hidden; /* Esconde conteúdo que ultrapassar */
            box-sizing: border-box; 
-           padding: 12mm !important;
+           padding: 12mm !important; /* Reduzi o padding para caber mais conteúdo */
        }
 
        @media print {
@@ -146,7 +143,7 @@
        /* Estilos de Foto */
        .photo-container {
            position: relative;
-           width: 100px;
+           width: 100px; /* Reduzi tamanho */
            height: 100px;
            border-radius: 50%;
            overflow: hidden;
@@ -213,10 +210,11 @@
        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
        
-       /* ===== MODO DESENVOLVEDOR ===== */
+       /* ===== MODO DESENVOLVEDOR (VISÍVEL APENAS PARA VOCÊ) ===== */
        .dev-only { display: none; }
        .dev-mode .dev-only { display: block; }
        
+       /* Badge de contador - aparece apenas com Ctrl+Shift+D */
        .download-counter-badge {
            position: fixed;
            bottom: 20px;
@@ -237,10 +235,12 @@
            letter-spacing: 0.5px;
        }
        
+       /* Só aparece em modo desenvolvedor */
        .dev-mode .download-counter-badge {
            display: flex !important;
        }
        
+       /* Painel de estatísticas completo */
        .dev-stats-panel {
            position: fixed;
            top: 80px;
@@ -362,12 +362,15 @@
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
 
-   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR ===== -->
+   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR (Ctrl+Shift+D) ===== -->
+   
+   <!-- Indicador de Modo Dev (topo) -->
    <div class="dev-indicator no-print">
        <i class="fas fa-code"></i> MODO DESENVOLVEDOR ATIVO
        <span class="bg-black text-white px-3 py-1 rounded text-xs">Ctrl+Shift+D</span>
    </div>
    
+   <!-- Badge de contador de downloads (só você vê) -->
    <div class="download-counter-badge no-print" id="downloadCounterBadge">
        <i class="fas fa-download text-2xl"></i>
        <div class="flex flex-col">
@@ -381,10 +384,11 @@
        </div>
    </div>
    
+   <!-- Painel completo de estatísticas (só você vê) -->
    <div class="dev-stats-panel no-print" id="devStatsPanel">
        <div class="dev-stats-header">
            <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
-           <span>v3.0 - Firebase</span>
+           <span>v2.0</span>
        </div>
        
        <div class="dev-stat-item">
@@ -485,11 +489,11 @@
                            <div id="preview-photo" class="w-20 h-20 rounded-lg bg-gray-200 bg-cover bg-center flex-shrink-0 hidden"></div>
                            <div class="flex-1">
                                <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
-                               <p class="text-base mb-2" style="color: #1e293b;" id="preview-title">Coordenador Geral do CNJ-AO, CHINA</p>
+                               <p class="text-base mb-2" style="color: #1e293b;" id="preview-title">Coordenador Geral do CNJ-AO</p>
                                <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
                                    <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
                                    <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
-                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China, Rua N123</span></span>
+                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China</span></span>
                                </div>
                            </div>
                        </header>
@@ -539,7 +543,7 @@
 
    <script>
        (function() {
-           // Dados padrão
+           // Dados padrão adaptados para Angola - exemplo do Odair
            const defaultData = {
                name: "Odair Miguel Júlio",
                title: "Coordenador Geral do CNJ-AO, CHINA",
@@ -573,174 +577,68 @@
            let cvData = JSON.parse(JSON.stringify(defaultData));
            let currentZoom = 0.9;
            
-           // ===== SISTEMA DE CONTADOR GLOBAL COM FIREBASE =====
+           // Sistema de contador de downloads (APENAS PARA DESENVOLVEDOR)
            let downloadStats = {
                total: 0,
                today: 0,
                session: 0,
-               lastReset: new Date().toDateString()
+               lastReset: new Date().toDateString(),
+               history: []
            };
-
-           // Configuração do Firebase (substitua com seus dados)
-           const firebaseConfig = {
-               apiKey: "AIzaSyBk1FkHZWqFrXGKzTQvLqOzqLqOzqLqOzqL",
-               authDomain: "gcv-interactive.firebaseapp.com",
-               databaseURL: "https://gcv-interactive-default-rtdb.firebaseio.com",
-               projectId: "gcv-interactive",
-               storageBucket: "gcv-interactive.appspot.com",
-               messagingSenderId: "123456789012",
-               appId: "1:123456789012:web:abc123def456ghi789"
-           };
-
-           // Inicializar Firebase
-           let database = null;
-           try {
-               firebase.initializeApp(firebaseConfig);
-               database = firebase.database();
-               console.log('🔥 Firebase conectado com sucesso!');
-           } catch (e) {
-               console.warn('Erro ao inicializar Firebase:', e);
-           }
-
-           // Modo desenvolvedor
+           
+           // Modo desenvolvedor (inicialmente desativado - só você ativa)
            let devMode = false;
-
-           // Carregar estatísticas do Firebase
-           async function loadDownloadStats() {
-               if (!database) {
-                   loadLocalStats();
-                   return;
-               }
-               
+           
+           // Carregar estatísticas do localStorage
+           function loadDownloadStats() {
                try {
-                   const totalRef = database.ref('downloads/total');
-                   const todayRef = database.ref('downloads/today');
-                   const dateRef = database.ref('downloads/date');
-                   
-                   // Buscar total
-                   totalRef.once('value', (snapshot) => {
-                       downloadStats.total = snapshot.val() || 0;
-                   });
-                   
-                   // Verificar data para contador de hoje
-                   const today = new Date().toDateString();
-                   dateRef.once('value', (snapshot) => {
-                       const savedDate = snapshot.val();
-                       if (savedDate === today) {
-                           todayRef.once('value', (s) => {
-                               downloadStats.today = s.val() || 0;
-                           });
-                       } else {
+                   const saved = localStorage.getItem('gcv_dev_stats');
+                   if (saved) {
+                       downloadStats = JSON.parse(saved);
+                       const today = new Date().toDateString();
+                       
+                       if (downloadStats.lastReset !== today) {
                            downloadStats.today = 0;
-                           dateRef.set(today);
-                           todayRef.set(0);
+                           downloadStats.lastReset = today;
                        }
-                   });
-                   
-                   updateDisplay();
+                       
+                       downloadStats.session = 0;
+                   } else {
+                       saveDownloadStats();
+                   }
                } catch (e) {
-                   console.warn('Erro ao carregar Firebase:', e);
-                   loadLocalStats();
+                   console.warn('Erro ao carregar estatísticas:', e);
                }
+               updateDisplay();
            }
-
-           // Incrementar contador global
-           async function incrementCounter() {
-               if (!database) {
-                   return fallbackIncrement();
-               }
-               
+           
+           function saveDownloadStats() {
                try {
-                   const totalRef = database.ref('downloads/total');
-                   const todayRef = database.ref('downloads/today');
-                   const dateRef = database.ref('downloads/date');
-                   
-                   const today = new Date().toDateString();
-                   
-                   // Verificar se é novo dia
-                   dateRef.once('value', (snapshot) => {
-                       const savedDate = snapshot.val();
-                       if (savedDate !== today) {
-                           dateRef.set(today);
-                           todayRef.set(0);
-                       }
-                   });
-                   
-                   // Incrementar total
-                   await totalRef.transaction((current) => {
-                       return (current || 0) + 1;
-                   });
-                   
-                   // Incrementar hoje
-                   await todayRef.transaction((current) => {
-                       return (current || 0) + 1;
-                   });
-                   
-                   // Buscar valores atualizados
-                   totalRef.once('value', (s) => {
-                       downloadStats.total = s.val() || 0;
-                   });
-                   
-                   todayRef.once('value', (s) => {
-                       downloadStats.today = s.val() || 0;
-                   });
-                   
-                   downloadStats.session++;
-                   updateDisplay();
-                   
-                   console.log('✅ Download registrado no Firebase!');
-                   
+                   localStorage.setItem('gcv_dev_stats', JSON.stringify(downloadStats));
                } catch (e) {
-                   console.warn('Erro ao incrementar Firebase:', e);
-                   fallbackIncrement();
+                   console.warn('Erro ao salvar estatísticas:', e);
                }
            }
-
-           // Fallback usando localStorage
-           function fallbackIncrement() {
+           
+           function incrementCounter() {
                downloadStats.total++;
                downloadStats.today++;
                downloadStats.session++;
-               downloadStats.lastReset = new Date().toDateString();
                
-               const saved = localStorage.getItem('gcv_fallback_stats');
-               let fallbackData = { total: 0, date: new Date().toDateString(), daily: 0 };
+               downloadStats.history.push({
+                   timestamp: new Date().toISOString(),
+                   name: cvData.name || 'Desconhecido'
+               });
                
-               if (saved) {
-                   fallbackData = JSON.parse(saved);
-                   const today = new Date().toDateString();
-                   
-                   if (fallbackData.date === today) {
-                       fallbackData.daily++;
-                   } else {
-                       fallbackData.daily = 1;
-                       fallbackData.date = today;
-                   }
-                   fallbackData.total++;
-               } else {
-                   fallbackData = { total: 1, date: new Date().toDateString(), daily: 1 };
+               if (downloadStats.history.length > 100) {
+                   downloadStats.history = downloadStats.history.slice(-100);
                }
                
-               localStorage.setItem('gcv_fallback_stats', JSON.stringify(fallbackData));
-               
-               downloadStats.total = fallbackData.total;
-               downloadStats.today = fallbackData.daily;
-               
+               saveDownloadStats();
                updateDisplay();
-               console.log('⚠️ Usando fallback localStorage');
+               return downloadStats;
            }
-
-           function loadLocalStats() {
-               const saved = localStorage.getItem('gcv_fallback_stats');
-               if (saved) {
-                   const data = JSON.parse(saved);
-                   const today = new Date().toDateString();
-                   downloadStats.total = data.total || 0;
-                   downloadStats.today = (data.date === today) ? data.daily : 0;
-               }
-               updateDisplay();
-           }
-
+           
            function updateDisplay() {
                document.getElementById('downloadCountDisplay').textContent = downloadStats.total;
                document.getElementById('todayCountDisplay').textContent = downloadStats.today;
@@ -753,27 +651,17 @@
                const average = Math.round(downloadStats.total / daysActive);
                document.getElementById('statAverage').textContent = average;
            }
-
-           window.resetDownloadCounter = async function() {
-               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores!\n\nTem certeza?')) {
-                   if (database) {
-                       try {
-                           await database.ref('downloads/total').set(0);
-                           await database.ref('downloads/today').set(0);
-                           await database.ref('downloads/date').set(new Date().toDateString());
-                       } catch (e) {
-                           console.warn('Erro ao resetar Firebase:', e);
-                       }
-                   }
-                   
+           
+           window.resetDownloadCounter = function() {
+               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores de download!\n\nTem certeza?')) {
                    downloadStats = {
                        total: 0,
                        today: 0,
                        session: 0,
-                       lastReset: new Date().toDateString()
+                       lastReset: new Date().toDateString(),
+                       history: []
                    };
-                   
-                   localStorage.removeItem('gcv_fallback_stats');
+                   saveDownloadStats();
                    updateDisplay();
                    
                    const btn = event?.target;
@@ -790,16 +678,20 @@
                    }
                }
            };
-
-           // Modo desenvolvedor
+           
            function toggleDevMode() {
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
+               
+               // Feedback visual no console
                if (devMode) {
-                   loadDownloadStats();
+                   console.log('🔧 Modo Desenvolvedor ATIVADO - Estatísticas visíveis');
+               } else {
+                   console.log('🔧 Modo Desenvolvedor DESATIVADO');
                }
            }
-
+           
+           // Atalho de teclado para modo desenvolvedor (Ctrl+Shift+D)
            document.addEventListener('keydown', (e) => {
                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                    e.preventDefault();
@@ -878,11 +770,13 @@
                }
            }
 
-           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD =====
+           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD (UMA ÚNICA PÁGINA) =====
            window.downloadPDF = async function() {
                try {
-                   await incrementCounter();
+                   // Incrementar contador (apenas você vê)
+                   incrementCounter();
                    
+                   // Mostrar indicador de loading
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
                    if (btn) {
@@ -890,62 +784,142 @@
                        btn.disabled = true;
                    }
                    
+                   // Nome do arquivo
                    const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
-                   const originalElement = document.getElementById('cv-content');
                    
+                   // Elemento original
+                   const originalElement = document.getElementById('cv-content');
                    if (!originalElement) throw new Error('Elemento do currículo não encontrado');
                    
+                   // Clonar o elemento para não afetar a visualização
                    const cloneElement = originalElement.cloneNode(true);
+                   
+                   // Configurar o clone para caber em UMA PÁGINA
                    cloneElement.id = 'cv-content-clone';
                    cloneElement.style.width = '210mm';
-                   cloneElement.style.maxHeight = '277mm';
-                   cloneElement.style.padding = '10mm';
+                   cloneElement.style.minHeight = 'auto';
+                   cloneElement.style.maxHeight = '277mm'; // Altura reduzida para garantir que caiba
+                   cloneElement.style.padding = '10mm'; // Padding reduzido
+                   cloneElement.style.margin = '0';
                    cloneElement.style.position = 'absolute';
                    cloneElement.style.left = '-9999px';
                    cloneElement.style.top = '0';
                    cloneElement.style.background = 'white';
+                   cloneElement.style.color = 'black';
+                   cloneElement.style.boxShadow = 'none';
+                   cloneElement.style.transform = 'none';
+                   cloneElement.style.overflow = 'hidden';
+                   cloneElement.style.fontFamily = 'Inter, sans-serif';
+                   
+                   // Aplicar classe compacta para reduzir espaçamentos
                    cloneElement.classList.add('cv-content-compact');
                    
-                   document.body.appendChild(cloneElement);
-                   await new Promise(resolve => setTimeout(resolve, 100));
-                   
-                   const canvas = await html2canvas(cloneElement, {
-                       scale: 2.5,
-                       backgroundColor: '#ffffff',
-                       logging: false,
-                       useCORS: true
+                   // Reduzir ainda mais os espaçamentos manualmente
+                   const sections = cloneElement.querySelectorAll('section');
+                   sections.forEach(section => {
+                       section.style.marginBottom = '0.3rem';
                    });
                    
+                   const headings = cloneElement.querySelectorAll('h1, h2, h3, p');
+                   headings.forEach(el => {
+                       if (el.tagName === 'H1') el.style.fontSize = '1.6rem';
+                       if (el.tagName === 'H2') el.style.fontSize = '0.8rem';
+                       if (el.tagName === 'P') el.style.fontSize = '0.7rem';
+                       el.style.marginBottom = '0.2rem';
+                   });
+                   
+                   // Garantir que todas as cores fiquem visíveis no PDF
+                   const allTextElements = cloneElement.querySelectorAll('*');
+                   allTextElements.forEach(el => {
+                       if (el.style) {
+                           if (el.classList.contains('text-gray-600') || 
+                               el.classList.contains('text-gray-500') ||
+                               el.classList.contains('text-gray-400')) {
+                               el.style.color = '#333333';
+                           }
+                           if (el.classList.contains('bg-gray-100') || 
+                               el.classList.contains('bg-gray-50')) {
+                               el.style.background = 'transparent';
+                           }
+                       }
+                   });
+                   
+                   // Adicionar ao corpo temporariamente
+                   document.body.appendChild(cloneElement);
+                   
+                   // Aguardar um momento para o CSS ser aplicado
+                   await new Promise(resolve => setTimeout(resolve, 100));
+                   
+                   // Calcular altura para garantir que cabe em uma página
+                   const elementHeight = cloneElement.scrollHeight;
+                   const maxHeight = 277; // mm em pixels aproximado
+                   
+                   console.log('Altura do elemento:', elementHeight, 'Limite:', maxHeight);
+                   
+                   // Se ainda estiver muito alto, aplicar mais reduções
+                   if (elementHeight > maxHeight) {
+                       const items = cloneElement.querySelectorAll('.mb-4, .mb-3, .mb-2, .space-y-3 > *, .space-y-4 > *');
+                       items.forEach(el => {
+                           el.style.marginBottom = '0.2rem';
+                       });
+                   }
+                   
+                   // Configurações para captura
+                   const canvas = await html2canvas(cloneElement, {
+                       scale: 2.5, // Qualidade alta mas não exagerada
+                       backgroundColor: '#ffffff',
+                       logging: false,
+                       allowTaint: false,
+                       useCORS: true,
+                       windowWidth: cloneElement.scrollWidth,
+                       windowHeight: cloneElement.scrollHeight
+                   });
+                   
+                   // Remover o clone
                    document.body.removeChild(cloneElement);
                    
+                   // Criar PDF
                    const { jsPDF } = window.jspdf;
-                   const imgWidth = 210;
+                   
+                   // Calcular dimensões para caber em UMA página
+                   const imgWidth = 210; // mm
+                   const pageHeight = 297; // mm
                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
                    
+                   // Criar PDF no formato A4
                    const doc = new jsPDF({
                        orientation: 'portrait',
                        unit: 'mm',
                        format: 'a4'
                    });
                    
-                   const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                   
+                   // Redimensionar a imagem para caber na página se necessário
                    let finalImgHeight = imgHeight;
-                   if (imgHeight > 297) {
-                       finalImgHeight = 287;
+                   let finalY = 0;
+                   
+                   if (imgHeight > pageHeight) {
+                       // Calcular fator de redução para caber
+                       const scaleFactor = pageHeight / imgHeight * 0.95; // 95% da página
+                       finalImgHeight = imgHeight * scaleFactor;
+                       console.log('Reduzindo imagem para caber:', finalImgHeight);
                    }
                    
+                   // Adicionar imagem centralizada
+                   const imgData = canvas.toDataURL('image/jpeg', 0.95);
                    doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalImgHeight, undefined, 'FAST');
+                   
+                   // Salvar PDF (uma única página)
                    doc.save(nomeArquivo);
                    
+                   // Restaurar botão
                    if (btn) {
                        btn.innerHTML = originalText;
                        btn.disabled = false;
                    }
                    
                } catch (error) {
-                   console.error('Erro:', error);
-                   alert('Erro ao gerar PDF. Tente novamente.');
+                   console.error('Erro detalhado:', error);
+                   alert('Erro ao gerar PDF. Por favor, tente novamente.\n\nDetalhes: ' + error.message);
                    
                    const btn = event?.target?.closest('button');
                    if (btn) {
@@ -955,7 +929,7 @@
                }
            };
 
-           // Funções auxiliares do editor
+           // Funções auxiliares do editor (mantidas do código anterior)
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
@@ -1190,6 +1164,7 @@
                });
            }
 
+           // Ações globais
            window.addItem = function(type) {
                if (type === 'experience') {
                    cvData.experience.unshift({ role: "Novo Cargo", company: "Empresa", date: "Data", description: "Descrição" });
@@ -1314,6 +1289,7 @@
                    <div class="space-y-4">
                        <h3 class="text-sm font-bold text-gray-900 uppercase">Informações Pessoais</h3>
                        
+                       <!-- Campo de Upload de Foto -->
                        <div class="flex items-center gap-4 mb-4">
                            <div id="photo-container-preview" class="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
                                ${cvData.photo ? 
@@ -1476,6 +1452,7 @@
                document.getElementById('cv-preview-container').style.transform = `scale(${currentZoom})`;
            }
 
+           // Carregar foto salva
            function loadSavedPhoto() {
                try {
                    const savedPhoto = localStorage.getItem('gcv_photo');
@@ -1488,6 +1465,7 @@
                }
            }
 
+           // Inicialização
            document.addEventListener('DOMContentLoaded', () => {
                loadDownloadStats();
                loadSavedPhoto();
@@ -1497,6 +1475,7 @@
                setupSkillInput();
                applyZoom();
                
+               // Carregar conteúdo inicial
                const editorArea = document.getElementById('editor-scroll-area');
                if (editorArea) {
                    editorArea.innerHTML = getContentHTML();
