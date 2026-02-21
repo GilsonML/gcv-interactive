@@ -11,6 +11,9 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
    <!-- html2canvas -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+   <!-- Firebase SDK -->
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
    <style>
        /* Barra de Rolagem Personalizada */
        ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -381,7 +384,7 @@
    <div class="dev-stats-panel no-print" id="devStatsPanel">
        <div class="dev-stats-header">
            <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
-           <span>v2.0</span>
+           <span>v3.0 - Firebase</span>
        </div>
        
        <div class="dev-stat-item">
@@ -536,7 +539,7 @@
 
    <script>
        (function() {
-           // Dados padrão adaptados para Angola - exemplo do Odair
+           // Dados padrão
            const defaultData = {
                name: "Odair Miguel Júlio",
                title: "Coordenador Geral do CNJ-AO, CHINA",
@@ -570,7 +573,7 @@
            let cvData = JSON.parse(JSON.stringify(defaultData));
            let currentZoom = 0.9;
            
-           // ===== SISTEMA DE CONTADOR GLOBAL (ALTERADO) =====
+           // ===== SISTEMA DE CONTADOR GLOBAL COM FIREBASE =====
            let downloadStats = {
                total: 0,
                today: 0,
@@ -578,83 +581,164 @@
                lastReset: new Date().toDateString()
            };
 
-           // Chave única para seu contador
-           const COUNTER_KEY = 'gilsonml-gcv-interactive';
-           const TODAY_KEY = 'gilsonml-gcv-today';
+           // Configuração do Firebase (substitua com seus dados)
+           const firebaseConfig = {
+               apiKey: "AIzaSyBk1FkHZWqFrXGKzTQvLqOzqLqOzqLqOzqL",
+               authDomain: "gcv-interactive.firebaseapp.com",
+               databaseURL: "https://gcv-interactive-default-rtdb.firebaseio.com",
+               projectId: "gcv-interactive",
+               storageBucket: "gcv-interactive.appspot.com",
+               messagingSenderId: "123456789012",
+               appId: "1:123456789012:web:abc123def456ghi789"
+           };
+
+           // Inicializar Firebase
+           let database = null;
+           try {
+               firebase.initializeApp(firebaseConfig);
+               database = firebase.database();
+               console.log('🔥 Firebase conectado com sucesso!');
+           } catch (e) {
+               console.warn('Erro ao inicializar Firebase:', e);
+           }
 
            // Modo desenvolvedor
            let devMode = false;
 
-           // Carregar estatísticas do servidor central
+           // Carregar estatísticas do Firebase
            async function loadDownloadStats() {
+               if (!database) {
+                   loadLocalStats();
+                   return;
+               }
+               
                try {
-                   const totalResponse = await fetch(`https://api.countapi.xyz/get/${COUNTER_KEY}`);
-                   const totalData = await totalResponse.json();
+                   const totalRef = database.ref('downloads/total');
+                   const todayRef = database.ref('downloads/today');
+                   const dateRef = database.ref('downloads/date');
                    
-                   const todayResponse = await fetch(`https://api.countapi.xyz/get/${TODAY_KEY}`);
-                   const todayData = await todayResponse.json();
+                   // Buscar total
+                   totalRef.once('value', (snapshot) => {
+                       downloadStats.total = snapshot.val() || 0;
+                   });
                    
-                   downloadStats.total = totalData.value || 0;
-                   downloadStats.today = todayData.value || 0;
-                   downloadStats.session = 0;
+                   // Verificar data para contador de hoje
+                   const today = new Date().toDateString();
+                   dateRef.once('value', (snapshot) => {
+                       const savedDate = snapshot.val();
+                       if (savedDate === today) {
+                           todayRef.once('value', (s) => {
+                               downloadStats.today = s.val() || 0;
+                           });
+                       } else {
+                           downloadStats.today = 0;
+                           dateRef.set(today);
+                           todayRef.set(0);
+                       }
+                   });
                    
                    updateDisplay();
                } catch (e) {
-                   console.warn('Erro ao carregar estatísticas:', e);
+                   console.warn('Erro ao carregar Firebase:', e);
                    loadLocalStats();
                }
            }
 
-           // Fallback: localStorage caso a API falhe
-           function loadLocalStats() {
-               try {
-                   const saved = localStorage.getItem('gcv_dev_stats');
-                   if (saved) {
-                       downloadStats = JSON.parse(saved);
-                       const today = new Date().toDateString();
-                       
-                       if (downloadStats.lastReset !== today) {
-                           downloadStats.today = 0;
-                           downloadStats.lastReset = today;
-                       }
-                       
-                       downloadStats.session = 0;
-                   }
-               } catch (e) {}
-               updateDisplay();
-           }
-
            // Incrementar contador global
            async function incrementCounter() {
+               if (!database) {
+                   return fallbackIncrement();
+               }
+               
                try {
-                   const totalResponse = await fetch(`https://api.countapi.xyz/hit/${COUNTER_KEY}`);
-                   const totalData = await totalResponse.json();
+                   const totalRef = database.ref('downloads/total');
+                   const todayRef = database.ref('downloads/today');
+                   const dateRef = database.ref('downloads/date');
                    
-                   const todayResponse = await fetch(`https://api.countapi.xyz/hit/${TODAY_KEY}`);
-                   const todayData = await todayResponse.json();
+                   const today = new Date().toDateString();
                    
-                   downloadStats.total = totalData.value;
-                   downloadStats.today = todayData.value;
+                   // Verificar se é novo dia
+                   dateRef.once('value', (snapshot) => {
+                       const savedDate = snapshot.val();
+                       if (savedDate !== today) {
+                           dateRef.set(today);
+                           todayRef.set(0);
+                       }
+                   });
+                   
+                   // Incrementar total
+                   await totalRef.transaction((current) => {
+                       return (current || 0) + 1;
+                   });
+                   
+                   // Incrementar hoje
+                   await todayRef.transaction((current) => {
+                       return (current || 0) + 1;
+                   });
+                   
+                   // Buscar valores atualizados
+                   totalRef.once('value', (s) => {
+                       downloadStats.total = s.val() || 0;
+                   });
+                   
+                   todayRef.once('value', (s) => {
+                       downloadStats.today = s.val() || 0;
+                   });
+                   
                    downloadStats.session++;
-                   
                    updateDisplay();
-                   return downloadStats;
+                   
+                   console.log('✅ Download registrado no Firebase!');
+                   
                } catch (e) {
-                   console.warn('Erro ao incrementar contador global:', e);
-                   downloadStats.total++;
-                   downloadStats.today++;
-                   downloadStats.session++;
-                   saveLocalStats();
-                   updateDisplay();
+                   console.warn('Erro ao incrementar Firebase:', e);
+                   fallbackIncrement();
                }
            }
 
-           // Salvar fallback no localStorage
-           function saveLocalStats() {
-               try {
-                   downloadStats.lastReset = new Date().toDateString();
-                   localStorage.setItem('gcv_dev_stats', JSON.stringify(downloadStats));
-               } catch (e) {}
+           // Fallback usando localStorage
+           function fallbackIncrement() {
+               downloadStats.total++;
+               downloadStats.today++;
+               downloadStats.session++;
+               downloadStats.lastReset = new Date().toDateString();
+               
+               const saved = localStorage.getItem('gcv_fallback_stats');
+               let fallbackData = { total: 0, date: new Date().toDateString(), daily: 0 };
+               
+               if (saved) {
+                   fallbackData = JSON.parse(saved);
+                   const today = new Date().toDateString();
+                   
+                   if (fallbackData.date === today) {
+                       fallbackData.daily++;
+                   } else {
+                       fallbackData.daily = 1;
+                       fallbackData.date = today;
+                   }
+                   fallbackData.total++;
+               } else {
+                   fallbackData = { total: 1, date: new Date().toDateString(), daily: 1 };
+               }
+               
+               localStorage.setItem('gcv_fallback_stats', JSON.stringify(fallbackData));
+               
+               downloadStats.total = fallbackData.total;
+               downloadStats.today = fallbackData.daily;
+               
+               updateDisplay();
+               console.log('⚠️ Usando fallback localStorage');
+           }
+
+           function loadLocalStats() {
+               const saved = localStorage.getItem('gcv_fallback_stats');
+               if (saved) {
+                   const data = JSON.parse(saved);
+                   const today = new Date().toDateString();
+                   downloadStats.total = data.total || 0;
+                   downloadStats.today = (data.date === today) ? data.daily : 0;
+               }
+               updateDisplay();
            }
 
            function updateDisplay() {
@@ -671,38 +755,43 @@
            }
 
            window.resetDownloadCounter = async function() {
-               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores globais!\n\nTem certeza?')) {
-                   try {
-                       await fetch(`https://api.countapi.xyz/set/${COUNTER_KEY}?value=0`);
-                       await fetch(`https://api.countapi.xyz/set/${TODAY_KEY}?value=0`);
-                       
-                       downloadStats = {
-                           total: 0,
-                           today: 0,
-                           session: 0,
-                           lastReset: new Date().toDateString()
-                       };
-                       
-                       updateDisplay();
-                       
-                       const btn = event?.target;
-                       if (btn) {
-                           const originalText = btn.innerHTML;
-                           btn.innerHTML = '<i class="fas fa-check"></i> Resetado Global!';
-                           btn.style.background = '#10b981';
-                           btn.style.color = 'white';
-                           setTimeout(() => {
-                               btn.innerHTML = originalText;
-                               btn.style.background = '#374151';
-                               btn.style.color = '#ef4444';
-                           }, 2000);
+               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores!\n\nTem certeza?')) {
+                   if (database) {
+                       try {
+                           await database.ref('downloads/total').set(0);
+                           await database.ref('downloads/today').set(0);
+                           await database.ref('downloads/date').set(new Date().toDateString());
+                       } catch (e) {
+                           console.warn('Erro ao resetar Firebase:', e);
                        }
-                   } catch (e) {
-                       alert('Erro ao resetar contadores globais. Tente novamente.');
+                   }
+                   
+                   downloadStats = {
+                       total: 0,
+                       today: 0,
+                       session: 0,
+                       lastReset: new Date().toDateString()
+                   };
+                   
+                   localStorage.removeItem('gcv_fallback_stats');
+                   updateDisplay();
+                   
+                   const btn = event?.target;
+                   if (btn) {
+                       const originalText = btn.innerHTML;
+                       btn.innerHTML = '<i class="fas fa-check"></i> Resetado!';
+                       btn.style.background = '#10b981';
+                       btn.style.color = 'white';
+                       setTimeout(() => {
+                           btn.innerHTML = originalText;
+                           btn.style.background = '#374151';
+                           btn.style.color = '#ef4444';
+                       }, 2000);
                    }
                }
            };
 
+           // Modo desenvolvedor
            function toggleDevMode() {
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
@@ -866,7 +955,7 @@
                }
            };
 
-           // Funções auxiliares do editor (mantidas iguais)
+           // Funções auxiliares do editor
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
