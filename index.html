@@ -6,7 +6,7 @@
    <title>GCV-INTERACTIVE - Gerador de Currículos</title>
    <script src="https://cdn.tailwindcss.com"></script>
    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
    <!-- jsPDF -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
    <!-- html2canvas -->
@@ -22,14 +22,14 @@
        .a4-paper { 
            width: 210mm; 
            min-height: 297mm; 
-           max-height: 297mm; /* Altura máxima fixa para evitar páginas extras */
+           max-height: 297mm;
            background: white; 
            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
            margin: 0 auto; 
            position: relative; 
-           overflow: hidden; /* Esconde conteúdo que ultrapassar */
+           overflow: hidden;
            box-sizing: border-box; 
-           padding: 12mm !important; /* Reduzi o padding para caber mais conteúdo */
+           padding: 12mm !important;
        }
 
        @media print {
@@ -45,15 +45,6 @@
                color: black;
                overflow: hidden;
            }
-           .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900 {
-               color: black !important;
-           }
-           .bg-gray-100, .bg-gray-50 {
-               background: transparent !important;
-           }
-           .border, .border-r, .border-b, .border-gray-200 {
-               border-color: #cccccc !important;
-           }
        }
 
        /* Ajustes de espaçamento para caber em uma página */
@@ -66,30 +57,6 @@
        .cv-content-compact .space-y-5 > *,
        .cv-content-compact .space-y-3 > * {
            margin-bottom: 0.4rem !important;
-       }
-       
-       .cv-content-compact .text-lg {
-           font-size: 1rem !important;
-       }
-       
-       .cv-content-compact .text-3xl {
-           font-size: 1.8rem !important;
-       }
-       
-       .cv-content-compact .text-sm {
-           font-size: 0.75rem !important;
-       }
-       
-       .cv-content-compact .text-xs {
-           font-size: 0.65rem !important;
-       }
-       
-       .cv-content-compact .gap-6 {
-           gap: 0.8rem !important;
-       }
-       
-       .cv-content-compact .p-8 {
-           padding: 0.8rem !important;
        }
 
        /* Modo de Simulação PDF */
@@ -143,18 +110,17 @@
        /* Estilos de Foto */
        .photo-container {
            position: relative;
-           width: 100px; /* Reduzi tamanho */
+           width: 100px;
            height: 100px;
-           border-radius: 50%;
+           border-radius: 8px;
            overflow: hidden;
-           border: 3px solid #e5e7eb;
+           border: 1px solid #e5e7eb;
            cursor: pointer;
            transition: all 0.3s ease;
        }
 
        .photo-container:hover {
-           border-color: #3b82f6;
-           transform: scale(1.05);
+           border-color: #9ca3af;
        }
 
        .photo-container img {
@@ -163,58 +129,94 @@
            object-fit: cover;
        }
 
-       .photo-placeholder {
-           width: 100%;
-           height: 100%;
-           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           color: white;
-           font-size: 40px;
-           font-weight: bold;
-       }
-
-       .photo-upload-btn {
-           position: absolute;
-           bottom: 0;
-           right: 0;
-           background: #3b82f6;
-           color: white;
-           width: 28px;
-           height: 28px;
-           border-radius: 50%;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           cursor: pointer;
-           border: 2px solid white;
-           transition: all 0.3s ease;
-       }
-
-       .photo-upload-btn:hover {
-           background: #2563eb;
-           transform: scale(1.1);
-       }
-
-       /* Estilos de Temas */
-       .theme-modern h1, .theme-modern h2 { font-family: 'Inter', sans-serif; }
-       .theme-classic h1, .theme-classic h2 { font-family: 'Merriweather', serif; }
-       .theme-minimal * { font-family: system-ui, -apple-system, sans-serif; }
-       .theme-vibrant .accent-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+       /* ===== TEMAS COM CORES SUAVES ===== */
        
-       .theme-modern .accent-bg { background-color: #1e293b; color: white; }
-       .theme-modern .accent-text { color: #1e293b; }
-       .theme-modern .border-accent { border-color: #1e293b; }
+       /* Tema Azure (Azul Suave) */
+       .theme-azure {
+           --primary-color: #60a5fa;        /* Azul claro */
+           --secondary-color: #3b82f6;       /* Azul médio */
+           --text-color: #1f2937;
+           --border-color: #d1d5db;          /* Cinza claro para bordas */
+           --light-bg: #f9fafb;
+       }
+       
+       /* Tema Blush (Vermelho Suave) */
+       .theme-blush {
+           --primary-color: #fca5a5;        /* Vermelho claro */
+           --secondary-color: #ef4444;        /* Vermelho médio */
+           --text-color: #1f2937;
+           --border-color: #d1d5db;
+           --light-bg: #f9fafb;
+       }
+       
+       /* Tema Mist (Cinza Suave) */
+       .theme-mist {
+           --primary-color: #9ca3af;         /* Cinza médio */
+           --secondary-color: #4b5563;        /* Cinza escuro */
+           --text-color: #111827;
+           --border-color: #d1d5db;
+           --light-bg: #f9fafb;
+       }
+       
+       /* Tema Sage (Verde Suave) */
+       .theme-sage {
+           --primary-color: #86efac;         /* Verde claro */
+           --secondary-color: #22c55e;        /* Verde médio */
+           --text-color: #1f2937;
+           --border-color: #d1d5db;
+           --light-bg: #f9fafb;
+       }
+       
+       /* Tema Lavender (Roxo Suave) */
+       .theme-lavender {
+           --primary-color: #c4b5fd;         /* Roxo claro */
+           --secondary-color: #8b5cf6;        /* Roxo médio */
+           --text-color: #1f2937;
+           --border-color: #d1d5db;
+           --light-bg: #f9fafb;
+       }
+       
+       /* Tema Classic (Preto e Branco) */
+       .theme-classic {
+           --primary-color: #000000;          /* Preto */
+           --secondary-color: #4b5563;        /* Cinza escuro */
+           --text-color: #111827;
+           --border-color: #000000;
+           --light-bg: #ffffff;
+       }
+       
+       /* Aplicação mínima das cores dos temas */
+       .theme-azure .section-title { color: var(--secondary-color); }
+       .theme-azure .border-accent { border-color: var(--border-color); }
+       .theme-azure .company-name { color: var(--secondary-color); }
+       
+       .theme-blush .section-title { color: var(--secondary-color); }
+       .theme-blush .border-accent { border-color: var(--border-color); }
+       .theme-blush .company-name { color: var(--secondary-color); }
+       
+       .theme-mist .section-title { color: var(--secondary-color); }
+       .theme-mist .border-accent { border-color: var(--border-color); }
+       .theme-mist .company-name { color: var(--secondary-color); }
+       
+       .theme-sage .section-title { color: var(--secondary-color); }
+       .theme-sage .border-accent { border-color: var(--border-color); }
+       .theme-sage .company-name { color: var(--secondary-color); }
+       
+       .theme-lavender .section-title { color: var(--secondary-color); }
+       .theme-lavender .border-accent { border-color: var(--border-color); }
+       .theme-lavender .company-name { color: var(--secondary-color); }
+       
+       .theme-classic .section-title { color: var(--primary-color); }
+       .theme-classic .border-accent { border-color: var(--border-color); }
+       .theme-classic .company-name { color: var(--secondary-color); }
        
        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
        
-       /* ===== MODO DESENVOLVEDOR (VISÍVEL APENAS PARA VOCÊ) ===== */
+       /* ===== MODO DESENVOLVEDOR ===== */
        .dev-only { display: none; }
        .dev-mode .dev-only { display: block; }
        
-       /* Badge de contador - aparece apenas com Ctrl+Shift+D */
        .download-counter-badge {
            position: fixed;
            bottom: 20px;
@@ -235,12 +237,10 @@
            letter-spacing: 0.5px;
        }
        
-       /* Só aparece em modo desenvolvedor */
        .dev-mode .download-counter-badge {
            display: flex !important;
        }
        
-       /* Painel de estatísticas completo */
        .dev-stats-panel {
            position: fixed;
            top: 80px;
@@ -358,19 +358,40 @@
        .dev-mode .dev-indicator {
            display: flex;
        }
+
+       /* Cards de temas */
+       .theme-card {
+           border: 1px solid #e5e7eb;
+           transition: all 0.2s;
+           cursor: pointer;
+           background: white;
+       }
+       
+       .theme-card:hover {
+           border-color: #9ca3af;
+       }
+       
+       .theme-card.selected {
+           border-color: #000000;
+           background-color: #f9fafb;
+       }
+       
+       .theme-preview {
+           height: 40px;
+           border-radius: 4px;
+           margin-bottom: 6px;
+           border: 1px solid #e5e7eb;
+       }
    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
 
-   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR (Ctrl+Shift+D) ===== -->
-   
-   <!-- Indicador de Modo Dev (topo) -->
+   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR ===== -->
    <div class="dev-indicator no-print">
        <i class="fas fa-code"></i> MODO DESENVOLVEDOR ATIVO
        <span class="bg-black text-white px-3 py-1 rounded text-xs">Ctrl+Shift+D</span>
    </div>
    
-   <!-- Badge de contador de downloads (só você vê) -->
    <div class="download-counter-badge no-print" id="downloadCounterBadge">
        <i class="fas fa-download text-2xl"></i>
        <div class="flex flex-col">
@@ -384,7 +405,6 @@
        </div>
    </div>
    
-   <!-- Painel completo de estatísticas (só você vê) -->
    <div class="dev-stats-panel no-print" id="devStatsPanel">
        <div class="dev-stats-header">
            <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
@@ -454,10 +474,12 @@
            <h1 class="font-bold text-xl text-gray-900">GCV<span class="text-blue-600">-INTERACTIVE</span></h1>
        </div>
        <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200">
-           <button onclick="setTheme('modern')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="modern">Moderno</button>
-           <button onclick="setTheme('classic')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="classic">Clássico</button>
-           <button onclick="setTheme('minimal')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="minimal">Minimalista</button>
-           <button onclick="setTheme('vibrant')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="vibrant">Vibrante</button>
+           <button onclick="setTheme('azure')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="azure">Azure</button>
+           <button onclick="setTheme('blush')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="blush">Blush</button>
+           <button onclick="setTheme('mist')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="mist">Mist</button>
+           <button onclick="setTheme('sage')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="sage">Sage</button>
+           <button onclick="setTheme('lavender')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="lavender">Lavender</button>
+           <button onclick="setTheme('classic')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="classic">Classic</button>
        </div>
    </header>
 
@@ -483,49 +505,55 @@
            </div>
            <div class="flex-1 overflow-auto p-8 flex justify-center items-start" id="preview-scroll-area">
                <div id="cv-preview-container" class="transition-transform duration-200 origin-top" style="transform: scale(0.9);">
-                   <div id="cv-content" class="a4-paper theme-modern text-gray-800">
+                   <div id="cv-content" class="a4-paper theme-azure text-gray-800" style="font-family: 'Inter', sans-serif; font-size: 12px;">
                        <!-- Cabeçalho do CV com Foto -->
-                       <header class="flex gap-4 mb-4 border-b-2 pb-3 items-start" style="border-color: #1e293b;">
-                           <div id="preview-photo" class="w-20 h-20 rounded-lg bg-gray-200 bg-cover bg-center flex-shrink-0 hidden"></div>
+                       <header class="flex gap-4 pb-3 items-start border-b border-gray-200">
+                           <div id="preview-photo" class="w-20 h-20 rounded bg-gray-100 bg-cover bg-center flex-shrink-0 hidden"></div>
                            <div class="flex-1">
                                <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
-                               <p class="text-base mb-2" style="color: #1e293b;" id="preview-title">Coordenador Geral do CNJ-AO</p>
+                               <p class="text-base mb-2" style="color: var(--secondary-color);" id="preview-title">Coordenador Geral do CNJ-AO, CHINA</p>
                                <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
                                    <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
                                    <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
-                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China</span></span>
+                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China, Rua N123</span></span>
                                </div>
                            </div>
                        </header>
 
-                       <div class="grid grid-cols-3 gap-4">
-                           <!-- Coluna Esquerda -->
-                           <div class="col-span-1 space-y-4 border-r border-gray-200 pr-3">
+                       <div class="grid grid-cols-3 gap-4 mt-4">
+                           <!-- Coluna Esquerda (com borda lateral) -->
+                           <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
                                <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Habilidades</h2>
-                                   <div id="preview-skills" class="flex flex-wrap gap-1"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
+                                   <div id="preview-skills" class="space-y-1">
+                                       <!-- Será preenchido via JS -->
+                                   </div>
                                </section>
                                <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Idiomas</h2>
-                                   <div id="preview-languages" class="space-y-1"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
+                                   <div id="preview-languages" class="space-y-1">
+                                       <!-- Será preenchido via JS -->
+                                   </div>
                                </section>
                                <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Educação</h2>
-                                   <div id="preview-education" class="space-y-2"></div>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
+                                   <div id="preview-education" class="space-y-2">
+                                       <!-- Será preenchido via JS -->
+                                   </div>
                                </section>
                            </div>
                            <!-- Coluna Direita -->
-                           <div class="col-span-2 pl-2">
+                           <div class="col-span-2">
                                <section class="mb-3">
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-1" style="color: #1e293b;">Perfil</h2>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">PERFIL</h2>
                                    <p class="text-xs leading-relaxed text-gray-600" id="preview-summary"></p>
                                </section>
                                <section class="mb-3">
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Experiência</h2>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
                                    <div id="preview-experience" class="space-y-3"></div>
                                </section>
                                <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #1e293b;">Prêmios</h2>
+                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
                                    <div id="preview-awards" class="space-y-2"></div>
                                </section>
                            </div>
@@ -543,8 +571,8 @@
 
    <script>
        (function() {
-           // Dados padrão adaptados para Angola - exemplo do Odair
-           const defaultData = {
+           // Dados de exemplo APENAS para visualização inicial
+           const exampleData = {
                name: "Odair Miguel Júlio",
                title: "Coordenador Geral do CNJ-AO, CHINA",
                email: "odair.julio@exemplo.com",
@@ -569,15 +597,45 @@
                    { name: "Inglês", level: "Fluente" },
                    { name: "Mandarim", level: "Avançado" },
                    { name: "Umbundo", level: "Intermediário" }
-               ],
-               theme: "modern",
-               photo: null
+               ]
            };
 
-           let cvData = JSON.parse(JSON.stringify(defaultData));
+           // Dados do usuário - INICIALMENTE VAZIOS
+           let cvData = {
+               name: "",
+               title: "",
+               email: "",
+               phone: "",
+               location: "",
+               summary: "",
+               skills: [],
+               experience: [],
+               education: [],
+               awards: [],
+               languages: [],
+               theme: "azure",
+               photo: null,
+               fontFamily: "Inter",
+               fontSize: 12
+           };
+
            let currentZoom = 0.9;
            
-           // Sistema de contador de downloads (APENAS PARA DESENVOLVEDOR)
+           // Fontes disponíveis
+           const fontOptions = {
+               "Inter": "'Inter', sans-serif",
+               "Merriweather": "'Merriweather', serif",
+               "Roboto": "'Roboto', sans-serif",
+               "Open Sans": "'Open Sans', sans-serif",
+               "Arial": "Arial, sans-serif",
+               "Times New Roman": "'Times New Roman', serif",
+               "Helvetica": "Helvetica, Arial, sans-serif",
+               "Georgia": "Georgia, serif",
+               "Verdana": "Verdana, sans-serif",
+               "Courier New": "'Courier New', monospace"
+           };
+           
+           // Sistema de contador de downloads
            let downloadStats = {
                total: 0,
                today: 0,
@@ -586,9 +644,8 @@
                history: []
            };
            
-           // Modo desenvolvedor (inicialmente desativado - só você ativa)
            let devMode = false;
-           
+
            // Carregar estatísticas do localStorage
            function loadDownloadStats() {
                try {
@@ -683,7 +740,6 @@
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
                
-               // Feedback visual no console
                if (devMode) {
                    console.log('🔧 Modo Desenvolvedor ATIVADO - Estatísticas visíveis');
                } else {
@@ -691,7 +747,7 @@
                }
            }
            
-           // Atalho de teclado para modo desenvolvedor (Ctrl+Shift+D)
+           // Atalho de teclado para modo desenvolvedor
            document.addEventListener('keydown', (e) => {
                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                    e.preventDefault();
@@ -699,7 +755,97 @@
                }
            });
 
-           // ===== FUNÇÃO DE UPLOAD DE FOTO =====
+           // ===== FUNÇÕES DE FORMATAÇÃO =====
+           window.setFontFamily = function(font) {
+               cvData.fontFamily = font;
+               const cvContent = document.getElementById('cv-content');
+               cvContent.style.fontFamily = fontOptions[font] || fontOptions["Inter"];
+               saveSettings();
+           };
+           
+           window.setFontSize = function(size) {
+               cvData.fontSize = parseInt(size);
+               const cvContent = document.getElementById('cv-content');
+               cvContent.style.fontSize = size + 'px';
+               
+               // Ajustar tamanhos relativos
+               const headings = cvContent.querySelectorAll('h1');
+               headings.forEach(h => h.style.fontSize = (size * 1.5) + 'px');
+               
+               const subHeadings = cvContent.querySelectorAll('h2');
+               subHeadings.forEach(h => h.style.fontSize = (size * 1.2) + 'px');
+               
+               saveSettings();
+               renderPreview();
+           };
+           
+           // ===== FUNÇÃO PRINCIPAL DE TEMAS =====
+           window.setTheme = function(theme) {
+               cvData.theme = theme;
+               const cv = document.getElementById('cv-content');
+               
+               // Remover todas as classes de tema
+               cv.className = cv.className.replace(/theme-\w+/g, '').trim();
+               // Adicionar a nova classe de tema
+               cv.classList.add(`theme-${theme}`);
+               
+               // Atualizar botões de tema
+               document.querySelectorAll('.theme-btn').forEach(btn => {
+                   if (btn.dataset.theme === theme) {
+                       btn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+                       btn.classList.remove('text-gray-500');
+                   } else {
+                       btn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+                       btn.classList.add('text-gray-500');
+                   }
+               });
+               
+               // Salvar tema no localStorage
+               try {
+                   localStorage.setItem('gcv_theme', theme);
+               } catch (e) {
+                   console.warn('Erro ao salvar tema:', e);
+               }
+               
+               renderPreview();
+           };
+           
+           // Salvar configurações no localStorage
+           function saveSettings() {
+               try {
+                   localStorage.setItem('gcv_font_family', cvData.fontFamily);
+                   localStorage.setItem('gcv_font_size', cvData.fontSize);
+               } catch (e) {
+                   console.warn('Erro ao salvar configurações:', e);
+               }
+           }
+           
+           // Carregar configurações salvas
+           function loadSettings() {
+               try {
+                   const savedTheme = localStorage.getItem('gcv_theme');
+                   if (savedTheme) {
+                       cvData.theme = savedTheme;
+                       setTheme(savedTheme);
+                   }
+                   
+                   const savedFont = localStorage.getItem('gcv_font_family');
+                   if (savedFont && fontOptions[savedFont]) {
+                       cvData.fontFamily = savedFont;
+                       setFontFamily(savedFont);
+                   }
+                   
+                   const savedSize = localStorage.getItem('gcv_font_size');
+                   if (savedSize) {
+                       cvData.fontSize = parseInt(savedSize);
+                       setFontSize(savedSize);
+                   }
+               } catch (e) {
+                   console.warn('Erro ao carregar configurações:', e);
+               }
+           }
+
+           // ===== FUNÇÕES DE FOTO =====
            window.handlePhotoUpload = function(input) {
                if (input.files && input.files[0]) {
                    const reader = new FileReader();
@@ -739,14 +885,14 @@
                    
                    if (photoContainer) {
                        photoContainer.innerHTML = `
-                           <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover rounded-lg">
-                           <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded-lg">
-                               <label class="cursor-pointer text-white hover:text-blue-300">
-                                   <i class="fas fa-camera text-lg"></i>
+                           <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover rounded">
+                           <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded">
+                               <label class="cursor-pointer text-white hover:text-gray-200">
+                                   <i class="fas fa-camera"></i>
                                    <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
                                </label>
-                               <button onclick="removePhoto()" class="text-white hover:text-red-300">
-                                   <i class="fas fa-trash text-lg"></i>
+                               <button onclick="removePhoto()" class="text-white hover:text-gray-200">
+                                   <i class="fas fa-trash"></i>
                                </button>
                            </div>
                        `;
@@ -756,12 +902,12 @@
                    
                    if (photoContainer) {
                        photoContainer.innerHTML = `
-                           <div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center rounded-lg">
-                               <span class="text-white text-4xl font-bold">${cvData.name ? cvData.name.charAt(0) : '?'}</span>
+                           <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded">
+                               <span class="text-gray-400 text-4xl font-light">?</span>
                            </div>
-                           <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
-                               <label class="cursor-pointer text-white hover:text-blue-300">
-                                   <i class="fas fa-camera text-lg"></i>
+                           <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded">
+                               <label class="cursor-pointer text-white hover:text-gray-200">
+                                   <i class="fas fa-camera"></i>
                                    <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
                                </label>
                            </div>
@@ -770,13 +916,11 @@
                }
            }
 
-           // ===== FUNÇÃO PRINCIPAL DE DOWNLOAD (UMA ÚNICA PÁGINA) =====
+           // ===== FUNÇÃO DE DOWNLOAD PDF =====
            window.downloadPDF = async function() {
                try {
-                   // Incrementar contador (apenas você vê)
                    incrementCounter();
                    
-                   // Mostrar indicador de loading
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
                    if (btn) {
@@ -784,22 +928,18 @@
                        btn.disabled = true;
                    }
                    
-                   // Nome do arquivo
                    const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
                    
-                   // Elemento original
                    const originalElement = document.getElementById('cv-content');
                    if (!originalElement) throw new Error('Elemento do currículo não encontrado');
                    
-                   // Clonar o elemento para não afetar a visualização
                    const cloneElement = originalElement.cloneNode(true);
                    
-                   // Configurar o clone para caber em UMA PÁGINA
                    cloneElement.id = 'cv-content-clone';
                    cloneElement.style.width = '210mm';
                    cloneElement.style.minHeight = 'auto';
-                   cloneElement.style.maxHeight = '277mm'; // Altura reduzida para garantir que caiba
-                   cloneElement.style.padding = '10mm'; // Padding reduzido
+                   cloneElement.style.maxHeight = '277mm';
+                   cloneElement.style.padding = '10mm';
                    cloneElement.style.margin = '0';
                    cloneElement.style.position = 'absolute';
                    cloneElement.style.left = '-9999px';
@@ -809,12 +949,11 @@
                    cloneElement.style.boxShadow = 'none';
                    cloneElement.style.transform = 'none';
                    cloneElement.style.overflow = 'hidden';
-                   cloneElement.style.fontFamily = 'Inter, sans-serif';
+                   cloneElement.style.fontFamily = originalElement.style.fontFamily;
+                   cloneElement.style.fontSize = originalElement.style.fontSize;
                    
-                   // Aplicar classe compacta para reduzir espaçamentos
                    cloneElement.classList.add('cv-content-compact');
                    
-                   // Reduzir ainda mais os espaçamentos manualmente
                    const sections = cloneElement.querySelectorAll('section');
                    sections.forEach(section => {
                        section.style.marginBottom = '0.3rem';
@@ -822,13 +961,12 @@
                    
                    const headings = cloneElement.querySelectorAll('h1, h2, h3, p');
                    headings.forEach(el => {
-                       if (el.tagName === 'H1') el.style.fontSize = '1.6rem';
-                       if (el.tagName === 'H2') el.style.fontSize = '0.8rem';
-                       if (el.tagName === 'P') el.style.fontSize = '0.7rem';
+                       if (el.tagName === 'H1') el.style.fontSize = (cvData.fontSize * 1.5) + 'px';
+                       if (el.tagName === 'H2') el.style.fontSize = (cvData.fontSize * 1.2) + 'px';
+                       if (el.tagName === 'P') el.style.fontSize = cvData.fontSize + 'px';
                        el.style.marginBottom = '0.2rem';
                    });
                    
-                   // Garantir que todas as cores fiquem visíveis no PDF
                    const allTextElements = cloneElement.querySelectorAll('*');
                    allTextElements.forEach(el => {
                        if (el.style) {
@@ -837,36 +975,15 @@
                                el.classList.contains('text-gray-400')) {
                                el.style.color = '#333333';
                            }
-                           if (el.classList.contains('bg-gray-100') || 
-                               el.classList.contains('bg-gray-50')) {
-                               el.style.background = 'transparent';
-                           }
                        }
                    });
                    
-                   // Adicionar ao corpo temporariamente
                    document.body.appendChild(cloneElement);
                    
-                   // Aguardar um momento para o CSS ser aplicado
                    await new Promise(resolve => setTimeout(resolve, 100));
                    
-                   // Calcular altura para garantir que cabe em uma página
-                   const elementHeight = cloneElement.scrollHeight;
-                   const maxHeight = 277; // mm em pixels aproximado
-                   
-                   console.log('Altura do elemento:', elementHeight, 'Limite:', maxHeight);
-                   
-                   // Se ainda estiver muito alto, aplicar mais reduções
-                   if (elementHeight > maxHeight) {
-                       const items = cloneElement.querySelectorAll('.mb-4, .mb-3, .mb-2, .space-y-3 > *, .space-y-4 > *');
-                       items.forEach(el => {
-                           el.style.marginBottom = '0.2rem';
-                       });
-                   }
-                   
-                   // Configurações para captura
                    const canvas = await html2canvas(cloneElement, {
-                       scale: 2.5, // Qualidade alta mas não exagerada
+                       scale: 2.5,
                        backgroundColor: '#ffffff',
                        logging: false,
                        allowTaint: false,
@@ -875,43 +992,32 @@
                        windowHeight: cloneElement.scrollHeight
                    });
                    
-                   // Remover o clone
                    document.body.removeChild(cloneElement);
                    
-                   // Criar PDF
                    const { jsPDF } = window.jspdf;
                    
-                   // Calcular dimensões para caber em UMA página
-                   const imgWidth = 210; // mm
-                   const pageHeight = 297; // mm
+                   const imgWidth = 210;
+                   const pageHeight = 297;
                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
                    
-                   // Criar PDF no formato A4
                    const doc = new jsPDF({
                        orientation: 'portrait',
                        unit: 'mm',
                        format: 'a4'
                    });
                    
-                   // Redimensionar a imagem para caber na página se necessário
                    let finalImgHeight = imgHeight;
-                   let finalY = 0;
                    
                    if (imgHeight > pageHeight) {
-                       // Calcular fator de redução para caber
-                       const scaleFactor = pageHeight / imgHeight * 0.95; // 95% da página
+                       const scaleFactor = pageHeight / imgHeight * 0.95;
                        finalImgHeight = imgHeight * scaleFactor;
-                       console.log('Reduzindo imagem para caber:', finalImgHeight);
                    }
                    
-                   // Adicionar imagem centralizada
                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
                    doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalImgHeight, undefined, 'FAST');
                    
-                   // Salvar PDF (uma única página)
                    doc.save(nomeArquivo);
                    
-                   // Restaurar botão
                    if (btn) {
                        btn.innerHTML = originalText;
                        btn.disabled = false;
@@ -929,7 +1035,7 @@
                }
            };
 
-           // Funções auxiliares do editor (mantidas do código anterior)
+           // ===== FUNÇÕES DO EDITOR =====
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
@@ -959,9 +1065,10 @@
            }
 
            window.loadDataToForm = function() {
+               // Carregar dados VAZIOS nos campos (nenhum dado pré-preenchido)
                document.querySelectorAll('[data-field]').forEach(input => {
                    const field = input.dataset.field;
-                   if (cvData[field] !== undefined) input.value = cvData[field];
+                   input.value = cvData[field] || '';
                });
                renderExperienceEditor();
                renderEducationEditor();
@@ -972,6 +1079,7 @@
            };
 
            window.renderPreview = function() {
+               // Se o usuário não preencheu nada, mostrar campos vazios
                document.getElementById('preview-name').textContent = cvData.name || '';
                document.getElementById('preview-title').textContent = cvData.title || '';
                document.getElementById('preview-email').textContent = cvData.email || '';
@@ -994,7 +1102,7 @@
                };
                if (map[field]) {
                    const el = document.getElementById(map[field]);
-                   if (el) el.textContent = value;
+                   if (el) el.textContent = value || '';
                }
            }
 
@@ -1002,6 +1110,12 @@
                const container = document.getElementById('experience-editor-list');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.experience.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma experiência adicionada. Clique em "Adicionar" para começar.</p>';
+                   return;
+               }
+               
                cvData.experience.forEach((job, index) => {
                    const div = document.createElement('div');
                    div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
@@ -1009,10 +1123,10 @@
                        <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
                            <button onclick="deleteItem('experience', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                        </div>
-                       <input type="text" value="${job.role.replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'role', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Cargo">
-                       <input type="text" value="${job.company.replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'company', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Empresa">
-                       <input type="text" value="${job.date.replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 mb-2 border-none focus:ring-0" placeholder="Período">
-                       <textarea onchange="updateItem('experience', ${index}, 'description', this.value)" class="w-full bg-white text-xs p-2 rounded border" rows="2">${job.description.replace(/"/g, '&quot;')}</textarea>
+                       <input type="text" value="${(job.role || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'role', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Cargo">
+                       <input type="text" value="${(job.company || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'company', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Empresa">
+                       <input type="text" value="${(job.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 mb-2 border-none focus:ring-0" placeholder="Período">
+                       <textarea onchange="updateItem('experience', ${index}, 'description', this.value)" class="w-full bg-white text-xs p-2 rounded border" rows="2" placeholder="Descrição...">${(job.description || '').replace(/"/g, '&quot;')}</textarea>
                    `;
                    container.appendChild(div);
                });
@@ -1022,6 +1136,12 @@
                const container = document.getElementById('preview-experience');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.experience.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
+                   return;
+               }
+               
                cvData.experience.forEach(job => {
                    container.innerHTML += `
                        <div class="mb-2">
@@ -1029,7 +1149,7 @@
                                <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
                                <span class="text-xs text-gray-500">${job.date || ''}</span>
                            </div>
-                           <div class="text-xs font-semibold mb-1" style="color: #1e293b;">${job.company || ''}</div>
+                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company || ''}</div>
                            <p class="text-xs text-gray-600">${job.description || ''}</p>
                        </div>
                    `;
@@ -1040,6 +1160,12 @@
                const container = document.getElementById('education-editor-list');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.education.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma formação adicionada. Clique em "Adicionar" para começar.</p>';
+                   return;
+               }
+               
                cvData.education.forEach((edu, index) => {
                    const div = document.createElement('div');
                    div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
@@ -1047,9 +1173,9 @@
                        <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
                            <button onclick="deleteItem('education', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                        </div>
-                       <input type="text" value="${edu.degree.replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'degree', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Grau">
-                       <input type="text" value="${edu.school.replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'school', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Instituição">
-                       <input type="text" value="${edu.date.replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
+                       <input type="text" value="${(edu.degree || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'degree', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Grau">
+                       <input type="text" value="${(edu.school || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'school', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Instituição">
+                       <input type="text" value="${(edu.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
                    `;
                    container.appendChild(div);
                });
@@ -1059,6 +1185,12 @@
                const container = document.getElementById('preview-education');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.education.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
+                   return;
+               }
+               
                cvData.education.forEach(edu => {
                    container.innerHTML += `
                        <div class="mb-2">
@@ -1074,6 +1206,12 @@
                const container = document.getElementById('awards-editor-list');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.awards.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhum prêmio adicionado. Clique em "Adicionar" para começar.</p>';
+                   return;
+               }
+               
                cvData.awards.forEach((award, index) => {
                    const div = document.createElement('div');
                    div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
@@ -1081,9 +1219,9 @@
                        <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
                            <button onclick="deleteItem('awards', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                        </div>
-                       <input type="text" value="${award.title.replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'title', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Prêmio">
-                       <input type="text" value="${award.organization.replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'organization', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Organização">
-                       <input type="text" value="${award.year.replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'year', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
+                       <input type="text" value="${(award.title || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'title', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Prêmio">
+                       <input type="text" value="${(award.organization || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'organization', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Organização">
+                       <input type="text" value="${(award.year || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'year', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
                    `;
                    container.appendChild(div);
                });
@@ -1093,6 +1231,12 @@
                const container = document.getElementById('preview-awards');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.awards.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum prêmio adicionado</p>';
+                   return;
+               }
+               
                cvData.awards.forEach(award => {
                    container.innerHTML += `
                        <div class="mb-2">
@@ -1100,7 +1244,7 @@
                                <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
                                <span class="text-xs text-gray-500">${award.year || ''}</span>
                            </div>
-                           <div class="text-xs font-semibold mb-1" style="color: #1e293b;">${award.organization || ''}</div>
+                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization || ''}</div>
                        </div>
                    `;
                });
@@ -1110,6 +1254,12 @@
                const container = document.getElementById('languages-editor-list');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.languages.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhum idioma adicionado. Clique em "Adicionar" para começar.</p>';
+                   return;
+               }
+               
                const levels = ["Iniciante", "Básico", "Intermediário", "Avançado", "Fluente", "Nativo"];
                cvData.languages.forEach((lang, index) => {
                    const div = document.createElement('div');
@@ -1119,7 +1269,7 @@
                            <button onclick="deleteItem('languages', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                        </div>
                        <div class="grid grid-cols-2 gap-2">
-                           <input type="text" value="${lang.name.replace(/"/g, '&quot;')}" onchange="updateItem('languages', ${index}, 'name', this.value)" class="w-full bg-transparent font-bold text-sm border-none focus:ring-0" placeholder="Idioma">
+                           <input type="text" value="${(lang.name || '').replace(/"/g, '&quot;')}" onchange="updateItem('languages', ${index}, 'name', this.value)" class="w-full bg-transparent font-bold text-sm border-none focus:ring-0" placeholder="Idioma">
                            <select onchange="updateItem('languages', ${index}, 'level', this.value)" class="w-full bg-white text-xs border rounded px-2 py-1">
                                ${levels.map(level => `<option value="${level}" ${lang.level === level ? 'selected' : ''}>${level}</option>`).join('')}
                            </select>
@@ -1133,11 +1283,17 @@
                const container = document.getElementById('preview-languages');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.languages.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
+                   return;
+               }
+               
                cvData.languages.forEach(lang => {
                    container.innerHTML += `
-                       <div class="flex justify-between items-center mb-1">
-                           <span class="text-xs text-gray-700">${lang.name || ''}</span>
-                           <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">${lang.level || ''}</span>
+                       <div class="text-xs">
+                           <span class="text-gray-700">${lang.name || ''}</span>
+                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
                        </div>
                    `;
                });
@@ -1147,6 +1303,12 @@
                const container = document.getElementById('skills-editor-list');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.skills.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada. Digite uma habilidade e pressione Enter.</p>';
+                   return;
+               }
+               
                cvData.skills.forEach((skill, index) => {
                    const span = document.createElement('span');
                    span.className = 'bg-white border px-2 py-1 rounded text-xs flex items-center gap-2';
@@ -1159,24 +1321,34 @@
                const container = document.getElementById('preview-skills');
                if (!container) return;
                container.innerHTML = '';
+               
+               if (cvData.skills.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
+                   return;
+               }
+               
                cvData.skills.forEach(skill => {
-                   container.innerHTML += `<span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 border">${skill}</span>`;
+                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
                });
            }
 
            // Ações globais
            window.addItem = function(type) {
                if (type === 'experience') {
-                   cvData.experience.unshift({ role: "Novo Cargo", company: "Empresa", date: "Data", description: "Descrição" });
+                   if (!cvData.experience) cvData.experience = [];
+                   cvData.experience.unshift({ role: "", company: "", date: "", description: "" });
                    renderExperienceEditor();
                } else if (type === 'education') {
-                   cvData.education.unshift({ degree: "Novo Grau", school: "Instituição", date: "Ano" });
+                   if (!cvData.education) cvData.education = [];
+                   cvData.education.unshift({ degree: "", school: "", date: "" });
                    renderEducationEditor();
                } else if (type === 'awards') {
-                   cvData.awards.unshift({ title: "Novo Prêmio", organization: "Organização", year: "Ano" });
+                   if (!cvData.awards) cvData.awards = [];
+                   cvData.awards.unshift({ title: "", organization: "", year: "" });
                    renderAwardsEditor();
                } else if (type === 'languages') {
-                   cvData.languages.unshift({ name: "Idioma", level: "Intermediário" });
+                   if (!cvData.languages) cvData.languages = [];
+                   cvData.languages.unshift({ name: "", level: "Intermediário" });
                    renderLanguagesEditor();
                }
                renderPreview();
@@ -1203,34 +1375,6 @@
            window.deleteSkill = function(index) {
                cvData.skills.splice(index, 1);
                renderSkills();
-               renderPreview();
-           };
-
-           window.setTheme = function(theme) {
-               cvData.theme = theme;
-               const cv = document.getElementById('cv-content');
-               cv.className = cv.className.replace(/theme-\w+/, `theme-${theme}`);
-               
-               const accentColor = theme === 'modern' ? '#1e293b' : 
-                                  theme === 'classic' ? '#8b5a2b' :
-                                  theme === 'vibrant' ? '#7c3aed' : '#374151';
-                                  
-               document.querySelectorAll('[style*="color: #1e293b"]').forEach(el => {
-                   el.style.color = accentColor;
-               });
-               document.querySelectorAll('[style*="border-color: #1e293b"]').forEach(el => {
-                   el.style.borderColor = accentColor;
-               });
-               
-               document.querySelectorAll('.theme-btn').forEach(btn => {
-                   if (btn.dataset.theme === theme) {
-                       btn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
-                       btn.classList.remove('text-gray-500');
-                   } else {
-                       btn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
-                       btn.classList.add('text-gray-500');
-                   }
-               });
                renderPreview();
            };
 
@@ -1281,6 +1425,14 @@
                    layoutTab.className = 'flex-1 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600';
                    contentTab.className = 'flex-1 py-4 text-sm font-medium text-gray-500';
                    editorArea.innerHTML = getLayoutHTML();
+                   // Carregar valores atuais nos seletores
+                   setTimeout(() => {
+                       const fontSelect = document.getElementById('font-family-select');
+                       if (fontSelect) fontSelect.value = cvData.fontFamily;
+                       
+                       const sizeSelect = document.getElementById('font-size-select');
+                       if (sizeSelect) sizeSelect.value = cvData.fontSize;
+                   }, 100);
                }
            };
 
@@ -1291,24 +1443,24 @@
                        
                        <!-- Campo de Upload de Foto -->
                        <div class="flex items-center gap-4 mb-4">
-                           <div id="photo-container-preview" class="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
+                           <div id="photo-container-preview" class="relative w-20 h-20 rounded overflow-hidden bg-gray-100">
                                ${cvData.photo ? 
                                    `<img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded-lg">
-                                        <label class="cursor-pointer text-white hover:text-blue-300">
+                                    <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded">
+                                        <label class="cursor-pointer text-white hover:text-gray-200">
                                             <i class="fas fa-camera"></i>
                                             <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
                                         </label>
-                                        <button onclick="removePhoto()" class="text-white hover:text-red-300">
+                                        <button onclick="removePhoto()" class="text-white hover:text-gray-200">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>` :
-                                   `<div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                        <span class="text-white text-2xl font-bold">${cvData.name ? cvData.name.charAt(0) : '?'}</span>
+                                   `<div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                        <span class="text-gray-400 text-4xl font-light">?</span>
                                     </div>
-                                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <label class="cursor-pointer text-white hover:text-blue-300">
-                                            <i class="fas fa-camera text-lg"></i>
+                                    <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded">
+                                        <label class="cursor-pointer text-white hover:text-gray-200">
+                                            <i class="fas fa-camera"></i>
                                             <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
                                         </label>
                                     </div>`
@@ -1317,12 +1469,12 @@
                            <div class="flex-1">
                                <label class="block text-xs text-gray-500 mb-1">Foto do perfil</label>
                                <div class="flex gap-2">
-                                   <label class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer text-center transition-colors">
+                                   <label class="flex-1 bg-gray-800 hover:bg-gray-900 text-white text-xs font-medium px-3 py-2 rounded cursor-pointer text-center transition-colors">
                                        <i class="fas fa-camera mr-1"></i> Adicionar Foto
                                        <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
                                    </label>
                                    ${cvData.photo ? `
-                                       <button onclick="removePhoto()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs">
+                                       <button onclick="removePhoto()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs">
                                            <i class="fas fa-trash"></i>
                                        </button>
                                    ` : ''}
@@ -1332,22 +1484,22 @@
 
                        <div class="grid grid-cols-2 gap-4">
                            <div class="col-span-2">
-                               <input type="text" data-field="name" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Nome completo" value="${cvData.name.replace(/"/g, '&quot;')}">
+                               <input type="text" data-field="name" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Nome completo" value="">
                            </div>
                            <div class="col-span-2">
-                               <input type="text" data-field="title" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Cargo atual" value="${cvData.title.replace(/"/g, '&quot;')}">
+                               <input type="text" data-field="title" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Profissão/Formação/Vocação" value="">
                            </div>
                            <div class="col-span-2">
-                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Resumo profissional">${cvData.summary.replace(/"/g, '&quot;')}</textarea>
+                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Perfil"></textarea>
                            </div>
                            <div>
-                               <input type="email" data-field="email" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Email" value="${cvData.email.replace(/"/g, '&quot;')}">
+                               <input type="email" data-field="email" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Email" value="">
                            </div>
                            <div>
-                               <input type="text" data-field="phone" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Telefone" value="${cvData.phone.replace(/"/g, '&quot;')}">
+                               <input type="text" data-field="phone" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Telefone" value="">
                            </div>
                            <div class="col-span-2">
-                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Localização" value="${cvData.location.replace(/"/g, '&quot;')}">
+                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Localização" value="">
                            </div>
                        </div>
                        
@@ -1355,7 +1507,7 @@
                        
                        <div class="flex justify-between items-center">
                            <h3 class="text-sm font-bold text-gray-900 uppercase">Experiência</h3>
-                           <button onclick="addItem('experience')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition-colors">+ Adicionar</button>
+                           <button onclick="addItem('experience')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
                        </div>
                        <div id="experience-editor-list" class="space-y-3"></div>
                        
@@ -1363,7 +1515,7 @@
                        
                        <div class="flex justify-between items-center">
                            <h3 class="text-sm font-bold text-gray-900 uppercase">Educação</h3>
-                           <button onclick="addItem('education')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition-colors">+ Adicionar</button>
+                           <button onclick="addItem('education')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
                        </div>
                        <div id="education-editor-list" class="space-y-3"></div>
                        
@@ -1371,7 +1523,7 @@
                        
                        <div class="flex justify-between items-center">
                            <h3 class="text-sm font-bold text-gray-900 uppercase">Prêmios</h3>
-                           <button onclick="addItem('awards')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition-colors">+ Adicionar</button>
+                           <button onclick="addItem('awards')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
                        </div>
                        <div id="awards-editor-list" class="space-y-3"></div>
                        
@@ -1379,21 +1531,21 @@
                        
                        <div class="flex justify-between items-center">
                            <h3 class="text-sm font-bold text-gray-900 uppercase">Idiomas</h3>
-                           <button onclick="addItem('languages')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition-colors">+ Adicionar</button>
+                           <button onclick="addItem('languages')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
                        </div>
                        <div id="languages-editor-list" class="space-y-3"></div>
                        
                        <hr class="border-gray-200">
                        
                        <h3 class="text-sm font-bold text-gray-900 uppercase">Habilidades</h3>
-                       <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                           <input type="text" id="skill-input" class="w-full bg-white border border-blue-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500" placeholder="Digite uma habilidade e pressione Enter">
+                       <div class="bg-gray-50 border border-gray-200 rounded p-3">
+                           <input type="text" id="skill-input" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Digite uma habilidade e pressione Enter">
                            <p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> Pressione Enter para adicionar</p>
                        </div>
-                       <div id="skills-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded-lg p-2"></div>
+                       <div id="skills-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded p-2"></div>
                        
                        <div class="pt-6">
-                           <button onclick="simulatePDF()" class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg">
+                           <button onclick="simulatePDF()" class="w-full bg-gray-800 hover:bg-gray-900 text-white py-3 rounded font-bold flex items-center justify-center gap-3 transition-all">
                                <i class="fas fa-file-pdf text-lg"></i> VISUALIZAR PDF
                            </button>
                        </div>
@@ -1402,37 +1554,96 @@
            }
 
            function getLayoutHTML() {
+               // Gerar opções de fonte
+               const fontOptionsHtml = Object.keys(fontOptions).map(font => 
+                   `<option value="${font}" ${cvData.fontFamily === font ? 'selected' : ''}>${font}</option>`
+               ).join('');
+               
+               // Gerar opções de tamanho
+               const sizeOptions = [9, 10, 11, 12, 13, 14].map(size => 
+                   `<option value="${size}" ${cvData.fontSize === size ? 'selected' : ''}>${size}px</option>`
+               ).join('');
+               
                return `
                    <div class="space-y-6">
                        <h3 class="text-sm font-bold text-gray-900 uppercase">Configurações de Layout</h3>
                        
-                       <div class="bg-gray-50 rounded-lg p-4">
-                           <h4 class="font-medium text-sm mb-3">Cores</h4>
-                           <div class="grid grid-cols-4 gap-2">
-                               <button class="w-8 h-8 rounded-full bg-blue-600 border-2 border-white shadow"></button>
-                               <button class="w-8 h-8 rounded-full bg-green-600 border-2 border-white shadow"></button>
-                               <button class="w-8 h-8 rounded-full bg-purple-600 border-2 border-white shadow"></button>
-                               <button class="w-8 h-8 rounded-full bg-red-600 border-2 border-white shadow"></button>
+                       <div class="bg-gray-50 rounded-lg p-4 space-y-4">
+                           <div>
+                               <h4 class="font-medium text-sm mb-3">Tipo de Letra</h4>
+                               <select id="font-family-select" onchange="setFontFamily(this.value)" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400">
+                                   ${fontOptionsHtml}
+                               </select>
+                           </div>
+                           
+                           <div>
+                               <h4 class="font-medium text-sm mb-3">Tamanho da Letra</h4>
+                               <select id="font-size-select" onchange="setFontSize(this.value)" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400">
+                                   ${sizeOptions}
+                               </select>
                            </div>
                        </div>
                        
                        <div class="bg-gray-50 rounded-lg p-4">
-                           <h4 class="font-medium text-sm mb-3">Espaçamento</h4>
-                           <input type="range" min="0" max="2" step="0.1" value="1" class="w-full">
+                           <h4 class="font-medium text-sm mb-3">Temas Suaves</h4>
+                           <p class="text-xs text-gray-500 mb-4">Escolha um tema com cores leves para seu currículo</p>
+                           
+                           <div class="grid grid-cols-2 gap-3">
+                               <!-- Tema Azure (Azul Suave) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'azure' ? 'selected' : ''}" onclick="setTheme('azure')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Azure</p>
+                                   <p class="text-xs text-gray-500 text-center">Azul suave</p>
+                               </div>
+                               
+                               <!-- Tema Blush (Vermelho Suave) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'blush' ? 'selected' : ''}" onclick="setTheme('blush')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Blush</p>
+                                   <p class="text-xs text-gray-500 text-center">Vermelho suave</p>
+                               </div>
+                               
+                               <!-- Tema Mist (Cinza Suave) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'mist' ? 'selected' : ''}" onclick="setTheme('mist')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #9ca3af 0%, #4b5563 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Mist</p>
+                                   <p class="text-xs text-gray-500 text-center">Cinza suave</p>
+                               </div>
+                               
+                               <!-- Tema Sage (Verde Suave) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'sage' ? 'selected' : ''}" onclick="setTheme('sage')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #86efac 0%, #22c55e 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Sage</p>
+                                   <p class="text-xs text-gray-500 text-center">Verde suave</p>
+                               </div>
+                               
+                               <!-- Tema Lavender (Roxo Suave) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'lavender' ? 'selected' : ''}" onclick="setTheme('lavender')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Lavender</p>
+                                   <p class="text-xs text-gray-500 text-center">Roxo suave</p>
+                               </div>
+                               
+                               <!-- Tema Classic (Preto e Branco) -->
+                               <div class="theme-card p-3 rounded border ${cvData.theme === 'classic' ? 'selected' : ''}" onclick="setTheme('classic')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #000000 0%, #4b5563 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Classic</p>
+                                   <p class="text-xs text-gray-500 text-center">Preto e branco</p>
+                               </div>
+                           </div>
                        </div>
                        
                        <div class="bg-gray-50 rounded-lg p-4">
-                           <h4 class="font-medium text-sm mb-3">Fontes</h4>
-                           <select class="w-full bg-white border rounded-lg px-3 py-2 text-sm">
-                               <option>Inter (Padrão)</option>
-                               <option>Merriweather</option>
-                               <option>Roboto</option>
-                               <option>Open Sans</option>
-                           </select>
+                           <h4 class="font-medium text-sm mb-3">Pré-visualização</h4>
+                           <div class="text-sm p-4 bg-white rounded border" style="font-family: ${fontOptions[cvData.fontFamily]}; font-size: ${cvData.fontSize}px;">
+                               <p class="font-bold" style="color: var(--secondary-color);">Exemplo de texto</p>
+                               <p class="text-gray-600">Este é um exemplo de como ficará seu currículo com as configurações atuais.</p>
+                           </div>
                        </div>
                        
                        <p class="text-center text-gray-400 text-sm py-4">
-                           <i class="fas fa-tools mr-2"></i> Mais opções em breve...
+                           <i class="fas fa-check-circle text-green-500 mr-2"></i> 
+                           Configurações salvas automaticamente
                        </p>
                    </div>
                `;
@@ -1465,15 +1676,85 @@
                }
            }
 
+           // FUNÇÃO PARA MOSTRAR EXEMPLO NA VISUALIZAÇÃO INICIAL
+           function showExampleInPreview() {
+               // Mostrar exemplo APENAS na visualização, não nos campos de edição
+               document.getElementById('preview-name').textContent = exampleData.name;
+               document.getElementById('preview-title').textContent = exampleData.title;
+               document.getElementById('preview-email').textContent = exampleData.email;
+               document.getElementById('preview-phone').textContent = exampleData.phone;
+               document.getElementById('preview-location').textContent = exampleData.location;
+               document.getElementById('preview-summary').textContent = exampleData.summary;
+               
+               // Renderizar habilidades de exemplo
+               const skillsContainer = document.getElementById('preview-skills');
+               skillsContainer.innerHTML = '';
+               exampleData.skills.forEach(skill => {
+                   skillsContainer.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
+               });
+               
+               // Renderizar idiomas de exemplo
+               const languagesContainer = document.getElementById('preview-languages');
+               languagesContainer.innerHTML = '';
+               exampleData.languages.forEach(lang => {
+                   languagesContainer.innerHTML += `
+                       <div class="text-xs">
+                           <span class="text-gray-700">${lang.name}</span>
+                           <span class="text-gray-500 ml-1">${lang.level}</span>
+                       </div>
+                   `;
+               });
+               
+               // Renderizar educação de exemplo
+               const educationContainer = document.getElementById('preview-education');
+               educationContainer.innerHTML = '';
+               exampleData.education.forEach(edu => {
+                   educationContainer.innerHTML += `
+                       <div class="mb-2">
+                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree}</h3>
+                           <div class="text-xs text-gray-600">${edu.school}</div>
+                           <div class="text-xs text-gray-400 italic">${edu.date}</div>
+                       </div>
+                   `;
+               });
+               
+               // Renderizar experiência de exemplo
+               const experienceContainer = document.getElementById('preview-experience');
+               experienceContainer.innerHTML = '';
+               exampleData.experience.forEach(job => {
+                   experienceContainer.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${job.role}</h3>
+                               <span class="text-xs text-gray-500">${job.date}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company}</div>
+                           <p class="text-xs text-gray-600">${job.description}</p>
+                       </div>
+                   `;
+               });
+               
+               // Renderizar prêmios de exemplo
+               const awardsContainer = document.getElementById('preview-awards');
+               awardsContainer.innerHTML = '';
+               exampleData.awards.forEach(award => {
+                   awardsContainer.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${award.title}</h3>
+                               <span class="text-xs text-gray-500">${award.year}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization}</div>
+                       </div>
+                   `;
+               });
+           }
+
            // Inicialização
            document.addEventListener('DOMContentLoaded', () => {
                loadDownloadStats();
                loadSavedPhoto();
-               loadDataToForm();
-               renderPreview();
-               setupInputListeners();
-               setupSkillInput();
-               applyZoom();
+               loadSettings(); // Carregar configurações de tema, fonte e tamanho
                
                // Carregar conteúdo inicial
                const editorArea = document.getElementById('editor-scroll-area');
@@ -1484,6 +1765,13 @@
                    setupInputListeners();
                    updatePhotoPreview();
                }
+               
+               // MOSTRAR EXEMPLO NA VISUALIZAÇÃO (APENAS VISUAL, NÃO NOS CAMPOS)
+               showExampleInPreview();
+               
+               // Atualizar tema inicial
+               setTheme(cvData.theme);
+               applyZoom();
            });
        })();
    </script>
