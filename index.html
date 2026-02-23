@@ -552,7 +552,8 @@
                                    <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
                                    <div id="preview-experience" class="space-y-3"></div>
                                </section>
-                               <section>
+                               <!-- Seção de Prêmios - Só aparece se houver prêmios -->
+                               <section id="preview-awards-section" class="mb-3" style="display: none;">
                                    <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
                                    <div id="preview-awards" class="space-y-2"></div>
                                </section>
@@ -1228,14 +1229,19 @@
            }
 
            function renderAwardsPreview() {
+               const awardsSection = document.getElementById('preview-awards-section');
                const container = document.getElementById('preview-awards');
-               if (!container) return;
-               container.innerHTML = '';
+               
+               if (!container || !awardsSection) return;
                
                if (cvData.awards.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum prêmio adicionado</p>';
+                   awardsSection.style.display = 'none';
                    return;
                }
+               
+               // Mostrar a seção e preencher os prêmios
+               awardsSection.style.display = 'block';
+               container.innerHTML = '';
                
                cvData.awards.forEach(award => {
                    container.innerHTML += `
@@ -1499,7 +1505,7 @@
                                <input type="text" data-field="phone" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Telefone" value="">
                            </div>
                            <div class="col-span-2">
-                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Morada: Bairro, Município, Província" value="">
+                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Localização" value="">
                            </div>
                        </div>
                        
@@ -1734,20 +1740,27 @@
                    `;
                });
                
-               // Renderizar prêmios de exemplo
+               // Renderizar prêmios de exemplo (mostrar se houver)
+               const awardsSection = document.getElementById('preview-awards-section');
                const awardsContainer = document.getElementById('preview-awards');
-               awardsContainer.innerHTML = '';
-               exampleData.awards.forEach(award => {
-                   awardsContainer.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${award.title}</h3>
-                               <span class="text-xs text-gray-500">${award.year}</span>
+               
+               if (exampleData.awards && exampleData.awards.length > 0) {
+                   awardsSection.style.display = 'block';
+                   awardsContainer.innerHTML = '';
+                   exampleData.awards.forEach(award => {
+                       awardsContainer.innerHTML += `
+                           <div class="mb-2">
+                               <div class="flex justify-between items-baseline">
+                                   <h3 class="font-bold text-gray-800 text-xs">${award.title}</h3>
+                                   <span class="text-xs text-gray-500">${award.year}</span>
+                               </div>
+                               <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization}</div>
                            </div>
-                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization}</div>
-                       </div>
-                   `;
-               });
+                       `;
+                   });
+               } else {
+                   awardsSection.style.display = 'none';
+               }
            }
 
            // Inicialização
@@ -1777,4 +1790,3 @@
    </script>
 </body>
 </html>
-
