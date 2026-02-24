@@ -107,7 +107,7 @@
            transform-origin: center top;
        }
 
-       /* Estilos de Foto */
+       /* Estilos de Foto - Melhorado para ajuste de imagem */
        .photo-container {
            position: relative;
            width: 100px;
@@ -127,23 +127,24 @@
            width: 100%;
            height: 100%;
            object-fit: cover;
+           object-position: center;
        }
 
        /* ===== TEMAS COM CORES SUAVES ===== */
        
        /* Tema Azure (Azul Suave) */
        .theme-azure {
-           --primary-color: #60a5fa;        /* Azul claro */
-           --secondary-color: #3b82f6;       /* Azul médio */
+           --primary-color: #60a5fa;
+           --secondary-color: #3b82f6;
            --text-color: #1f2937;
-           --border-color: #d1d5db;          /* Cinza claro para bordas */
+           --border-color: #d1d5db;
            --light-bg: #f9fafb;
        }
        
        /* Tema Blush (Vermelho Suave) */
        .theme-blush {
-           --primary-color: #fca5a5;        /* Vermelho claro */
-           --secondary-color: #ef4444;        /* Vermelho médio */
+           --primary-color: #fca5a5;
+           --secondary-color: #ef4444;
            --text-color: #1f2937;
            --border-color: #d1d5db;
            --light-bg: #f9fafb;
@@ -151,8 +152,8 @@
        
        /* Tema Mist (Cinza Suave) */
        .theme-mist {
-           --primary-color: #9ca3af;         /* Cinza médio */
-           --secondary-color: #4b5563;        /* Cinza escuro */
+           --primary-color: #9ca3af;
+           --secondary-color: #4b5563;
            --text-color: #111827;
            --border-color: #d1d5db;
            --light-bg: #f9fafb;
@@ -160,8 +161,8 @@
        
        /* Tema Sage (Verde Suave) */
        .theme-sage {
-           --primary-color: #86efac;         /* Verde claro */
-           --secondary-color: #22c55e;        /* Verde médio */
+           --primary-color: #86efac;
+           --secondary-color: #22c55e;
            --text-color: #1f2937;
            --border-color: #d1d5db;
            --light-bg: #f9fafb;
@@ -169,8 +170,8 @@
        
        /* Tema Lavender (Roxo Suave) */
        .theme-lavender {
-           --primary-color: #c4b5fd;         /* Roxo claro */
-           --secondary-color: #8b5cf6;        /* Roxo médio */
+           --primary-color: #c4b5fd;
+           --secondary-color: #8b5cf6;
            --text-color: #1f2937;
            --border-color: #d1d5db;
            --light-bg: #f9fafb;
@@ -178,14 +179,127 @@
        
        /* Tema Classic (Preto e Branco) */
        .theme-classic {
-           --primary-color: #000000;          /* Preto */
-           --secondary-color: #4b5563;        /* Cinza escuro */
+           --primary-color: #000000;
+           --secondary-color: #4b5563;
            --text-color: #111827;
            --border-color: #000000;
            --light-bg: #ffffff;
        }
        
-       /* Aplicação mínima das cores dos temas */
+       /* ===== TEMAS PROFISSIONAIS COM CORES FRIAS ===== */
+       
+       /* Tema Profissional 1 - Azul Petróleo (frio e elegante) */
+       .theme-pro-1 {
+           --primary-color: #0f4c5c;
+           --secondary-color: #1e6f7e;
+           --accent-color: #e0f2f1;
+           --text-color: #1f2937;
+           --border-color: #b2d8d8;
+           --light-bg: #f0f7f7;
+       }
+       
+       /* Tema Profissional 2 - Azul Céu Noturno (frio e suave) */
+       .theme-pro-2 {
+           --primary-color: #1a4b7a;
+           --secondary-color: #2e6da9;
+           --accent-color: #d4e6f1;
+           --text-color: #1f2937;
+           --border-color: #aac8e0;
+           --light-bg: #e8f0f7;
+       }
+       
+       /* Tema Profissional 3 - Azul Geada (frio e claro) */
+       .theme-pro-3 {
+           --primary-color: #2c5f8a;
+           --secondary-color: #4a7baa;
+           --accent-color: #e1eef7;
+           --text-color: #1f2937;
+           --border-color: #b8d1e8;
+           --light-bg: #f0f5fa;
+       }
+       
+       /* Estilo do cabeçalho destacado para temas profissionais */
+       .theme-pro-1 .professional-header,
+       .theme-pro-2 .professional-header,
+       .theme-pro-3 .professional-header {
+           background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+           color: white;
+           padding: 20px 15px;
+           margin: -12mm -12mm 15px -12mm;
+           border-radius: 0;
+       }
+       
+       .theme-pro-1 .professional-header h1,
+       .theme-pro-2 .professional-header h1,
+       .theme-pro-3 .professional-header h1 {
+           color: white;
+           font-size: 28px;
+           font-weight: 700;
+           margin-bottom: 5px;
+       }
+       
+       .theme-pro-1 .professional-header .professional-title,
+       .theme-pro-2 .professional-header .professional-title,
+       .theme-pro-3 .professional-header .professional-title {
+           color: rgba(255,255,255,0.9);
+           font-size: 16px;
+           font-weight: 500;
+           margin-bottom: 10px;
+       }
+       
+       .theme-pro-1 .professional-header .professional-contact,
+       .theme-pro-2 .professional-header .professional-contact,
+       .theme-pro-3 .professional-header .professional-contact {
+           display: flex;
+           flex-wrap: wrap;
+           gap: 15px;
+           font-size: 12px;
+           color: rgba(255,255,255,0.8);
+       }
+       
+       .theme-pro-1 .professional-header .professional-contact i,
+       .theme-pro-2 .professional-header .professional-contact i,
+       .theme-pro-3 .professional-header .professional-contact i {
+           margin-right: 5px;
+           color: rgba(255,255,255,0.9);
+       }
+       
+       .theme-pro-1 .section-title,
+       .theme-pro-2 .section-title,
+       .theme-pro-3 .section-title {
+           color: var(--primary-color);
+           border-bottom: 2px solid var(--border-color);
+           padding-bottom: 5px;
+           margin-bottom: 10px;
+           font-weight: 600;
+       }
+       
+       .theme-pro-1 .border-accent,
+       .theme-pro-2 .border-accent,
+       .theme-pro-3 .border-accent {
+           border-color: var(--border-color);
+       }
+       
+       .theme-pro-1 .company-name,
+       .theme-pro-2 .company-name,
+       .theme-pro-3 .company-name {
+           color: var(--secondary-color);
+           font-weight: 600;
+       }
+       
+       /* Texto justificado para todos os temas */
+       .a4-paper p, 
+       .a4-paper .text-justify,
+       .a4-paper .preview-summary,
+       .a4-paper .preview-experience p,
+       .a4-paper .preview-education p,
+       .a4-paper .preview-awards p,
+       .a4-paper .job-description {
+           text-align: justify;
+           text-justify: inter-word;
+       }
+       
+       /* Aplicação das cores dos temas padrão */
        .theme-azure .section-title { color: var(--secondary-color); }
        .theme-azure .border-accent { border-color: var(--border-color); }
        .theme-azure .company-name { color: var(--secondary-color); }
@@ -473,13 +587,16 @@
            </div>
            <h1 class="font-bold text-xl text-gray-900">GCV<span class="text-blue-600">-INTERACTIVE</span></h1>
        </div>
-       <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200">
-           <button onclick="setTheme('azure')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="azure">Azure</button>
-           <button onclick="setTheme('blush')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="blush">Blush</button>
-           <button onclick="setTheme('mist')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="mist">Mist</button>
-           <button onclick="setTheme('sage')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="sage">Sage</button>
-           <button onclick="setTheme('lavender')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="lavender">Lavender</button>
-           <button onclick="setTheme('classic')" class="theme-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-500" data-theme="classic">Classic</button>
+       <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200 flex-wrap">
+           <button onclick="setTheme('azure')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="azure">Azure</button>
+           <button onclick="setTheme('blush')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="blush">Blush</button>
+           <button onclick="setTheme('mist')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="mist">Mist</button>
+           <button onclick="setTheme('sage')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="sage">Sage</button>
+           <button onclick="setTheme('lavender')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="lavender">Lavender</button>
+           <button onclick="setTheme('classic')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="classic">Classic</button>
+           <button onclick="setTheme('pro-1')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-1">Pro 1</button>
+           <button onclick="setTheme('pro-2')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-2">Pro 2</button>
+           <button onclick="setTheme('pro-3')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-3">Pro 3</button>
        </div>
    </header>
 
@@ -506,19 +623,39 @@
            <div class="flex-1 overflow-auto p-8 flex justify-center items-start" id="preview-scroll-area">
                <div id="cv-preview-container" class="transition-transform duration-200 origin-top" style="transform: scale(0.9);">
                    <div id="cv-content" class="a4-paper theme-azure text-gray-800" style="font-family: 'Inter', sans-serif; font-size: 12px;">
-                       <!-- Cabeçalho do CV com Foto -->
-                       <header class="flex gap-4 pb-3 items-start border-b border-gray-200">
-                           <div id="preview-photo" class="w-20 h-20 rounded bg-gray-100 bg-cover bg-center flex-shrink-0 hidden"></div>
-                           <div class="flex-1">
-                               <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
-                               <p class="text-base mb-2" style="color: var(--secondary-color);" id="preview-title">Coordenador Geral do CNJ-AO, CHINA</p>
-                               <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
-                                   <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
-                                   <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
-                                   <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China, Rua N123</span></span>
+                       <!-- MODELO PADRÃO - Cabeçalho simples -->
+                       <div id="default-template">
+                           <header class="flex gap-4 pb-3 items-start border-b border-gray-200">
+                               <div id="preview-photo" class="w-20 h-20 rounded bg-gray-100 bg-cover bg-center flex-shrink-0 hidden"></div>
+                               <div class="flex-1">
+                                   <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
+                                   <p class="text-base mb-2" style="color: var(--secondary-color);" id="preview-title">Coordenador Geral do CNJ-AO, CHINA</p>
+                                   <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
+                                       <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
+                                       <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
+                                       <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China, Rua N123</span></span>
+                                   </div>
+                               </div>
+                           </header>
+                       </div>
+                       
+                       <!-- MODELO PROFISSIONAL - Cabeçalho destacado (inicialmente oculto) -->
+                       <div id="professional-template" style="display: none;">
+                           <div class="professional-header">
+                               <div class="flex items-center gap-4">
+                                   <div id="preview-photo-professional" class="w-20 h-20 rounded-full bg-white bg-cover bg-center flex-shrink-0 hidden" style="border: 3px solid white;"></div>
+                                   <div class="flex-1">
+                                       <h1 class="text-3xl font-bold mb-1" id="preview-name-professional">Odair Miguel Júlio</h1>
+                                       <p class="professional-title text-lg mb-2" id="preview-title-professional">Coordenador Geral do CNJ-AO, CHINA</p>
+                                       <div class="professional-contact">
+                                           <span><i class="fas fa-envelope"></i> <span id="preview-email-professional">odair.julio@exemplo.com</span></span>
+                                           <span><i class="fas fa-phone"></i> <span id="preview-phone-professional">+244 923433343</span></span>
+                                           <span><i class="fas fa-map-marker-alt"></i> <span id="preview-location-professional">Beijing, China, Rua N123</span></span>
+                                       </div>
+                                   </div>
                                </div>
                            </div>
-                       </header>
+                       </div>
 
                        <div class="grid grid-cols-3 gap-4 mt-4">
                            <!-- Coluna Esquerda (com borda lateral) -->
@@ -546,7 +683,7 @@
                            <div class="col-span-2">
                                <section class="mb-3">
                                    <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">PERFIL</h2>
-                                   <p class="text-xs leading-relaxed text-gray-600" id="preview-summary"></p>
+                                   <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary"></p>
                                </section>
                                <section class="mb-3">
                                    <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
@@ -580,7 +717,7 @@
                phone: "+244 923433343",
                location: "Beijing, China, Rua N123",
                summary: "Profissional com forte capacidade de liderança, articulação política e gestão de pessoas, dedicado a potencializar o protagonismo juvenil. Responsável por planejar, coordenar e monitorar as atividades da organização, garantindo que a missão institucional seja cumprida, os prazos respeitados e os jovens engajados de forma saudável e produtiva. Atua como facilitador e mentor, criando um ambiente seguro para o desenvolvimento de lideranças emergentes.",
-               skills: ["Prototipagem", "Design Systems", "Power BI", "Gestão de Liderança", "Visão de Longo Prazo", "Expressão e Comunicação", "CRM"],
+               skills: ["Power BI", "Microsoft 365", "Anylogic", "Gestão de Liderança", "Visão de Longo Prazo", "Expressão e Comunicação", "CRM"],
                experience: [
                    { role: "Coordenador Geral", company: "Conselho Nacional da Juventude", date: "2023-Presente", description: "Liderando sistema de design que atende 5 produtos digitais." },
                    { role: "Coordenador de Controlo e Imagem", company: "VITAL Lda", date: "2020-2023", description: "Design de apps com mais de 1M de usuários." }
@@ -635,6 +772,9 @@
                "Verdana": "Verdana, sans-serif",
                "Courier New": "'Courier New', monospace"
            };
+           
+           // Lista de temas profissionais (com cabeçalho destacado)
+           const professionalThemes = ['pro-1', 'pro-2', 'pro-3'];
            
            // Sistema de contador de downloads
            let downloadStats = {
@@ -790,6 +930,18 @@
                // Adicionar a nova classe de tema
                cv.classList.add(`theme-${theme}`);
                
+               // Mostrar/esconder os templates apropriados
+               const defaultTemplate = document.getElementById('default-template');
+               const professionalTemplate = document.getElementById('professional-template');
+               
+               if (professionalThemes.includes(theme)) {
+                   defaultTemplate.style.display = 'none';
+                   professionalTemplate.style.display = 'block';
+               } else {
+                   defaultTemplate.style.display = 'block';
+                   professionalTemplate.style.display = 'none';
+               }
+               
                // Atualizar botões de tema
                document.querySelectorAll('.theme-btn').forEach(btn => {
                    if (btn.dataset.theme === theme) {
@@ -846,7 +998,7 @@
                }
            }
 
-           // ===== FUNÇÕES DE FOTO =====
+           // ===== FUNÇÕES DE FOTO - MELHORADA =====
            window.handlePhotoUpload = function(input) {
                if (input.files && input.files[0]) {
                    const reader = new FileReader();
@@ -878,15 +1030,30 @@
 
            function updatePhotoPreview() {
                const previewPhoto = document.getElementById('preview-photo');
+               const previewPhotoProfessional = document.getElementById('preview-photo-professional');
                const photoContainer = document.getElementById('photo-container-preview');
                
                if (cvData.photo) {
-                   previewPhoto.style.backgroundImage = `url('${cvData.photo}')`;
-                   previewPhoto.classList.remove('hidden');
+                   // Para a visualização do currículo (modelo padrão)
+                   if (previewPhoto) {
+                       previewPhoto.style.backgroundImage = `url('${cvData.photo}')`;
+                       previewPhoto.style.backgroundSize = 'cover';
+                       previewPhoto.style.backgroundPosition = 'center';
+                       previewPhoto.classList.remove('hidden');
+                   }
                    
+                   // Para a visualização do currículo (modelo profissional)
+                   if (previewPhotoProfessional) {
+                       previewPhotoProfessional.style.backgroundImage = `url('${cvData.photo}')`;
+                       previewPhotoProfessional.style.backgroundSize = 'cover';
+                       previewPhotoProfessional.style.backgroundPosition = 'center';
+                       previewPhotoProfessional.classList.remove('hidden');
+                   }
+                   
+                   // Para o container do editor
                    if (photoContainer) {
                        photoContainer.innerHTML = `
-                           <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover rounded">
+                           <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
                            <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded">
                                <label class="cursor-pointer text-white hover:text-gray-200">
                                    <i class="fas fa-camera"></i>
@@ -899,7 +1066,8 @@
                        `;
                    }
                } else {
-                   previewPhoto.classList.add('hidden');
+                   if (previewPhoto) previewPhoto.classList.add('hidden');
+                   if (previewPhotoProfessional) previewPhotoProfessional.classList.add('hidden');
                    
                    if (photoContainer) {
                        photoContainer.innerHTML = `
@@ -1080,12 +1248,24 @@
            };
 
            window.renderPreview = function() {
-               // Se o usuário não preencheu nada, mostrar campos vazios
-               document.getElementById('preview-name').textContent = cvData.name || '';
-               document.getElementById('preview-title').textContent = cvData.title || '';
-               document.getElementById('preview-email').textContent = cvData.email || '';
-               document.getElementById('preview-phone').textContent = cvData.phone || '';
-               document.getElementById('preview-location').textContent = cvData.location || '';
+               // Verificar qual template está ativo
+               const isProfessional = professionalThemes.includes(cvData.theme);
+               
+               // Atualizar campos apropriados
+               if (isProfessional) {
+                   document.getElementById('preview-name-professional').textContent = cvData.name || '';
+                   document.getElementById('preview-title-professional').textContent = cvData.title || '';
+                   document.getElementById('preview-email-professional').textContent = cvData.email || '';
+                   document.getElementById('preview-phone-professional').textContent = cvData.phone || '';
+                   document.getElementById('preview-location-professional').textContent = cvData.location || '';
+               } else {
+                   document.getElementById('preview-name').textContent = cvData.name || '';
+                   document.getElementById('preview-title').textContent = cvData.title || '';
+                   document.getElementById('preview-email').textContent = cvData.email || '';
+                   document.getElementById('preview-phone').textContent = cvData.phone || '';
+                   document.getElementById('preview-location').textContent = cvData.location || '';
+               }
+               
                document.getElementById('preview-summary').textContent = cvData.summary || '';
                
                renderExperiencePreview();
@@ -1097,13 +1277,30 @@
            };
 
            function updatePreviewField(field, value) {
-               const map = {
-                   'name': 'preview-name', 'title': 'preview-title', 'email': 'preview-email',
-                   'phone': 'preview-phone', 'location': 'preview-location', 'summary': 'preview-summary'
-               };
-               if (map[field]) {
-                   const el = document.getElementById(map[field]);
-                   if (el) el.textContent = value || '';
+               const isProfessional = professionalThemes.includes(cvData.theme);
+               
+               if (isProfessional) {
+                   const map = {
+                       'name': 'preview-name-professional',
+                       'title': 'preview-title-professional',
+                       'email': 'preview-email-professional',
+                       'phone': 'preview-phone-professional',
+                       'location': 'preview-location-professional',
+                       'summary': 'preview-summary'
+                   };
+                   if (map[field]) {
+                       const el = document.getElementById(map[field]);
+                       if (el) el.textContent = value || '';
+                   }
+               } else {
+                   const map = {
+                       'name': 'preview-name', 'title': 'preview-title', 'email': 'preview-email',
+                       'phone': 'preview-phone', 'location': 'preview-location', 'summary': 'preview-summary'
+                   };
+                   if (map[field]) {
+                       const el = document.getElementById(map[field]);
+                       if (el) el.textContent = value || '';
+                   }
                }
            }
 
@@ -1126,7 +1323,7 @@
                        </div>
                        <input type="text" value="${(job.role || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'role', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Cargo">
                        <input type="text" value="${(job.company || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'company', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Empresa">
-                       <input type="text" value="${(job.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 mb-2 border-none focus:ring-0" placeholder="Período">
+                       <input type="text" value="${(job.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 mb-2 border-none focus:ring-0" placeholder="Ano de início-presente">
                        <textarea onchange="updateItem('experience', ${index}, 'description', this.value)" class="w-full bg-white text-xs p-2 rounded border" rows="2" placeholder="Descrição...">${(job.description || '').replace(/"/g, '&quot;')}</textarea>
                    `;
                    container.appendChild(div);
@@ -1151,7 +1348,7 @@
                                <span class="text-xs text-gray-500">${job.date || ''}</span>
                            </div>
                            <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company || ''}</div>
-                           <p class="text-xs text-gray-600">${job.description || ''}</p>
+                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
                        </div>
                    `;
                });
@@ -1176,7 +1373,7 @@
                        </div>
                        <input type="text" value="${(edu.degree || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'degree', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Grau">
                        <input type="text" value="${(edu.school || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'school', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Instituição">
-                       <input type="text" value="${(edu.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
+                       <input type="text" value="${(edu.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano de início-Ano de termino">
                    `;
                    container.appendChild(div);
                });
@@ -1333,6 +1530,7 @@
                    return;
                }
                
+               // Habilidades organizadas uma abaixo da outra
                cvData.skills.forEach(skill => {
                    container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
                });
@@ -1505,7 +1703,7 @@
                                <input type="text" data-field="phone" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Telefone" value="">
                            </div>
                            <div class="col-span-2">
-                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Localização" value="">
+                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Morada: Bairro, Município, Província" value="">
                            </div>
                        </div>
                        
@@ -1594,47 +1792,65 @@
                            <h4 class="font-medium text-sm mb-3">Temas Suaves</h4>
                            <p class="text-xs text-gray-500 mb-4">Escolha um tema com cores leves para seu currículo</p>
                            
-                           <div class="grid grid-cols-2 gap-3">
+                           <div class="grid grid-cols-3 gap-2">
                                <!-- Tema Azure (Azul Suave) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'azure' ? 'selected' : ''}" onclick="setTheme('azure')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'azure' ? 'selected' : ''}" onclick="setTheme('azure')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);"></div>
                                    <p class="text-xs font-medium text-center">Azure</p>
-                                   <p class="text-xs text-gray-500 text-center">Azul suave</p>
                                </div>
                                
                                <!-- Tema Blush (Vermelho Suave) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'blush' ? 'selected' : ''}" onclick="setTheme('blush')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'blush' ? 'selected' : ''}" onclick="setTheme('blush')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);"></div>
                                    <p class="text-xs font-medium text-center">Blush</p>
-                                   <p class="text-xs text-gray-500 text-center">Vermelho suave</p>
                                </div>
                                
                                <!-- Tema Mist (Cinza Suave) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'mist' ? 'selected' : ''}" onclick="setTheme('mist')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'mist' ? 'selected' : ''}" onclick="setTheme('mist')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #9ca3af 0%, #4b5563 100%);"></div>
                                    <p class="text-xs font-medium text-center">Mist</p>
-                                   <p class="text-xs text-gray-500 text-center">Cinza suave</p>
                                </div>
                                
                                <!-- Tema Sage (Verde Suave) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'sage' ? 'selected' : ''}" onclick="setTheme('sage')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'sage' ? 'selected' : ''}" onclick="setTheme('sage')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #86efac 0%, #22c55e 100%);"></div>
                                    <p class="text-xs font-medium text-center">Sage</p>
-                                   <p class="text-xs text-gray-500 text-center">Verde suave</p>
                                </div>
                                
                                <!-- Tema Lavender (Roxo Suave) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'lavender' ? 'selected' : ''}" onclick="setTheme('lavender')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'lavender' ? 'selected' : ''}" onclick="setTheme('lavender')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 100%);"></div>
                                    <p class="text-xs font-medium text-center">Lavender</p>
-                                   <p class="text-xs text-gray-500 text-center">Roxo suave</p>
                                </div>
                                
                                <!-- Tema Classic (Preto e Branco) -->
-                               <div class="theme-card p-3 rounded border ${cvData.theme === 'classic' ? 'selected' : ''}" onclick="setTheme('classic')">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'classic' ? 'selected' : ''}" onclick="setTheme('classic')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #000000 0%, #4b5563 100%);"></div>
                                    <p class="text-xs font-medium text-center">Classic</p>
-                                   <p class="text-xs text-gray-500 text-center">Preto e branco</p>
+                               </div>
+                           </div>
+                           
+                           <h4 class="font-medium text-sm mt-4 mb-3">Temas Profissionais (Cabeçalho Destacado)</h4>
+                           <div class="grid grid-cols-3 gap-2">
+                               <!-- Tema Pro 1 - Azul Petróleo -->
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-1' ? 'selected' : ''}" onclick="setTheme('pro-1')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #0f4c5c 0%, #1e6f7e 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Pro 1</p>
+                                   <p class="text-xs text-gray-500 text-center">Azul Petróleo</p>
+                               </div>
+                               
+                               <!-- Tema Pro 2 - Azul Céu Noturno -->
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-2' ? 'selected' : ''}" onclick="setTheme('pro-2')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #1a4b7a 0%, #2e6da9 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Pro 2</p>
+                                   <p class="text-xs text-gray-500 text-center">Azul Noturno</p>
+                               </div>
+                               
+                               <!-- Tema Pro 3 - Azul Geada -->
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-3' ? 'selected' : ''}" onclick="setTheme('pro-3')">
+                                   <div class="theme-preview" style="background: linear-gradient(135deg, #2c5f8a 0%, #4a7baa 100%);"></div>
+                                   <p class="text-xs font-medium text-center">Pro 3</p>
+                                   <p class="text-xs text-gray-500 text-center">Azul Geada</p>
                                </div>
                            </div>
                        </div>
@@ -1643,7 +1859,7 @@
                            <h4 class="font-medium text-sm mb-3">Pré-visualização</h4>
                            <div class="text-sm p-4 bg-white rounded border" style="font-family: ${fontOptions[cvData.fontFamily]}; font-size: ${cvData.fontSize}px;">
                                <p class="font-bold" style="color: var(--secondary-color);">Exemplo de texto</p>
-                               <p class="text-gray-600">Este é um exemplo de como ficará seu currículo com as configurações atuais.</p>
+                               <p class="text-gray-600 text-justify">Este é um exemplo de como ficará seu currículo com as configurações atuais. Todo o texto será justificado para um visual mais profissional.</p>
                            </div>
                        </div>
                        
@@ -1684,15 +1900,26 @@
 
            // FUNÇÃO PARA MOSTRAR EXEMPLO NA VISUALIZAÇÃO INICIAL
            function showExampleInPreview() {
+               const isProfessional = professionalThemes.includes(cvData.theme);
+               
                // Mostrar exemplo APENAS na visualização, não nos campos de edição
-               document.getElementById('preview-name').textContent = exampleData.name;
-               document.getElementById('preview-title').textContent = exampleData.title;
-               document.getElementById('preview-email').textContent = exampleData.email;
-               document.getElementById('preview-phone').textContent = exampleData.phone;
-               document.getElementById('preview-location').textContent = exampleData.location;
+               if (isProfessional) {
+                   document.getElementById('preview-name-professional').textContent = exampleData.name;
+                   document.getElementById('preview-title-professional').textContent = exampleData.title;
+                   document.getElementById('preview-email-professional').textContent = exampleData.email;
+                   document.getElementById('preview-phone-professional').textContent = exampleData.phone;
+                   document.getElementById('preview-location-professional').textContent = exampleData.location;
+               } else {
+                   document.getElementById('preview-name').textContent = exampleData.name;
+                   document.getElementById('preview-title').textContent = exampleData.title;
+                   document.getElementById('preview-email').textContent = exampleData.email;
+                   document.getElementById('preview-phone').textContent = exampleData.phone;
+                   document.getElementById('preview-location').textContent = exampleData.location;
+               }
+               
                document.getElementById('preview-summary').textContent = exampleData.summary;
                
-               // Renderizar habilidades de exemplo
+               // Renderizar habilidades de exemplo - uma abaixo da outra
                const skillsContainer = document.getElementById('preview-skills');
                skillsContainer.innerHTML = '';
                exampleData.skills.forEach(skill => {
@@ -1735,7 +1962,7 @@
                                <span class="text-xs text-gray-500">${job.date}</span>
                            </div>
                            <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company}</div>
-                           <p class="text-xs text-gray-600">${job.description}</p>
+                           <p class="text-xs text-gray-600 text-justify">${job.description}</p>
                        </div>
                    `;
                });
