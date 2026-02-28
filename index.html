@@ -29,7 +29,7 @@
            position: relative; 
            overflow: hidden;
            box-sizing: border-box; 
-           padding: 12mm !important;
+           padding: 0 !important;
        }
 
        @media print {
@@ -40,7 +40,6 @@
                left: 0; 
                top: 0; 
                width: 100%;
-               padding: 12mm;
                background: white;
                color: black;
                overflow: hidden;
@@ -107,7 +106,7 @@
            transform-origin: center top;
        }
 
-       /* Estilos de Foto - Melhorado para ajuste de imagem */
+       /* Estilos de Foto */
        .photo-container {
            position: relative;
            width: 100px;
@@ -130,92 +129,279 @@
            object-position: center;
        }
 
-       /* ===== TEMAS COM CORES SUAVES ===== */
+       /* ===== VARIÁVEL DE COR DINÂMICA ===== */
+       :root {
+           --accent-color: #f39c12;
+       }
        
-       /* Tema Azure (Azul Suave) */
+       /* Cores predefinidas com tons adequados */
+       .accent-orange { --accent-color: #f39c12; }
+       .accent-blue { --accent-color: #2980b9; }
+       .accent-green { --accent-color: #27ae60; }
+       .accent-gray { --accent-color: #7f8c8d; }
+       .accent-black { --accent-color: #2c3e50; }
+       .accent-red { --accent-color: #c0392b; }
+
+       /* ===== TEMAS SUAVES ===== */
        .theme-azure {
            --primary-color: #60a5fa;
            --secondary-color: #3b82f6;
-           --text-color: #1f2937;
-           --border-color: #d1d5db;
-           --light-bg: #f9fafb;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Blush (Vermelho Suave) */
        .theme-blush {
            --primary-color: #fca5a5;
            --secondary-color: #ef4444;
-           --text-color: #1f2937;
-           --border-color: #d1d5db;
-           --light-bg: #f9fafb;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Mist (Cinza Suave) */
        .theme-mist {
            --primary-color: #9ca3af;
            --secondary-color: #4b5563;
-           --text-color: #111827;
-           --border-color: #d1d5db;
-           --light-bg: #f9fafb;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Sage (Verde Suave) */
        .theme-sage {
            --primary-color: #86efac;
            --secondary-color: #22c55e;
-           --text-color: #1f2937;
-           --border-color: #d1d5db;
-           --light-bg: #f9fafb;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Lavender (Roxo Suave) */
        .theme-lavender {
            --primary-color: #c4b5fd;
            --secondary-color: #8b5cf6;
-           --text-color: #1f2937;
-           --border-color: #d1d5db;
-           --light-bg: #f9fafb;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Classic (Preto e Branco) */
        .theme-classic {
            --primary-color: #000000;
            --secondary-color: #4b5563;
-           --text-color: #111827;
-           --border-color: #000000;
-           --light-bg: #ffffff;
+           --border-color: var(--accent-color);
        }
        
-       /* ===== TEMAS PROFISSIONAIS COM CORES FRIAS ===== */
-       
-       /* Tema Profissional 1 - Azul Petróleo (frio e elegante) */
+       /* ===== TEMAS PROFISSIONAIS ===== */
        .theme-pro-1 {
            --primary-color: #0f4c5c;
            --secondary-color: #1e6f7e;
-           --accent-color: #e0f2f1;
-           --text-color: #1f2937;
-           --border-color: #b2d8d8;
-           --light-bg: #f0f7f7;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Profissional 2 - Azul Céu Noturno (frio e suave) */
        .theme-pro-2 {
            --primary-color: #1a4b7a;
            --secondary-color: #2e6da9;
-           --accent-color: #d4e6f1;
-           --text-color: #1f2937;
-           --border-color: #aac8e0;
-           --light-bg: #e8f0f7;
+           --border-color: var(--accent-color);
        }
        
-       /* Tema Profissional 3 - Azul Geada (frio e claro) */
        .theme-pro-3 {
            --primary-color: #2c5f8a;
            --secondary-color: #4a7baa;
-           --accent-color: #e1eef7;
-           --text-color: #1f2937;
-           --border-color: #b8d1e8;
-           --light-bg: #f0f5fa;
+           --border-color: var(--accent-color);
+       }
+       
+       /* ===== MODELO GCV ===== */
+       .theme-gcv {
+           --sidebar-bg: #0b3b4b;
+           --sidebar-text: #ffffff;
+       }
+       
+       .theme-gcv .gcv-sidebar {
+           background-color: var(--sidebar-bg);
+           color: var(--sidebar-text);
+           min-height: 297mm;
+           padding: 30px 20px;
+       }
+       
+       .theme-gcv .gcv-sidebar h2 {
+           color: white;
+           font-size: 16px;
+           font-weight: 600;
+           letter-spacing: 1px;
+           border-bottom: 2px solid var(--accent-color);
+           padding-bottom: 8px;
+           margin-bottom: 20px;
+           text-transform: uppercase;
+       }
+       
+       .theme-gcv .gcv-sidebar .contact-item {
+           margin-bottom: 20px;
+       }
+       
+       .theme-gcv .gcv-sidebar .contact-item .contact-label {
+           font-weight: 600;
+           font-size: 13px;
+           color: var(--accent-color);
+           margin-bottom: 5px;
+           text-transform: uppercase;
+       }
+       
+       .theme-gcv .gcv-sidebar .contact-item .contact-value {
+           font-size: 12px;
+           line-height: 1.5;
+           color: rgba(255,255,255,0.9);
+       }
+       
+       .theme-gcv .gcv-sidebar .skill-item,
+       .theme-gcv .gcv-sidebar .cert-item {
+           margin-bottom: 8px;
+           font-size: 12px;
+           display: flex;
+           align-items: center;
+           color: rgba(255,255,255,0.9);
+       }
+       
+       .theme-gcv .gcv-sidebar .skill-item:before,
+       .theme-gcv .gcv-sidebar .cert-item:before {
+           content: "•";
+           color: var(--accent-color);
+           font-size: 16px;
+           margin-right: 8px;
+       }
+       
+       .theme-gcv .gcv-sidebar .language-item {
+           margin-bottom: 8px;
+           font-size: 12px;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           color: rgba(255,255,255,0.9);
+       }
+       
+       .theme-gcv .gcv-sidebar .language-percent {
+           color: var(--accent-color);
+           font-weight: 600;
+       }
+       
+       .theme-gcv .gcv-photo {
+           width: 120px;
+           height: 120px;
+           border-radius: 50%;
+           background-color: #e0e0e0;
+           margin: 0 auto 30px auto;
+           border: 3px solid var(--accent-color);
+           overflow: hidden;
+       }
+       
+       .theme-gcv .gcv-photo img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
+       
+       .theme-gcv .gcv-photo-placeholder {
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           color: white;
+           font-size: 48px;
+           font-weight: 300;
+       }
+       
+       .theme-gcv .gcv-main {
+           padding: 30px 25px;
+       }
+       
+       .theme-gcv .gcv-main h1 {
+           color: var(--sidebar-bg);
+           font-size: 32px;
+           font-weight: 700;
+           margin-bottom: 5px;
+           letter-spacing: 1px;
+       }
+       
+       .theme-gcv .gcv-main .profession {
+           color: #666666;
+           font-size: 16px;
+           font-weight: 500;
+           margin-bottom: 25px;
+           letter-spacing: 0.5px;
+       }
+       
+       .theme-gcv .gcv-main h3 {
+           color: var(--sidebar-bg);
+           font-size: 18px;
+           font-weight: 600;
+           border-bottom: 2px solid var(--accent-color);
+           padding-bottom: 5px;
+           margin-bottom: 20px;
+           text-transform: uppercase;
+       }
+       
+       .theme-gcv .gcv-main .about-text {
+           font-size: 13px;
+           line-height: 1.6;
+           color: #333333;
+           margin-bottom: 25px;
+           text-align: justify;
+       }
+       
+       .theme-gcv .gcv-main .experience-item {
+           margin-bottom: 25px;
+       }
+       
+       .theme-gcv .gcv-main .experience-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: baseline;
+           margin-bottom: 5px;
+       }
+       
+       .theme-gcv .gcv-main .experience-header h4 {
+           color: var(--sidebar-bg);
+           font-size: 16px;
+           font-weight: 600;
+       }
+       
+       .theme-gcv .gcv-main .experience-header .experience-date {
+           color: var(--accent-color);
+           font-size: 13px;
+           font-weight: 500;
+       }
+       
+       .theme-gcv .gcv-main .experience-company {
+           color: #666666;
+           font-size: 14px;
+           font-weight: 500;
+           margin-bottom: 8px;
+       }
+       
+       .theme-gcv .gcv-main .experience-item p {
+           font-size: 12px;
+           line-height: 1.5;
+           color: #666666;
+           text-align: justify;
+       }
+       
+       .theme-gcv .gcv-main .education-item {
+           margin-bottom: 15px;
+       }
+       
+       .theme-gcv .gcv-main .education-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: baseline;
+           margin-bottom: 2px;
+       }
+       
+       .theme-gcv .gcv-main .education-header h5 {
+           color: var(--sidebar-bg);
+           font-size: 14px;
+           font-weight: 600;
+       }
+       
+       .theme-gcv .gcv-main .education-header .education-date {
+           color: var(--accent-color);
+           font-size: 12px;
+           font-weight: 500;
+       }
+       
+       .theme-gcv .gcv-main .education-degree {
+           font-size: 12px;
+           color: #666666;
+           font-style: italic;
+           margin-top: 2px;
        }
        
        /* Estilo do cabeçalho destacado para temas profissionais */
@@ -226,103 +412,33 @@
            color: white;
            padding: 20px 15px;
            margin: -12mm -12mm 15px -12mm;
-           border-radius: 0;
        }
        
        .theme-pro-1 .professional-header h1,
        .theme-pro-2 .professional-header h1,
        .theme-pro-3 .professional-header h1 {
            color: white;
-           font-size: 28px;
-           font-weight: 700;
-           margin-bottom: 5px;
        }
        
-       .theme-pro-1 .professional-header .professional-title,
-       .theme-pro-2 .professional-header .professional-title,
-       .theme-pro-3 .professional-header .professional-title {
-           color: rgba(255,255,255,0.9);
-           font-size: 16px;
-           font-weight: 500;
-           margin-bottom: 10px;
-       }
-       
-       .theme-pro-1 .professional-header .professional-contact,
-       .theme-pro-2 .professional-header .professional-contact,
-       .theme-pro-3 .professional-header .professional-contact {
-           display: flex;
-           flex-wrap: wrap;
-           gap: 15px;
-           font-size: 12px;
-           color: rgba(255,255,255,0.8);
-       }
-       
-       .theme-pro-1 .professional-header .professional-contact i,
-       .theme-pro-2 .professional-header .professional-contact i,
-       .theme-pro-3 .professional-header .professional-contact i {
-           margin-right: 5px;
-           color: rgba(255,255,255,0.9);
-       }
-       
+       /* Aplicação das cores dos temas suaves */
+       .theme-azure .section-title,
+       .theme-blush .section-title,
+       .theme-mist .section-title,
+       .theme-sage .section-title,
+       .theme-lavender .section-title,
+       .theme-classic .section-title,
        .theme-pro-1 .section-title,
        .theme-pro-2 .section-title,
        .theme-pro-3 .section-title {
-           color: var(--primary-color);
-           border-bottom: 2px solid var(--border-color);
-           padding-bottom: 5px;
-           margin-bottom: 10px;
-           font-weight: 600;
+           border-bottom: 2px solid var(--accent-color);
        }
        
-       .theme-pro-1 .border-accent,
-       .theme-pro-2 .border-accent,
-       .theme-pro-3 .border-accent {
-           border-color: var(--border-color);
-       }
-       
-       .theme-pro-1 .company-name,
-       .theme-pro-2 .company-name,
-       .theme-pro-3 .company-name {
-           color: var(--secondary-color);
-           font-weight: 600;
-       }
-       
-       /* Texto justificado para todos os temas */
+       /* Texto justificado */
        .a4-paper p, 
-       .a4-paper .text-justify,
-       .a4-paper .preview-summary,
-       .a4-paper .preview-experience p,
-       .a4-paper .preview-education p,
-       .a4-paper .preview-awards p,
-       .a4-paper .job-description {
+       .a4-paper .text-justify {
            text-align: justify;
            text-justify: inter-word;
        }
-       
-       /* Aplicação das cores dos temas padrão */
-       .theme-azure .section-title { color: var(--secondary-color); }
-       .theme-azure .border-accent { border-color: var(--border-color); }
-       .theme-azure .company-name { color: var(--secondary-color); }
-       
-       .theme-blush .section-title { color: var(--secondary-color); }
-       .theme-blush .border-accent { border-color: var(--border-color); }
-       .theme-blush .company-name { color: var(--secondary-color); }
-       
-       .theme-mist .section-title { color: var(--secondary-color); }
-       .theme-mist .border-accent { border-color: var(--border-color); }
-       .theme-mist .company-name { color: var(--secondary-color); }
-       
-       .theme-sage .section-title { color: var(--secondary-color); }
-       .theme-sage .border-accent { border-color: var(--border-color); }
-       .theme-sage .company-name { color: var(--secondary-color); }
-       
-       .theme-lavender .section-title { color: var(--secondary-color); }
-       .theme-lavender .border-accent { border-color: var(--border-color); }
-       .theme-lavender .company-name { color: var(--secondary-color); }
-       
-       .theme-classic .section-title { color: var(--primary-color); }
-       .theme-classic .border-accent { border-color: var(--border-color); }
-       .theme-classic .company-name { color: var(--secondary-color); }
        
        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -473,7 +589,7 @@
            display: flex;
        }
 
-       /* Cards de temas */
+       /* Cards de temas e cores */
        .theme-card {
            border: 1px solid #e5e7eb;
            transition: all 0.2s;
@@ -495,6 +611,24 @@
            border-radius: 4px;
            margin-bottom: 6px;
            border: 1px solid #e5e7eb;
+       }
+       
+       .color-preset {
+           width: 30px;
+           height: 30px;
+           border-radius: 50%;
+           cursor: pointer;
+           border: 2px solid transparent;
+           transition: all 0.2s;
+       }
+       
+       .color-preset:hover {
+           transform: scale(1.1);
+       }
+       
+       .color-preset.selected {
+           border-color: #000;
+           box-shadow: 0 0 0 2px white;
        }
    </style>
 </head>
@@ -587,7 +721,7 @@
            </div>
            <h1 class="font-bold text-xl text-gray-900">GCV<span class="text-blue-600">-INTERACTIVE</span></h1>
        </div>
-       <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200 flex-wrap">
+       <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200 flex-wrap max-w-[600px]">
            <button onclick="setTheme('azure')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="azure">Azure</button>
            <button onclick="setTheme('blush')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="blush">Blush</button>
            <button onclick="setTheme('mist')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="mist">Mist</button>
@@ -597,6 +731,7 @@
            <button onclick="setTheme('pro-1')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-1">Pro 1</button>
            <button onclick="setTheme('pro-2')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-2">Pro 2</button>
            <button onclick="setTheme('pro-3')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-3">Pro 3</button>
+           <button onclick="setTheme('gcv')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="gcv">GCV</button>
        </div>
    </header>
 
@@ -623,77 +758,179 @@
            <div class="flex-1 overflow-auto p-8 flex justify-center items-start" id="preview-scroll-area">
                <div id="cv-preview-container" class="transition-transform duration-200 origin-top" style="transform: scale(0.9);">
                    <div id="cv-content" class="a4-paper theme-azure text-gray-800" style="font-family: 'Inter', sans-serif; font-size: 12px;">
-                       <!-- MODELO PADRÃO - Cabeçalho simples -->
-                       <div id="default-template">
+                       
+                       <!-- MODELO PADRÃO -->
+                       <div id="default-template" style="display: none; padding: 12mm;">
                            <header class="flex gap-4 pb-3 items-start border-b border-gray-200">
                                <div id="preview-photo" class="w-20 h-20 rounded bg-gray-100 bg-cover bg-center flex-shrink-0 hidden"></div>
                                <div class="flex-1">
-                                   <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name">Odair Miguel Júlio</h1>
-                                   <p class="text-base mb-2" style="color: var(--secondary-color);" id="preview-title">Coordenador Geral do CNJ-AO, CHINA</p>
+                                   <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name"></h1>
+                                   <p class="text-base mb-2" id="preview-title"></p>
                                    <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
-                                       <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email">odair.julio@exemplo.com</span></span>
-                                       <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone">+244 923433343</span></span>
-                                       <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location">Beijing, China, Rua N123</span></span>
+                                       <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email"></span></span>
+                                       <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone"></span></span>
+                                       <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location"></span></span>
                                    </div>
                                </div>
                            </header>
+                           <div class="grid grid-cols-3 gap-4 mt-4">
+                               <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
+                                       <div id="preview-skills" class="space-y-1"></div>
+                                   </section>
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
+                                       <div id="preview-languages" class="space-y-1"></div>
+                                   </section>
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
+                                       <div id="preview-education" class="space-y-2"></div>
+                                   </section>
+                               </div>
+                               <div class="col-span-2">
+                                   <section class="mb-3">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">SOBRE MIM</h2>
+                                       <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary"></p>
+                                   </section>
+                                   <section class="mb-3">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
+                                       <div id="preview-experience" class="space-y-3"></div>
+                                   </section>
+                                   <section id="preview-awards-section" class="mb-3" style="display: none;">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
+                                       <div id="preview-awards" class="space-y-2"></div>
+                                   </section>
+                               </div>
+                           </div>
                        </div>
                        
-                       <!-- MODELO PROFISSIONAL - Cabeçalho destacado (inicialmente oculto) -->
-                       <div id="professional-template" style="display: none;">
-                           <div class="professional-header">
-                               <div class="flex items-center gap-4">
+                       <!-- MODELO PROFISSIONAL -->
+                       <div id="professional-template" style="display: none; padding: 12mm;">
+                           <div class="professional-header" style="margin: -12mm -12mm 15px -12mm;">
+                               <div class="flex items-center gap-4" style="padding: 20px 15px;">
                                    <div id="preview-photo-professional" class="w-20 h-20 rounded-full bg-white bg-cover bg-center flex-shrink-0 hidden" style="border: 3px solid white;"></div>
                                    <div class="flex-1">
-                                       <h1 class="text-3xl font-bold mb-1" id="preview-name-professional">Odair Miguel Júlio</h1>
-                                       <p class="professional-title text-lg mb-2" id="preview-title-professional">Coordenador Geral do CNJ-AO, CHINA</p>
+                                       <h1 class="text-3xl font-bold mb-1" id="preview-name-professional"></h1>
+                                       <p class="professional-title text-lg mb-2" id="preview-title-professional"></p>
                                        <div class="professional-contact">
-                                           <span><i class="fas fa-envelope"></i> <span id="preview-email-professional">odair.julio@exemplo.com</span></span>
-                                           <span><i class="fas fa-phone"></i> <span id="preview-phone-professional">+244 923433343</span></span>
-                                           <span><i class="fas fa-map-marker-alt"></i> <span id="preview-location-professional">Beijing, China, Rua N123</span></span>
+                                           <span><i class="fas fa-envelope"></i> <span id="preview-email-professional"></span></span>
+                                           <span><i class="fas fa-phone"></i> <span id="preview-phone-professional"></span></span>
+                                           <span><i class="fas fa-map-marker-alt"></i> <span id="preview-location-professional"></span></span>
                                        </div>
                                    </div>
                                </div>
                            </div>
-                       </div>
-
-                       <div class="grid grid-cols-3 gap-4 mt-4">
-                           <!-- Coluna Esquerda (com borda lateral) -->
-                           <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
-                               <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
-                                   <div id="preview-skills" class="space-y-1">
-                                       <!-- Será preenchido via JS -->
-                                   </div>
-                               </section>
-                               <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
-                                   <div id="preview-languages" class="space-y-1">
-                                       <!-- Será preenchido via JS -->
-                                   </div>
-                               </section>
-                               <section>
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
-                                   <div id="preview-education" class="space-y-2">
-                                       <!-- Será preenchido via JS -->
-                                   </div>
-                               </section>
+                           <div class="grid grid-cols-3 gap-4 mt-4">
+                               <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
+                                       <div id="preview-skills-pro" class="space-y-1"></div>
+                                   </section>
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
+                                       <div id="preview-languages-pro" class="space-y-1"></div>
+                                   </section>
+                                   <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
+                                       <div id="preview-education-pro" class="space-y-2"></div>
+                                   </section>
+                               </div>
+                               <div class="col-span-2">
+                                   <section class="mb-3">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">SOBRE MIM</h2>
+                                       <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary-pro"></p>
+                                   </section>
+                                   <section class="mb-3">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
+                                       <div id="preview-experience-pro" class="space-y-3"></div>
+                                   </section>
+                                   <section id="preview-awards-section-pro" class="mb-3" style="display: none;">
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
+                                       <div id="preview-awards-pro" class="space-y-2"></div>
+                                   </section>
+                               </div>
                            </div>
-                           <!-- Coluna Direita -->
-                           <div class="col-span-2">
-                               <section class="mb-3">
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">PERFIL</h2>
-                                   <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary"></p>
-                               </section>
-                               <section class="mb-3">
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
-                                   <div id="preview-experience" class="space-y-3"></div>
-                               </section>
-                               <!-- Seção de Prêmios - Só aparece se houver prêmios -->
-                               <section id="preview-awards-section" class="mb-3" style="display: none;">
-                                   <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
-                                   <div id="preview-awards" class="space-y-2"></div>
-                               </section>
+                       </div>
+                       
+                       <!-- MODELO GCV -->
+                       <div id="gcv-template" style="display: none;">
+                           <div class="flex">
+                               <!-- Coluna Esquerda Colorida -->
+                               <div class="w-1/3 gcv-sidebar">
+                                   <!-- Foto -->
+                                   <div class="gcv-photo">
+                                       <div id="gcv-photo" class="w-full h-full bg-cover bg-center hidden"></div>
+                                       <div id="gcv-photo-placeholder" class="gcv-photo-placeholder">
+                                           <span>👤</span>
+                                       </div>
+                                   </div>
+                                   
+                                   <!-- CONTACTOS -->
+                                   <div class="mb-6">
+                                       <h2>CONTACTOS</h2>
+                                       <div class="contact-item">
+                                           <div class="contact-label">Telefone:</div>
+                                           <div class="contact-value" id="gcv-phone"></div>
+                                       </div>
+                                       <div class="contact-item">
+                                           <div class="contact-label">Email:</div>
+                                           <div class="contact-value" id="gcv-email"></div>
+                                       </div>
+                                       <div class="contact-item">
+                                           <div class="contact-label">Endereço:</div>
+                                           <div class="contact-value" id="gcv-location"></div>
+                                       </div>
+                                   </div>
+                                   
+                                   <!-- HABILIDADES -->
+                                   <div class="mb-6">
+                                       <h2>HABILIDADES</h2>
+                                       <div id="gcv-skills" class="space-y-1"></div>
+                                   </div>
+                                   
+                                   <!-- CERTIFICAÇÕES -->
+                                   <div class="mb-6">
+                                       <h2>CERTIFICAÇÕES</h2>
+                                       <div id="gcv-certifications" class="space-y-1"></div>
+                                   </div>
+                                   
+                                   <!-- LÍNGUAS -->
+                                   <div class="mb-6">
+                                       <h2>LÍNGUAS</h2>
+                                       <div id="gcv-languages" class="space-y-1"></div>
+                                   </div>
+                               </div>
+                               
+                               <!-- Coluna Direita Branca -->
+                               <div class="w-2/3 gcv-main">
+                                   <h1 id="gcv-name"></h1>
+                                   <div class="profession" id="gcv-title"></div>
+                                   
+                                   <!-- SOBRE MIM -->
+                                   <div class="mb-4">
+                                       <h3>SOBRE MIM</h3>
+                                       <p class="about-text" id="gcv-summary"></p>
+                                   </div>
+                                   
+                                   <!-- EXPERIÊNCIAS -->
+                                   <div class="mb-4">
+                                       <h3>EXPERIÊNCIAS</h3>
+                                       <div id="gcv-experience" class="space-y-4"></div>
+                                   </div>
+                                   
+                                   <!-- EDUCAÇÃO -->
+                                   <div class="mb-4">
+                                       <h3>EDUCAÇÃO</h3>
+                                       <div id="gcv-education" class="space-y-3"></div>
+                                   </div>
+                                   
+                                   <!-- PRÊMIOS (OPCIONAL) -->
+                                   <div id="gcv-awards-section" style="display: none;">
+                                       <h3>PRÊMIOS</h3>
+                                       <div id="gcv-awards" class="space-y-2"></div>
+                                   </div>
+                               </div>
                            </div>
                        </div>
                    </div>
@@ -702,42 +939,18 @@
        </main>
    </div>
 
-   <!-- Footer -->
+   <!-- Footer com link para Admin -->
    <footer class="bg-white border-t border-gray-200 py-2 px-6 text-center text-xs text-gray-600 no-print">
-       © 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana
+       <div>© 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana</div>
+       <div class="mt-1">
+           <a href="/admin.html" class="text-gray-400 hover:text-gray-600 transition-colors" target="_blank">
+               <i class="fas fa-chart-line mr-1"></i> Estatísticas
+           </a>
+       </div>
    </footer>
 
    <script>
        (function() {
-           // Dados de exemplo APENAS para visualização inicial
-           const exampleData = {
-               name: "Odair Miguel Júlio",
-               title: "Coordenador Geral do CNJ-AO, CHINA",
-               email: "odair.julio@exemplo.com",
-               phone: "+244 923433343",
-               location: "Beijing, China, Rua N123",
-               summary: "Profissional com forte capacidade de liderança, articulação política e gestão de pessoas, dedicado a potencializar o protagonismo juvenil. Responsável por planejar, coordenar e monitorar as atividades da organização, garantindo que a missão institucional seja cumprida, os prazos respeitados e os jovens engajados de forma saudável e produtiva. Atua como facilitador e mentor, criando um ambiente seguro para o desenvolvimento de lideranças emergentes.",
-               skills: ["Power BI", "Microsoft 365", "Anylogic", "Gestão de Liderança", "Visão de Longo Prazo", "Expressão e Comunicação", "CRM"],
-               experience: [
-                   { role: "Coordenador Geral", company: "Conselho Nacional da Juventude", date: "2023-Presente", description: "Liderando sistema de design que atende 5 produtos digitais." },
-                   { role: "Coordenador de Controlo e Imagem", company: "VITAL Lda", date: "2020-2023", description: "Design de apps com mais de 1M de usuários." }
-               ],
-               education: [
-                   { degree: "Licenciatura", school: "Beijing Normal University", date: "2014-2018" },
-                   { degree: "Mestrado", school: "Beijing University", date: "2018-2020" }
-               ],
-               awards: [
-                   { title: "Jovem de Excelência", organization: "CNJ-AO, CHINA", year: "2024" },
-                   { title: "Estudante de Mérito", organization: "Beijing University", year: "2023" }
-               ],
-               languages: [
-                   { name: "Português", level: "Nativo" },
-                   { name: "Inglês", level: "Fluente" },
-                   { name: "Mandarim", level: "Avançado" },
-                   { name: "Umbundo", level: "Intermediário" }
-               ]
-           };
-
            // Dados do usuário - INICIALMENTE VAZIOS
            let cvData = {
                name: "",
@@ -751,7 +964,9 @@
                education: [],
                awards: [],
                languages: [],
+               certifications: [],
                theme: "azure",
+               accentColor: "#f39c12",
                photo: null,
                fontFamily: "Inter",
                fontSize: 12
@@ -773,8 +988,19 @@
                "Courier New": "'Courier New', monospace"
            };
            
-           // Lista de temas profissionais (com cabeçalho destacado)
+           // Cores predefinidas
+           const colorPresets = {
+               "Laranja": "#f39c12",
+               "Azul": "#2980b9",
+               "Verde": "#27ae60",
+               "Cinzento": "#7f8c8d",
+               "Preto": "#2c3e50",
+               "Vermelho": "#c0392b"
+           };
+           
+           // Lista de temas
            const professionalThemes = ['pro-1', 'pro-2', 'pro-3'];
+           const gcvTheme = 'gcv';
            
            // Sistema de contador de downloads
            let downloadStats = {
@@ -818,23 +1044,59 @@
                }
            }
            
-           function incrementCounter() {
-               downloadStats.total++;
-               downloadStats.today++;
-               downloadStats.session++;
-               
-               downloadStats.history.push({
-                   timestamp: new Date().toISOString(),
-                   name: cvData.name || 'Desconhecido'
-               });
-               
-               if (downloadStats.history.length > 100) {
-                   downloadStats.history = downloadStats.history.slice(-100);
+           // ===== NOVA FUNÇÃO DE INCREMENTO COM COUNTERAPI =====
+           async function incrementCounter() {
+               try {
+                   // Incrementa contador local
+                   downloadStats.total++;
+                   downloadStats.today++;
+                   downloadStats.session++;
+                   
+                   // Registra no CounterAPI (gratuito, sem necessidade de cadastro)
+                   const pageId = 'gcv-interactive'; // Identificador único do seu app
+                   const counterUrl = `https://api.counterapi.dev/v1/${pageId}/downloads/up`;
+                   
+                   const response = await fetch(counterUrl);
+                   const data = await response.json();
+                   
+                   console.log('📊 Download registrado! Total global:', data.count);
+                   
+                   // Opcional: você pode guardar o total global
+                   if (data && data.count) {
+                       downloadStats.globalTotal = data.count;
+                   }
+                   
+                   downloadStats.history.push({
+                       timestamp: new Date().toISOString(),
+                       name: cvData.name || 'Desconhecido',
+                       globalCount: data?.count
+                   });
+                   
+                   if (downloadStats.history.length > 100) {
+                       downloadStats.history = downloadStats.history.slice(-100);
+                   }
+                   
+                   saveDownloadStats();
+                   updateDisplay();
+                   return downloadStats;
+                   
+               } catch (error) {
+                   console.warn('Erro ao registrar no CounterAPI, usando apenas contador local:', error);
+                   
+                   // Fallback para o contador local
+                   downloadStats.history.push({
+                       timestamp: new Date().toISOString(),
+                       name: cvData.name || 'Desconhecido'
+                   });
+                   
+                   if (downloadStats.history.length > 100) {
+                       downloadStats.history = downloadStats.history.slice(-100);
+                   }
+                   
+                   saveDownloadStats();
+                   updateDisplay();
+                   return downloadStats;
                }
-               
-               saveDownloadStats();
-               updateDisplay();
-               return downloadStats;
            }
            
            function updateDisplay() {
@@ -851,7 +1113,7 @@
            }
            
            window.resetDownloadCounter = function() {
-               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores de download!\n\nTem certeza?')) {
+               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores locais!\n\nOs dados no CounterAPI continuarão intactos.')) {
                    downloadStats = {
                        total: 0,
                        today: 0,
@@ -861,40 +1123,38 @@
                    };
                    saveDownloadStats();
                    updateDisplay();
-                   
-                   const btn = event?.target;
-                   if (btn) {
-                       const originalText = btn.innerHTML;
-                       btn.innerHTML = '<i class="fas fa-check"></i> Resetado!';
-                       btn.style.background = '#10b981';
-                       btn.style.color = 'white';
-                       setTimeout(() => {
-                           btn.innerHTML = originalText;
-                           btn.style.background = '#374151';
-                           btn.style.color = '#ef4444';
-                       }, 2000);
-                   }
                }
            };
            
            function toggleDevMode() {
                devMode = !devMode;
                document.body.classList.toggle('dev-mode', devMode);
-               
-               if (devMode) {
-                   console.log('🔧 Modo Desenvolvedor ATIVADO - Estatísticas visíveis');
-               } else {
-                   console.log('🔧 Modo Desenvolvedor DESATIVADO');
-               }
            }
            
-           // Atalho de teclado para modo desenvolvedor
            document.addEventListener('keydown', (e) => {
                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                    e.preventDefault();
                    toggleDevMode();
                }
            });
+
+           // ===== FUNÇÃO PARA MUDAR COR DE DESTAQUE =====
+           window.setAccentColor = function(color) {
+               cvData.accentColor = color;
+               document.documentElement.style.setProperty('--accent-color', color);
+               
+               document.querySelectorAll('.color-preset').forEach(el => {
+                   if (el.dataset.color === color) {
+                       el.classList.add('selected');
+                   } else {
+                       el.classList.remove('selected');
+                   }
+               });
+               
+               try {
+                   localStorage.setItem('gcv_accent_color', color);
+               } catch (e) {}
+           };
 
            // ===== FUNÇÕES DE FORMATAÇÃO =====
            window.setFontFamily = function(font) {
@@ -909,7 +1169,6 @@
                const cvContent = document.getElementById('cv-content');
                cvContent.style.fontSize = size + 'px';
                
-               // Ajustar tamanhos relativos
                const headings = cvContent.querySelectorAll('h1');
                headings.forEach(h => h.style.fontSize = (size * 1.5) + 'px');
                
@@ -925,24 +1184,27 @@
                cvData.theme = theme;
                const cv = document.getElementById('cv-content');
                
-               // Remover todas as classes de tema
                cv.className = cv.className.replace(/theme-\w+/g, '').trim();
-               // Adicionar a nova classe de tema
                cv.classList.add(`theme-${theme}`);
                
-               // Mostrar/esconder os templates apropriados
                const defaultTemplate = document.getElementById('default-template');
                const professionalTemplate = document.getElementById('professional-template');
+               const gcvTemplate = document.getElementById('gcv-template');
                
-               if (professionalThemes.includes(theme)) {
+               if (theme === gcvTheme) {
+                   defaultTemplate.style.display = 'none';
+                   professionalTemplate.style.display = 'none';
+                   gcvTemplate.style.display = 'block';
+               } else if (professionalThemes.includes(theme)) {
                    defaultTemplate.style.display = 'none';
                    professionalTemplate.style.display = 'block';
+                   gcvTemplate.style.display = 'none';
                } else {
                    defaultTemplate.style.display = 'block';
                    professionalTemplate.style.display = 'none';
+                   gcvTemplate.style.display = 'none';
                }
                
-               // Atualizar botões de tema
                document.querySelectorAll('.theme-btn').forEach(btn => {
                    if (btn.dataset.theme === theme) {
                        btn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
@@ -953,27 +1215,21 @@
                    }
                });
                
-               // Salvar tema no localStorage
                try {
                    localStorage.setItem('gcv_theme', theme);
-               } catch (e) {
-                   console.warn('Erro ao salvar tema:', e);
-               }
+               } catch (e) {}
                
                renderPreview();
            };
            
-           // Salvar configurações no localStorage
            function saveSettings() {
                try {
                    localStorage.setItem('gcv_font_family', cvData.fontFamily);
                    localStorage.setItem('gcv_font_size', cvData.fontSize);
-               } catch (e) {
-                   console.warn('Erro ao salvar configurações:', e);
-               }
+                   localStorage.setItem('gcv_accent_color', cvData.accentColor);
+               } catch (e) {}
            }
            
-           // Carregar configurações salvas
            function loadSettings() {
                try {
                    const savedTheme = localStorage.getItem('gcv_theme');
@@ -993,12 +1249,16 @@
                        cvData.fontSize = parseInt(savedSize);
                        setFontSize(savedSize);
                    }
-               } catch (e) {
-                   console.warn('Erro ao carregar configurações:', e);
-               }
+                   
+                   const savedColor = localStorage.getItem('gcv_accent_color');
+                   if (savedColor) {
+                       cvData.accentColor = savedColor;
+                       setAccentColor(savedColor);
+                   }
+               } catch (e) {}
            }
 
-           // ===== FUNÇÕES DE FOTO - MELHORADA =====
+           // ===== FUNÇÕES DE FOTO =====
            window.handlePhotoUpload = function(input) {
                if (input.files && input.files[0]) {
                    const reader = new FileReader();
@@ -1009,9 +1269,7 @@
                        
                        try {
                            localStorage.setItem('gcv_photo', cvData.photo);
-                       } catch (e) {
-                           console.warn('Erro ao salvar foto:', e);
-                       }
+                       } catch (e) {}
                    };
                    
                    reader.readAsDataURL(input.files[0]);
@@ -1023,34 +1281,33 @@
                updatePhotoPreview();
                try {
                    localStorage.removeItem('gcv_photo');
-               } catch (e) {
-                   console.warn('Erro ao remover foto:', e);
-               }
+               } catch (e) {}
            };
 
            function updatePhotoPreview() {
                const previewPhoto = document.getElementById('preview-photo');
                const previewPhotoProfessional = document.getElementById('preview-photo-professional');
+               const gcvPhoto = document.getElementById('gcv-photo');
+               const gcvPlaceholder = document.getElementById('gcv-photo-placeholder');
                const photoContainer = document.getElementById('photo-container-preview');
                
                if (cvData.photo) {
-                   // Para a visualização do currículo (modelo padrão)
                    if (previewPhoto) {
                        previewPhoto.style.backgroundImage = `url('${cvData.photo}')`;
-                       previewPhoto.style.backgroundSize = 'cover';
-                       previewPhoto.style.backgroundPosition = 'center';
                        previewPhoto.classList.remove('hidden');
                    }
                    
-                   // Para a visualização do currículo (modelo profissional)
                    if (previewPhotoProfessional) {
                        previewPhotoProfessional.style.backgroundImage = `url('${cvData.photo}')`;
-                       previewPhotoProfessional.style.backgroundSize = 'cover';
-                       previewPhotoProfessional.style.backgroundPosition = 'center';
                        previewPhotoProfessional.classList.remove('hidden');
                    }
                    
-                   // Para o container do editor
+                   if (gcvPhoto) {
+                       gcvPhoto.style.backgroundImage = `url('${cvData.photo}')`;
+                       gcvPhoto.classList.remove('hidden');
+                       if (gcvPlaceholder) gcvPlaceholder.style.display = 'none';
+                   }
+                   
                    if (photoContainer) {
                        photoContainer.innerHTML = `
                            <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
@@ -1068,6 +1325,10 @@
                } else {
                    if (previewPhoto) previewPhoto.classList.add('hidden');
                    if (previewPhotoProfessional) previewPhotoProfessional.classList.add('hidden');
+                   if (gcvPhoto) {
+                       gcvPhoto.classList.add('hidden');
+                       if (gcvPlaceholder) gcvPlaceholder.style.display = 'flex';
+                   }
                    
                    if (photoContainer) {
                        photoContainer.innerHTML = `
@@ -1085,10 +1346,11 @@
                }
            }
 
-           // ===== FUNÇÃO DE DOWNLOAD PDF =====
+           // ===== FUNÇÃO DE DOWNLOAD PDF (MODIFICADA PARA USAR O NOVO CONTADOR) =====
            window.downloadPDF = async function() {
                try {
-                   incrementCounter();
+                   // Registrar o download (usa a nova função incrementCounter)
+                   await incrementCounter();
                    
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
@@ -1100,52 +1362,24 @@
                    const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
                    
                    const originalElement = document.getElementById('cv-content');
-                   if (!originalElement) throw new Error('Elemento do currículo não encontrado');
-                   
                    const cloneElement = originalElement.cloneNode(true);
                    
                    cloneElement.id = 'cv-content-clone';
                    cloneElement.style.width = '210mm';
                    cloneElement.style.minHeight = 'auto';
                    cloneElement.style.maxHeight = '277mm';
-                   cloneElement.style.padding = '10mm';
+                   cloneElement.style.padding = '0';
                    cloneElement.style.margin = '0';
                    cloneElement.style.position = 'absolute';
                    cloneElement.style.left = '-9999px';
                    cloneElement.style.top = '0';
                    cloneElement.style.background = 'white';
-                   cloneElement.style.color = 'black';
-                   cloneElement.style.boxShadow = 'none';
                    cloneElement.style.transform = 'none';
                    cloneElement.style.overflow = 'hidden';
                    cloneElement.style.fontFamily = originalElement.style.fontFamily;
                    cloneElement.style.fontSize = originalElement.style.fontSize;
                    
                    cloneElement.classList.add('cv-content-compact');
-                   
-                   const sections = cloneElement.querySelectorAll('section');
-                   sections.forEach(section => {
-                       section.style.marginBottom = '0.3rem';
-                   });
-                   
-                   const headings = cloneElement.querySelectorAll('h1, h2, h3, p');
-                   headings.forEach(el => {
-                       if (el.tagName === 'H1') el.style.fontSize = (cvData.fontSize * 1.5) + 'px';
-                       if (el.tagName === 'H2') el.style.fontSize = (cvData.fontSize * 1.2) + 'px';
-                       if (el.tagName === 'P') el.style.fontSize = cvData.fontSize + 'px';
-                       el.style.marginBottom = '0.2rem';
-                   });
-                   
-                   const allTextElements = cloneElement.querySelectorAll('*');
-                   allTextElements.forEach(el => {
-                       if (el.style) {
-                           if (el.classList.contains('text-gray-600') || 
-                               el.classList.contains('text-gray-500') ||
-                               el.classList.contains('text-gray-400')) {
-                               el.style.color = '#333333';
-                           }
-                       }
-                   });
                    
                    document.body.appendChild(cloneElement);
                    
@@ -1156,9 +1390,7 @@
                        backgroundColor: '#ffffff',
                        logging: false,
                        allowTaint: false,
-                       useCORS: true,
-                       windowWidth: cloneElement.scrollWidth,
-                       windowHeight: cloneElement.scrollHeight
+                       useCORS: true
                    });
                    
                    document.body.removeChild(cloneElement);
@@ -1176,10 +1408,8 @@
                    });
                    
                    let finalImgHeight = imgHeight;
-                   
                    if (imgHeight > pageHeight) {
-                       const scaleFactor = pageHeight / imgHeight * 0.95;
-                       finalImgHeight = imgHeight * scaleFactor;
+                       finalImgHeight = pageHeight * 0.95;
                    }
                    
                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1193,8 +1423,8 @@
                    }
                    
                } catch (error) {
-                   console.error('Erro detalhado:', error);
-                   alert('Erro ao gerar PDF. Por favor, tente novamente.\n\nDetalhes: ' + error.message);
+                   console.error('Erro:', error);
+                   alert('Erro ao gerar PDF. Tente novamente.');
                    
                    const btn = event?.target?.closest('button');
                    if (btn) {
@@ -1204,7 +1434,7 @@
                }
            };
 
-           // ===== FUNÇÕES DO EDITOR =====
+           // ===== FUNÇÕES DO EDITOR (mantidas como estavam) =====
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
@@ -1233,8 +1463,26 @@
                }
            }
 
+           function setupCertificationInput() {
+               const input = document.getElementById('certification-input');
+               if (input) {
+                   input.addEventListener('keydown', (e) => {
+                       if (e.key === 'Enter') {
+                           e.preventDefault();
+                           const val = e.target.value.trim();
+                           if (val) {
+                               if (!cvData.certifications) cvData.certifications = [];
+                               cvData.certifications.push(val);
+                               e.target.value = '';
+                               renderCertificationsEditor();
+                               renderPreview();
+                           }
+                       }
+                   });
+               }
+           }
+
            window.loadDataToForm = function() {
-               // Carregar dados VAZIOS nos campos (nenhum dado pré-preenchido)
                document.querySelectorAll('[data-field]').forEach(input => {
                    const field = input.dataset.field;
                    input.value = cvData[field] || '';
@@ -1244,49 +1492,78 @@
                renderAwardsEditor();
                renderLanguagesEditor();
                renderSkills();
+               renderCertificationsEditor();
                updatePhotoPreview();
            };
 
            window.renderPreview = function() {
-               // Verificar qual template está ativo
-               const isProfessional = professionalThemes.includes(cvData.theme);
-               
-               // Atualizar campos apropriados
-               if (isProfessional) {
+               if (cvData.theme === gcvTheme) {
+                   document.getElementById('gcv-name').textContent = cvData.name || '';
+                   document.getElementById('gcv-title').textContent = cvData.title || '';
+                   document.getElementById('gcv-email').textContent = cvData.email || '';
+                   document.getElementById('gcv-phone').textContent = cvData.phone || '';
+                   document.getElementById('gcv-location').textContent = cvData.location || '';
+                   document.getElementById('gcv-summary').textContent = cvData.summary || '';
+                   
+                   renderGcvSkills();
+                   renderGcvCertifications();
+                   renderGcvLanguages();
+                   renderGcvExperience();
+                   renderGcvEducation();
+                   renderGcvAwards();
+               } else if (professionalThemes.includes(cvData.theme)) {
                    document.getElementById('preview-name-professional').textContent = cvData.name || '';
                    document.getElementById('preview-title-professional').textContent = cvData.title || '';
                    document.getElementById('preview-email-professional').textContent = cvData.email || '';
                    document.getElementById('preview-phone-professional').textContent = cvData.phone || '';
                    document.getElementById('preview-location-professional').textContent = cvData.location || '';
+                   document.getElementById('preview-summary-pro').textContent = cvData.summary || '';
+                   
+                   renderProfessionalSkills();
+                   renderProfessionalLanguages();
+                   renderProfessionalEducation();
+                   renderProfessionalExperience();
+                   renderProfessionalAwards();
                } else {
                    document.getElementById('preview-name').textContent = cvData.name || '';
                    document.getElementById('preview-title').textContent = cvData.title || '';
                    document.getElementById('preview-email').textContent = cvData.email || '';
                    document.getElementById('preview-phone').textContent = cvData.phone || '';
                    document.getElementById('preview-location').textContent = cvData.location || '';
+                   document.getElementById('preview-summary').textContent = cvData.summary || '';
+                   
+                   renderDefaultSkills();
+                   renderDefaultLanguages();
+                   renderDefaultEducation();
+                   renderDefaultExperience();
+                   renderDefaultAwards();
                }
                
-               document.getElementById('preview-summary').textContent = cvData.summary || '';
-               
-               renderExperiencePreview();
-               renderEducationPreview();
-               renderAwardsPreview();
-               renderLanguagesPreview();
-               renderSkillsPreview();
                updatePhotoPreview();
            };
 
            function updatePreviewField(field, value) {
-               const isProfessional = professionalThemes.includes(cvData.theme);
-               
-               if (isProfessional) {
+               if (cvData.theme === gcvTheme) {
+                   const map = {
+                       'name': 'gcv-name',
+                       'title': 'gcv-title',
+                       'email': 'gcv-email',
+                       'phone': 'gcv-phone',
+                       'location': 'gcv-location',
+                       'summary': 'gcv-summary'
+                   };
+                   if (map[field]) {
+                       const el = document.getElementById(map[field]);
+                       if (el) el.textContent = value || '';
+                   }
+               } else if (professionalThemes.includes(cvData.theme)) {
                    const map = {
                        'name': 'preview-name-professional',
                        'title': 'preview-title-professional',
                        'email': 'preview-email-professional',
                        'phone': 'preview-phone-professional',
                        'location': 'preview-location-professional',
-                       'summary': 'preview-summary'
+                       'summary': 'preview-summary-pro'
                    };
                    if (map[field]) {
                        const el = document.getElementById(map[field]);
@@ -1302,6 +1579,307 @@
                        if (el) el.textContent = value || '';
                    }
                }
+           }
+
+           // Funções de renderização (mantidas como estavam)
+           function renderDefaultSkills() {
+               const container = document.getElementById('preview-skills');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.skills.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
+                   return;
+               }
+               cvData.skills.forEach(skill => {
+                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
+               });
+           }
+
+           function renderDefaultLanguages() {
+               const container = document.getElementById('preview-languages');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.languages.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
+                   return;
+               }
+               cvData.languages.forEach(lang => {
+                   container.innerHTML += `
+                       <div class="text-xs">
+                           <span class="text-gray-700">${lang.name || ''}</span>
+                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderDefaultEducation() {
+               const container = document.getElementById('preview-education');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.education.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
+                   return;
+               }
+               cvData.education.forEach(edu => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
+                           <div class="text-xs text-gray-600">${edu.school || ''}</div>
+                           <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderDefaultExperience() {
+               const container = document.getElementById('preview-experience');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.experience.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
+                   return;
+               }
+               cvData.experience.forEach(job => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
+                               <span class="text-xs text-gray-500">${job.date || ''}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1">${job.company || ''}</div>
+                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderDefaultAwards() {
+               const section = document.getElementById('preview-awards-section');
+               const container = document.getElementById('preview-awards');
+               if (!section || !container) return;
+               if (cvData.awards.length === 0) {
+                   section.style.display = 'none';
+                   return;
+               }
+               section.style.display = 'block';
+               container.innerHTML = '';
+               cvData.awards.forEach(award => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
+                               <span class="text-xs text-gray-500">${award.year || ''}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1">${award.organization || ''}</div>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderProfessionalSkills() {
+               const container = document.getElementById('preview-skills-pro');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.skills.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
+                   return;
+               }
+               cvData.skills.forEach(skill => {
+                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
+               });
+           }
+
+           function renderProfessionalLanguages() {
+               const container = document.getElementById('preview-languages-pro');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.languages.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
+                   return;
+               }
+               cvData.languages.forEach(lang => {
+                   container.innerHTML += `
+                       <div class="text-xs">
+                           <span class="text-gray-700">${lang.name || ''}</span>
+                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderProfessionalEducation() {
+               const container = document.getElementById('preview-education-pro');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.education.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
+                   return;
+               }
+               cvData.education.forEach(edu => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
+                           <div class="text-xs text-gray-600">${edu.school || ''}</div>
+                           <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderProfessionalExperience() {
+               const container = document.getElementById('preview-experience-pro');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.experience.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
+                   return;
+               }
+               cvData.experience.forEach(job => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
+                               <span class="text-xs text-gray-500">${job.date || ''}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1">${job.company || ''}</div>
+                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderProfessionalAwards() {
+               const section = document.getElementById('preview-awards-section-pro');
+               const container = document.getElementById('preview-awards-pro');
+               if (!section || !container) return;
+               if (cvData.awards.length === 0) {
+                   section.style.display = 'none';
+                   return;
+               }
+               section.style.display = 'block';
+               container.innerHTML = '';
+               cvData.awards.forEach(award => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
+                               <span class="text-xs text-gray-500">${award.year || ''}</span>
+                           </div>
+                           <div class="text-xs font-semibold mb-1">${award.organization || ''}</div>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderGcvSkills() {
+               const container = document.getElementById('gcv-skills');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.skills.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
+                   return;
+               }
+               cvData.skills.forEach(skill => {
+                   container.innerHTML += `<div class="skill-item">${skill}</div>`;
+               });
+           }
+
+           function renderGcvCertifications() {
+               const container = document.getElementById('gcv-certifications');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.certifications && cvData.certifications.length > 0) {
+                   cvData.certifications.forEach(cert => {
+                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
+                   });
+               } else {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
+               }
+           }
+
+           function renderGcvLanguages() {
+               const container = document.getElementById('gcv-languages');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.languages.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
+                   return;
+               }
+               cvData.languages.forEach(lang => {
+                   container.innerHTML += `
+                       <div class="language-item">
+                           <span>${lang.name || ''}</span>
+                           <span class="language-percent">${lang.level || ''}</span>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderGcvExperience() {
+               const container = document.getElementById('gcv-experience');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.experience.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
+                   return;
+               }
+               cvData.experience.forEach(job => {
+                   container.innerHTML += `
+                       <div class="experience-item">
+                           <div class="experience-header">
+                               <h4>${job.role || ''}</h4>
+                               <span class="experience-date">${job.date || ''}</span>
+                           </div>
+                           <div class="experience-company">${job.company || ''}</div>
+                           <p>${job.description || ''}</p>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderGcvEducation() {
+               const container = document.getElementById('gcv-education');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.education.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
+                   return;
+               }
+               cvData.education.forEach(edu => {
+                   container.innerHTML += `
+                       <div class="education-item">
+                           <div class="education-header">
+                               <h5>${edu.school || ''}</h5>
+                               <span class="education-date">${edu.date || ''}</span>
+                           </div>
+                           <div class="education-degree">${edu.degree || ''}</div>
+                       </div>
+                   `;
+               });
+           }
+
+           function renderGcvAwards() {
+               const section = document.getElementById('gcv-awards-section');
+               const container = document.getElementById('gcv-awards');
+               if (!section || !container) return;
+               if (cvData.awards.length === 0) {
+                   section.style.display = 'none';
+                   return;
+               }
+               section.style.display = 'block';
+               container.innerHTML = '';
+               cvData.awards.forEach(award => {
+                   container.innerHTML += `
+                       <div class="mb-2">
+                           <div class="flex justify-between items-baseline">
+                               <h4 class="font-bold text-gray-800 text-xs">${award.title || ''}</h4>
+                               <span class="text-xs text-gray-500">${award.year || ''}</span>
+                           </div>
+                           <div class="text-xs text-gray-600">${award.organization || ''}</div>
+                       </div>
+                   `;
+               });
            }
 
            function renderExperienceEditor() {
@@ -1330,30 +1908,6 @@
                });
            }
 
-           function renderExperiencePreview() {
-               const container = document.getElementById('preview-experience');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.experience.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
-                   return;
-               }
-               
-               cvData.experience.forEach(job => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
-                               <span class="text-xs text-gray-500">${job.date || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company || ''}</div>
-                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
-                       </div>
-                   `;
-               });
-           }
-
            function renderEducationEditor() {
                const container = document.getElementById('education-editor-list');
                if (!container) return;
@@ -1379,27 +1933,6 @@
                });
            }
 
-           function renderEducationPreview() {
-               const container = document.getElementById('preview-education');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.education.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
-                   return;
-               }
-               
-               cvData.education.forEach(edu => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
-                           <div class="text-xs text-gray-600">${edu.school || ''}</div>
-                           <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
            function renderAwardsEditor() {
                const container = document.getElementById('awards-editor-list');
                if (!container) return;
@@ -1422,34 +1955,6 @@
                        <input type="text" value="${(award.year || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'year', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
                    `;
                    container.appendChild(div);
-               });
-           }
-
-           function renderAwardsPreview() {
-               const awardsSection = document.getElementById('preview-awards-section');
-               const container = document.getElementById('preview-awards');
-               
-               if (!container || !awardsSection) return;
-               
-               if (cvData.awards.length === 0) {
-                   awardsSection.style.display = 'none';
-                   return;
-               }
-               
-               // Mostrar a seção e preencher os prêmios
-               awardsSection.style.display = 'block';
-               container.innerHTML = '';
-               
-               cvData.awards.forEach(award => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
-                               <span class="text-xs text-gray-500">${award.year || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization || ''}</div>
-                       </div>
-                   `;
                });
            }
 
@@ -1482,26 +1987,6 @@
                });
            }
 
-           function renderLanguagesPreview() {
-               const container = document.getElementById('preview-languages');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.languages.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
-                   return;
-               }
-               
-               cvData.languages.forEach(lang => {
-                   container.innerHTML += `
-                       <div class="text-xs">
-                           <span class="text-gray-700">${lang.name || ''}</span>
-                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
-                       </div>
-                   `;
-               });
-           }
-
            function renderSkills() {
                const container = document.getElementById('skills-editor-list');
                if (!container) return;
@@ -1520,21 +2005,27 @@
                });
            }
 
-           function renderSkillsPreview() {
-               const container = document.getElementById('preview-skills');
+           function renderCertificationsEditor() {
+               const container = document.getElementById('certifications-editor-list');
                if (!container) return;
                container.innerHTML = '';
-               
-               if (cvData.skills.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
+               if (!cvData.certifications || cvData.certifications.length === 0) {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma certificação adicionada. Digite e pressione Enter.</p>';
                    return;
                }
-               
-               // Habilidades organizadas uma abaixo da outra
-               cvData.skills.forEach(skill => {
-                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
+               cvData.certifications.forEach((cert, index) => {
+                   const span = document.createElement('span');
+                   span.className = 'bg-white border px-2 py-1 rounded text-xs flex items-center gap-2';
+                   span.innerHTML = `${cert} <button onclick="deleteCertification(${index})" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>`;
+                   container.appendChild(span);
                });
            }
+
+           window.deleteCertification = function(index) {
+               cvData.certifications.splice(index, 1);
+               renderCertificationsEditor();
+               renderPreview();
+           };
 
            // Ações globais
            window.addItem = function(type) {
@@ -1599,7 +2090,7 @@
                clone.style.transform = 'none';
                clone.style.margin = '0 auto';
                clone.style.width = '210mm';
-               clone.style.padding = '10mm';
+               clone.style.padding = '0';
                clone.classList.add('pdf-page');
                
                container.appendChild(clone);
@@ -1624,12 +2115,12 @@
                    editorArea.innerHTML = getContentHTML();
                    loadDataToForm();
                    setupSkillInput();
+                   setupCertificationInput();
                    setupInputListeners();
                } else {
                    layoutTab.className = 'flex-1 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600';
                    contentTab.className = 'flex-1 py-4 text-sm font-medium text-gray-500';
                    editorArea.innerHTML = getLayoutHTML();
-                   // Carregar valores atuais nos seletores
                    setTimeout(() => {
                        const fontSelect = document.getElementById('font-family-select');
                        if (fontSelect) fontSelect.value = cvData.fontFamily;
@@ -1694,7 +2185,7 @@
                                <input type="text" data-field="title" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Profissão/Formação/Vocação" value="">
                            </div>
                            <div class="col-span-2">
-                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Perfil"></textarea>
+                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Sobre mim"></textarea>
                            </div>
                            <div>
                                <input type="email" data-field="email" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Email" value="">
@@ -1748,6 +2239,15 @@
                        </div>
                        <div id="skills-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded p-2"></div>
                        
+                       <hr class="border-gray-200">
+                       
+                       <h3 class="text-sm font-bold text-gray-900 uppercase">Certificações</h3>
+                       <div class="bg-gray-50 border border-gray-200 rounded p-3">
+                           <input type="text" id="certification-input" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Digite uma certificação e pressione Enter">
+                           <p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> Pressione Enter para adicionar</p>
+                       </div>
+                       <div id="certifications-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded p-2"></div>
+                       
                        <div class="pt-6">
                            <button onclick="simulatePDF()" class="w-full bg-gray-800 hover:bg-gray-900 text-white py-3 rounded font-bold flex items-center justify-center gap-3 transition-all">
                                <i class="fas fa-file-pdf text-lg"></i> VISUALIZAR PDF
@@ -1758,14 +2258,20 @@
            }
 
            function getLayoutHTML() {
-               // Gerar opções de fonte
                const fontOptionsHtml = Object.keys(fontOptions).map(font => 
                    `<option value="${font}" ${cvData.fontFamily === font ? 'selected' : ''}>${font}</option>`
                ).join('');
                
-               // Gerar opções de tamanho
                const sizeOptions = [9, 10, 11, 12, 13, 14].map(size => 
                    `<option value="${size}" ${cvData.fontSize === size ? 'selected' : ''}>${size}px</option>`
+               ).join('');
+               
+               const colorPresetsHtml = Object.entries(colorPresets).map(([name, color]) => 
+                   `<div class="color-preset ${cvData.accentColor === color ? 'selected' : ''}" 
+                         style="background-color: ${color};" 
+                         data-color="${color}"
+                         onclick="setAccentColor('${color}')"
+                         title="${name}"></div>`
                ).join('');
                
                return `
@@ -1786,80 +2292,77 @@
                                    ${sizeOptions}
                                </select>
                            </div>
+                           
+                           <div>
+                               <h4 class="font-medium text-sm mb-3">Cor de Destaque</h4>
+                               <p class="text-xs text-gray-500 mb-2">Escolha a cor para linhas e marcadores</p>
+                               <div class="flex flex-wrap gap-2">
+                                   ${colorPresetsHtml}
+                               </div>
+                           </div>
                        </div>
                        
                        <div class="bg-gray-50 rounded-lg p-4">
                            <h4 class="font-medium text-sm mb-3">Temas Suaves</h4>
-                           <p class="text-xs text-gray-500 mb-4">Escolha um tema com cores leves para seu currículo</p>
+                           <p class="text-xs text-gray-500 mb-4">Apenas linhas divisórias e cabeçalho/lateral</p>
                            
                            <div class="grid grid-cols-3 gap-2">
-                               <!-- Tema Azure (Azul Suave) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'azure' ? 'selected' : ''}" onclick="setTheme('azure')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);"></div>
+                                   <div class="theme-preview" style="background: #60a5fa;"></div>
                                    <p class="text-xs font-medium text-center">Azure</p>
                                </div>
-                               
-                               <!-- Tema Blush (Vermelho Suave) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'blush' ? 'selected' : ''}" onclick="setTheme('blush')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);"></div>
+                                   <div class="theme-preview" style="background: #fca5a5;"></div>
                                    <p class="text-xs font-medium text-center">Blush</p>
                                </div>
-                               
-                               <!-- Tema Mist (Cinza Suave) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'mist' ? 'selected' : ''}" onclick="setTheme('mist')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #9ca3af 0%, #4b5563 100%);"></div>
+                                   <div class="theme-preview" style="background: #9ca3af;"></div>
                                    <p class="text-xs font-medium text-center">Mist</p>
                                </div>
-                               
-                               <!-- Tema Sage (Verde Suave) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'sage' ? 'selected' : ''}" onclick="setTheme('sage')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #86efac 0%, #22c55e 100%);"></div>
+                                   <div class="theme-preview" style="background: #86efac;"></div>
                                    <p class="text-xs font-medium text-center">Sage</p>
                                </div>
-                               
-                               <!-- Tema Lavender (Roxo Suave) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'lavender' ? 'selected' : ''}" onclick="setTheme('lavender')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 100%);"></div>
+                                   <div class="theme-preview" style="background: #c4b5fd;"></div>
                                    <p class="text-xs font-medium text-center">Lavender</p>
                                </div>
-                               
-                               <!-- Tema Classic (Preto e Branco) -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'classic' ? 'selected' : ''}" onclick="setTheme('classic')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #000000 0%, #4b5563 100%);"></div>
+                                   <div class="theme-preview" style="background: #000000;"></div>
                                    <p class="text-xs font-medium text-center">Classic</p>
                                </div>
                            </div>
                            
-                           <h4 class="font-medium text-sm mt-4 mb-3">Temas Profissionais (Cabeçalho Destacado)</h4>
+                           <h4 class="font-medium text-sm mt-4 mb-3">Temas Profissionais</h4>
                            <div class="grid grid-cols-3 gap-2">
-                               <!-- Tema Pro 1 - Azul Petróleo -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-1' ? 'selected' : ''}" onclick="setTheme('pro-1')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #0f4c5c 0%, #1e6f7e 100%);"></div>
                                    <p class="text-xs font-medium text-center">Pro 1</p>
-                                   <p class="text-xs text-gray-500 text-center">Azul Petróleo</p>
                                </div>
-                               
-                               <!-- Tema Pro 2 - Azul Céu Noturno -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-2' ? 'selected' : ''}" onclick="setTheme('pro-2')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #1a4b7a 0%, #2e6da9 100%);"></div>
                                    <p class="text-xs font-medium text-center">Pro 2</p>
-                                   <p class="text-xs text-gray-500 text-center">Azul Noturno</p>
                                </div>
-                               
-                               <!-- Tema Pro 3 - Azul Geada -->
                                <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-3' ? 'selected' : ''}" onclick="setTheme('pro-3')">
                                    <div class="theme-preview" style="background: linear-gradient(135deg, #2c5f8a 0%, #4a7baa 100%);"></div>
                                    <p class="text-xs font-medium text-center">Pro 3</p>
-                                   <p class="text-xs text-gray-500 text-center">Azul Geada</p>
+                               </div>
+                           </div>
+                           
+                           <h4 class="font-medium text-sm mt-4 mb-3">Modelo GCV</h4>
+                           <div class="grid grid-cols-1 gap-2">
+                               <div class="theme-card p-2 rounded border ${cvData.theme === 'gcv' ? 'selected' : ''}" onclick="setTheme('gcv')">
+                                   <div class="theme-preview" style="background: linear-gradient(90deg, #0b3b4b 0%, #0b3b4b 33%, #ffffff 33%, #ffffff 100%);"></div>
+                                   <p class="text-xs font-medium text-center">GCV</p>
                                </div>
                            </div>
                        </div>
                        
                        <div class="bg-gray-50 rounded-lg p-4">
                            <h4 class="font-medium text-sm mb-3">Pré-visualização</h4>
-                           <div class="text-sm p-4 bg-white rounded border" style="font-family: ${fontOptions[cvData.fontFamily]}; font-size: ${cvData.fontSize}px;">
-                               <p class="font-bold" style="color: var(--secondary-color);">Exemplo de texto</p>
-                               <p class="text-gray-600 text-justify">Este é um exemplo de como ficará seu currículo com as configurações atuais. Todo o texto será justificado para um visual mais profissional.</p>
+                           <div class="text-sm p-4 bg-white rounded border" style="font-family: ${fontOptions[cvData.fontFamily]}; font-size: ${cvData.fontSize}px; border-left: 4px solid ${cvData.accentColor};">
+                               <p class="font-bold" style="color: ${cvData.accentColor};">Exemplo de texto</p>
+                               <p class="text-gray-600 text-justify">Este é um exemplo de como ficará seu currículo com as configurações atuais. As linhas e marcadores usarão a cor de destaque escolhida.</p>
                            </div>
                        </div>
                        
@@ -1885,7 +2388,6 @@
                document.getElementById('cv-preview-container').style.transform = `scale(${currentZoom})`;
            }
 
-           // Carregar foto salva
            function loadSavedPhoto() {
                try {
                    const savedPhoto = localStorage.getItem('gcv_photo');
@@ -1893,123 +2395,25 @@
                        cvData.photo = savedPhoto;
                        updatePhotoPreview();
                    }
-               } catch (e) {
-                   console.warn('Erro ao carregar foto salva:', e);
-               }
+               } catch (e) {}
            }
 
-           // FUNÇÃO PARA MOSTRAR EXEMPLO NA VISUALIZAÇÃO INICIAL
-           function showExampleInPreview() {
-               const isProfessional = professionalThemes.includes(cvData.theme);
-               
-               // Mostrar exemplo APENAS na visualização, não nos campos de edição
-               if (isProfessional) {
-                   document.getElementById('preview-name-professional').textContent = exampleData.name;
-                   document.getElementById('preview-title-professional').textContent = exampleData.title;
-                   document.getElementById('preview-email-professional').textContent = exampleData.email;
-                   document.getElementById('preview-phone-professional').textContent = exampleData.phone;
-                   document.getElementById('preview-location-professional').textContent = exampleData.location;
-               } else {
-                   document.getElementById('preview-name').textContent = exampleData.name;
-                   document.getElementById('preview-title').textContent = exampleData.title;
-                   document.getElementById('preview-email').textContent = exampleData.email;
-                   document.getElementById('preview-phone').textContent = exampleData.phone;
-                   document.getElementById('preview-location').textContent = exampleData.location;
-               }
-               
-               document.getElementById('preview-summary').textContent = exampleData.summary;
-               
-               // Renderizar habilidades de exemplo - uma abaixo da outra
-               const skillsContainer = document.getElementById('preview-skills');
-               skillsContainer.innerHTML = '';
-               exampleData.skills.forEach(skill => {
-                   skillsContainer.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
-               });
-               
-               // Renderizar idiomas de exemplo
-               const languagesContainer = document.getElementById('preview-languages');
-               languagesContainer.innerHTML = '';
-               exampleData.languages.forEach(lang => {
-                   languagesContainer.innerHTML += `
-                       <div class="text-xs">
-                           <span class="text-gray-700">${lang.name}</span>
-                           <span class="text-gray-500 ml-1">${lang.level}</span>
-                       </div>
-                   `;
-               });
-               
-               // Renderizar educação de exemplo
-               const educationContainer = document.getElementById('preview-education');
-               educationContainer.innerHTML = '';
-               exampleData.education.forEach(edu => {
-                   educationContainer.innerHTML += `
-                       <div class="mb-2">
-                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree}</h3>
-                           <div class="text-xs text-gray-600">${edu.school}</div>
-                           <div class="text-xs text-gray-400 italic">${edu.date}</div>
-                       </div>
-                   `;
-               });
-               
-               // Renderizar experiência de exemplo
-               const experienceContainer = document.getElementById('preview-experience');
-               experienceContainer.innerHTML = '';
-               exampleData.experience.forEach(job => {
-                   experienceContainer.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${job.role}</h3>
-                               <span class="text-xs text-gray-500">${job.date}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${job.company}</div>
-                           <p class="text-xs text-gray-600 text-justify">${job.description}</p>
-                       </div>
-                   `;
-               });
-               
-               // Renderizar prêmios de exemplo (mostrar se houver)
-               const awardsSection = document.getElementById('preview-awards-section');
-               const awardsContainer = document.getElementById('preview-awards');
-               
-               if (exampleData.awards && exampleData.awards.length > 0) {
-                   awardsSection.style.display = 'block';
-                   awardsContainer.innerHTML = '';
-                   exampleData.awards.forEach(award => {
-                       awardsContainer.innerHTML += `
-                           <div class="mb-2">
-                               <div class="flex justify-between items-baseline">
-                                   <h3 class="font-bold text-gray-800 text-xs">${award.title}</h3>
-                                   <span class="text-xs text-gray-500">${award.year}</span>
-                               </div>
-                               <div class="text-xs font-semibold mb-1 company-name" style="color: var(--secondary-color);">${award.organization}</div>
-                           </div>
-                       `;
-                   });
-               } else {
-                   awardsSection.style.display = 'none';
-               }
-           }
-
-           // Inicialização
            document.addEventListener('DOMContentLoaded', () => {
                loadDownloadStats();
                loadSavedPhoto();
-               loadSettings(); // Carregar configurações de tema, fonte e tamanho
+               loadSettings();
                
-               // Carregar conteúdo inicial
                const editorArea = document.getElementById('editor-scroll-area');
                if (editorArea) {
                    editorArea.innerHTML = getContentHTML();
                    loadDataToForm();
                    setupSkillInput();
+                   setupCertificationInput();
                    setupInputListeners();
                    updatePhotoPreview();
                }
                
-               // MOSTRAR EXEMPLO NA VISUALIZAÇÃO (APENAS VISUAL, NÃO NOS CAMPOS)
-               showExampleInPreview();
-               
-               // Atualizar tema inicial
+               setAccentColor(cvData.accentColor);
                setTheme(cvData.theme);
                applyZoom();
            });
