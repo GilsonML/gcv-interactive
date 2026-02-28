@@ -630,6 +630,28 @@
            border-color: #000;
            box-shadow: 0 0 0 2px white;
        }
+
+       /* Notificação de download */
+       .download-toast {
+           position: fixed;
+           bottom: 20px;
+           right: 20px;
+           background: #10b981;
+           color: white;
+           padding: 12px 20px;
+           border-radius: 8px;
+           box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+           z-index: 9999;
+           animation: slideIn 0.3s ease-out;
+           display: flex;
+           align-items: center;
+           gap: 10px;
+       }
+
+       @keyframes slideIn {
+           from { transform: translateX(100%); opacity: 0; }
+           to { transform: translateX(0); opacity: 1; }
+       }
    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
@@ -889,16 +911,16 @@
                                        <div id="gcv-skills" class="space-y-1"></div>
                                    </div>
                                    
-                                   <!-- CERTIFICAÇÕES -->
-                                   <div class="mb-6">
-                                       <h2>CERTIFICAÇÕES</h2>
-                                       <div id="gcv-certifications" class="space-y-1"></div>
-                                   </div>
-                                   
                                    <!-- LÍNGUAS -->
                                    <div class="mb-6">
                                        <h2>LÍNGUAS</h2>
                                        <div id="gcv-languages" class="space-y-1"></div>
+                                   </div>
+                                   
+                                   <!-- CERTIFICAÇÕES (AGORA NA PARTE INFERIOR) -->
+                                   <div class="mt-auto pt-6">
+                                       <h2>CERTIFICAÇÕES</h2>
+                                       <div id="gcv-certifications" class="space-y-1"></div>
                                    </div>
                                </div>
                                
@@ -942,10 +964,14 @@
    <!-- Footer com link para Admin -->
    <footer class="bg-white border-t border-gray-200 py-2 px-6 text-center text-xs text-gray-600 no-print">
        <div>© 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana</div>
-       <div class="mt-1">
-           <a href="/admin.html" class="text-gray-400 hover:text-gray-600 transition-colors" target="_blank">
+       <div class="mt-1 flex justify-center gap-4">
+           <a href="/gcv-interactive/admin.html" class="text-gray-400 hover:text-gray-600 transition-colors" target="_blank">
                <i class="fas fa-chart-line mr-1"></i> Estatísticas
            </a>
+           <span class="text-gray-300">|</span>
+           <span class="text-gray-400">
+               <i class="fas fa-download mr-1"></i> Total: <span id="footer-download-count">0</span>
+           </span>
        </div>
    </footer>
 
@@ -1013,6 +1039,22 @@
            
            let devMode = false;
 
+           // Função para mostrar notificação
+           function showNotification(message, type = 'success') {
+               const toast = document.createElement('div');
+               toast.className = 'download-toast';
+               toast.innerHTML = `
+                   <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} text-white"></i>
+                   <span>${message}</span>
+               `;
+               document.body.appendChild(toast);
+               
+               setTimeout(() => {
+                   toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                   setTimeout(() => toast.remove(), 300);
+               }, 3000);
+           }
+
            // Carregar estatísticas do localStorage
            function loadDownloadStats() {
                try {
@@ -1044,7 +1086,7 @@
                }
            }
            
-           // ===== NOVA FUNÇÃO DE INCREMENTO COM COUNTERAPI =====
+           // ===== FUNÇÃO DE INCREMENTO MELHORADA =====
            async function incrementCounter() {
                try {
                    // Incrementa contador local
@@ -1052,24 +1094,21 @@
                    downloadStats.today++;
                    downloadStats.session++;
                    
-                   // Registra no CounterAPI (gratuito, sem necessidade de cadastro)
-                   const pageId = 'gcv-interactive'; // Identificador único do seu app
+                   // Registra no CounterAPI
+                   const pageId = 'gcv-interactive';
                    const counterUrl = `https://api.counterapi.dev/v1/${pageId}/downloads/up`;
+                   
+                   console.log('📤 Registrando download no CounterAPI...');
                    
                    const response = await fetch(counterUrl);
                    const data = await response.json();
                    
-                   console.log('📊 Download registrado! Total global:', data.count);
-                   
-                   // Opcional: você pode guardar o total global
-                   if (data && data.count) {
-                       downloadStats.globalTotal = data.count;
-                   }
+                   console.log('✅ Download registrado! Total global:', data.count);
                    
                    downloadStats.history.push({
                        timestamp: new Date().toISOString(),
-                       name: cvData.name || 'Desconhecido',
-                       globalCount: data?.count
+                       name: cvData.name || 'Anônimo',
+                       globalCount: data.count
                    });
                    
                    if (downloadStats.history.length > 100) {
@@ -1078,15 +1117,19 @@
                    
                    saveDownloadStats();
                    updateDisplay();
-                   return downloadStats;
+                   
+                   // Mostra notificação de sucesso
+                   showNotification(`Download registrado! Total: ${data.count}`, 'success');
+                   
+                   return data.count;
                    
                } catch (error) {
-                   console.warn('Erro ao registrar no CounterAPI, usando apenas contador local:', error);
+                   console.warn('❌ Erro ao registrar no CounterAPI:', error);
                    
                    // Fallback para o contador local
                    downloadStats.history.push({
                        timestamp: new Date().toISOString(),
-                       name: cvData.name || 'Desconhecido'
+                       name: cvData.name || 'Anônimo'
                    });
                    
                    if (downloadStats.history.length > 100) {
@@ -1095,7 +1138,11 @@
                    
                    saveDownloadStats();
                    updateDisplay();
-                   return downloadStats;
+                   
+                   // Mostra notificação de aviso
+                   showNotification('Download registrado localmente (offline)', 'warning');
+                   
+                   return downloadStats.total;
                }
            }
            
@@ -1106,6 +1153,12 @@
                document.getElementById('statTodayDownloads').textContent = downloadStats.today;
                document.getElementById('statSessionDownloads').textContent = downloadStats.session;
                document.getElementById('statLastReset').textContent = downloadStats.lastReset;
+               
+               // Atualiza contador no footer
+               const footerCount = document.getElementById('footer-download-count');
+               if (footerCount) {
+                   footerCount.textContent = downloadStats.total;
+               }
                
                const daysActive = Math.ceil((new Date() - new Date(downloadStats.lastReset)) / (1000 * 60 * 60 * 24)) || 1;
                const average = Math.round(downloadStats.total / daysActive);
@@ -1346,10 +1399,10 @@
                }
            }
 
-           // ===== FUNÇÃO DE DOWNLOAD PDF (MODIFICADA PARA USAR O NOVO CONTADOR) =====
+           // ===== FUNÇÃO DE DOWNLOAD PDF =====
            window.downloadPDF = async function() {
                try {
-                   // Registrar o download (usa a nova função incrementCounter)
+                   // Registrar o download
                    await incrementCounter();
                    
                    const btn = event?.target?.closest('button');
@@ -1434,7 +1487,7 @@
                }
            };
 
-           // ===== FUNÇÕES DO EDITOR (mantidas como estavam) =====
+           // ===== FUNÇÕES DO EDITOR =====
            function setupInputListeners() {
                document.querySelectorAll('[data-field]').forEach(input => {
                    input.addEventListener('input', (e) => {
@@ -1506,8 +1559,8 @@
                    document.getElementById('gcv-summary').textContent = cvData.summary || '';
                    
                    renderGcvSkills();
-                   renderGcvCertifications();
                    renderGcvLanguages();
+                   renderGcvCertifications();
                    renderGcvExperience();
                    renderGcvEducation();
                    renderGcvAwards();
@@ -1581,7 +1634,7 @@
                }
            }
 
-           // Funções de renderização (mantidas como estavam)
+           // Funções de renderização
            function renderDefaultSkills() {
                const container = document.getElementById('preview-skills');
                if (!container) return;
@@ -1785,19 +1838,6 @@
                });
            }
 
-           function renderGcvCertifications() {
-               const container = document.getElementById('gcv-certifications');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.certifications && cvData.certifications.length > 0) {
-                   cvData.certifications.forEach(cert => {
-                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
-                   });
-               } else {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
-               }
-           }
-
            function renderGcvLanguages() {
                const container = document.getElementById('gcv-languages');
                if (!container) return;
@@ -1814,6 +1854,19 @@
                        </div>
                    `;
                });
+           }
+
+           function renderGcvCertifications() {
+               const container = document.getElementById('gcv-certifications');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.certifications && cvData.certifications.length > 0) {
+                   cvData.certifications.forEach(cert => {
+                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
+                   });
+               } else {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
+               }
            }
 
            function renderGcvExperience() {
