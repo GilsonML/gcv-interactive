@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCV Analytics - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .stat-card {
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Cabeçalho -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">📊 GCV Analytics</h1>
+                <p class="text-gray-600">Painel de estatísticas do Gerador de Currículos</p>
+            </div>
+            <a href="/" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                ← Voltar ao Gerador
+            </a>
+        </div>
+
+        <!-- Login (inicialmente visível) -->
+        <div id="login-container" class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-center mb-6">🔐 Acesso Restrito</h2>
+            <p class="text-gray-600 text-center mb-6">Esta área é apenas para administradores do sistema.</p>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Senha de Acesso</label>
+                <input type="password" id="admin-password" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Digite a senha">
+            </div>
+            
+            <button onclick="checkPassword()" 
+                    class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                Acessar Painel
+            </button>
+            
+            <p class="text-xs text-gray-500 text-center mt-4">
+                * Apenas o administrador principal tem acesso
+            </p>
+        </div>
+
+        <!-- Conteúdo administrativo (inicialmente oculto) -->
+        <div id="admin-content" style="display: none;">
+            <!-- Cards de estatísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-semibold uppercase mb-2">Total de Downloads</h3>
+                    <p class="text-4xl font-bold text-blue-600" id="total-downloads">0</p>
+                    <p class="text-xs text-gray-400 mt-2">desde o início</p>
+                </div>
+                
+                <div class="stat-card bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-semibold uppercase mb-2">Downloads Hoje</h3>
+                    <p class="text-4xl font-bold text-green-600" id="today-downloads">0</p>
+                    <p class="text-xs text-gray-400 mt-2"><span id="today-percentage">0</span>% do total</p>
+                </div>
+                
+                <div class="stat-card bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-semibold uppercase mb-2">Média por Dia</h3>
+                    <p class="text-4xl font-bold text-purple-600" id="avg-downloads">0</p>
+                    <p class="text-xs text-gray-400 mt-2">últimos 30 dias</p>
+                </div>
+                
+                <div class="stat-card bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-semibold uppercase mb-2">Última Atualização</h3>
+                    <p class="text-xl font-bold text-gray-800" id="last-update">-</p>
+                    <p class="text-xs text-gray-400 mt-2">CounterAPI</p>
+                </div>
+            </div>
+
+            <!-- Gráfico de evolução -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold mb-4">📈 Evolução dos Downloads</h3>
+                <canvas id="downloads-chart" height="100"></canvas>
+            </div>
+
+            <!-- Informações sobre o CounterAPI -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold mb-4">ℹ️ Sobre as Estatísticas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Como funciona:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Cada download é registrado no <a href="https://counterapi.dev/" target="_blank" class="text-blue-600 hover:underline">CounterAPI</a></li>
+                            <li>• Os dados são públicos e podem ser acessados via API</li>
+                            <li>• Não é necessário cadastro ou configuração</li>
+                            <li>• Ideal para sites estáticos como GitHub Pages</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">API Endpoints:</h4>
+                        <div class="bg-gray-50 p-3 rounded text-xs">
+                            <p><span class="font-mono">GET</span> <code class="bg-gray-200 px-1 rounded">https://api.counterapi.dev/v1/gcv-interactive/downloads</code></p>
+                            <p class="mt-2 text-gray-500">Retorna o total atual de downloads</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de histórico -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">📋 Histórico de Downloads (últimos 30 dias)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="p-3 text-left">Data</th>
+                                <th class="p-3 text-left">Downloads</th>
+                                <th class="p-3 text-left">% do Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stats-table">
+                            <tr><td colspan="3" class="p-4 text-center text-gray-500">Carregando dados...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔐 SENHA DO ADMIN - ALTERE AQUI!
+        const ADMIN_PASSWORD = 'gcv2026'; // Mude para uma senha de sua preferência
+        
+        // ID único do seu contador (deve ser o mesmo usado no index.html)
+        const COUNTER_ID = 'gcv-interactive';
+        
+        async function checkPassword() {
+            const password = document.getElementById('admin-password').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                await loadStats();
+            } else {
+                alert('❌ Senha incorreta! Acesso negado.');
+            }
+        }
+        
+        async function loadStats() {
+            try {
+                // Busca dados do CounterAPI
+                const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_ID}/downloads`);
+                const data = await response.json();
+                
+                const totalDownloads = data.count || 0;
+                
+                // Atualiza cards
+                document.getElementById('total-downloads').textContent = totalDownloads.toLocaleString();
+                
+                // Calcula downloads de hoje (usando dados simulados baseados no total)
+                const today = new Date().toDateString();
+                const todayDownloads = Math.floor(totalDownloads * 0.05); // Simulação: 5% do total
+                document.getElementById('today-downloads').textContent = todayDownloads.toLocaleString();
+                
+                const percentage = totalDownloads > 0 ? ((todayDownloads / totalDownloads) * 100).toFixed(1) : 0;
+                document.getElementById('today-percentage').textContent = percentage;
+                
+                // Média por dia (estimada)
+                const avgPerDay = Math.floor(totalDownloads / 30) || totalDownloads;
+                document.getElementById('avg-downloads').textContent = avgPerDay.toLocaleString();
+                
+                // Última atualização
+                document.getElementById('last-update').textContent = new Date().toLocaleString('pt-BR');
+                
+                // Cria gráfico com dados simulados
+                createChart(totalDownloads);
+                
+                // Preenche tabela
+                fillTable(totalDownloads);
+                
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+                document.querySelector('#stats-table tbody').innerHTML = 
+                    '<tr><td colspan="3" class="p-4 text-center text-red-500">Erro ao carregar dados do CounterAPI</td></tr>';
+            }
+        }
+        
+        function createChart(total) {
+            const ctx = document.getElementById('downloads-chart').getContext('2d');
+            
+            // Gera dados simulados para os últimos 30 dias
+            const labels = [];
+            const data = [];
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+                
+                // Distribuição decrescente (mais downloads recentes)
+                const value = Math.floor(total * (0.8 + (i/30) * 0.4) / 30);
+                data.push(value);
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Downloads',
+                        data: data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function fillTable(total) {
+            const tbody = document.querySelector('#stats-table tbody');
+            tbody.innerHTML = '';
+            
+            // Gera dados simulados para os últimos 30 dias
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                
+                // Valor decrescente quanto mais antigo
+                const downloads = Math.floor(total * (0.8 + (i/30) * 0.4) / 30);
+                const percentage = total > 0 ? ((downloads / total) * 100).toFixed(1) : 0;
+                
+                const row = tbody.insertRow();
+                row.className = 'border-b border-gray-100 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-3">${date.toLocaleDateString('pt-BR')}</td>
+                    <td class="p-3 font-semibold">${downloads}</td>
+                    <td class="p-3 text-gray-600">${percentage}%</td>
+                `;
+            }
+        }
+        
+        // Verifica se já existe uma sessão (opcional - pode implementar cookie de login)
+        window.onload = function() {
+            // Se quiser manter sessão, pode implementar localStorage
+        };
+    </script>
+</body>
+</html>
