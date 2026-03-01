@@ -131,7 +131,7 @@
 
        /* ===== VARIÁVEL DE COR DINÂMICA ===== */
        :root {
-           --accent-color: #f39c12;
+           --accent-color: #f39c12; /* Laranja padrão */
        }
        
        /* Cores predefinidas com tons adequados */
@@ -198,7 +198,7 @@
            --border-color: var(--accent-color);
        }
        
-       /* ===== MODELO GCV ===== */
+       /* ===== MODELO GCV (ANTIGO MARIA SILVA) ===== */
        .theme-gcv {
            --sidebar-bg: #0b3b4b;
            --sidebar-text: #ffffff;
@@ -630,28 +630,6 @@
            border-color: #000;
            box-shadow: 0 0 0 2px white;
        }
-
-       /* Notificação de download */
-       .download-toast {
-           position: fixed;
-           bottom: 20px;
-           right: 20px;
-           background: #10b981;
-           color: white;
-           padding: 12px 20px;
-           border-radius: 8px;
-           box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-           z-index: 9999;
-           animation: slideIn 0.3s ease-out;
-           display: flex;
-           align-items: center;
-           gap: 10px;
-       }
-
-       @keyframes slideIn {
-           from { transform: translateX(100%); opacity: 0; }
-           to { transform: translateX(0); opacity: 1; }
-       }
    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
@@ -875,7 +853,7 @@
                            </div>
                        </div>
                        
-                       <!-- MODELO GCV -->
+                       <!-- MODELO GCV (ANTIGO MARIA SILVA) -->
                        <div id="gcv-template" style="display: none;">
                            <div class="flex">
                                <!-- Coluna Esquerda Colorida -->
@@ -911,16 +889,16 @@
                                        <div id="gcv-skills" class="space-y-1"></div>
                                    </div>
                                    
+                                   <!-- CERTIFICAÇÕES -->
+                                   <div class="mb-6">
+                                       <h2>CERTIFICAÇÕES</h2>
+                                       <div id="gcv-certifications" class="space-y-1"></div>
+                                   </div>
+                                   
                                    <!-- LÍNGUAS -->
                                    <div class="mb-6">
                                        <h2>LÍNGUAS</h2>
                                        <div id="gcv-languages" class="space-y-1"></div>
-                                   </div>
-                                   
-                                   <!-- CERTIFICAÇÕES (AGORA NA PARTE INFERIOR) -->
-                                   <div class="mt-auto pt-6">
-                                       <h2>CERTIFICAÇÕES</h2>
-                                       <div id="gcv-certifications" class="space-y-1"></div>
                                    </div>
                                </div>
                                
@@ -961,18 +939,9 @@
        </main>
    </div>
 
-   <!-- Footer com link para Admin -->
+   <!-- Footer -->
    <footer class="bg-white border-t border-gray-200 py-2 px-6 text-center text-xs text-gray-600 no-print">
-       <div>© 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana</div>
-       <div class="mt-1 flex justify-center gap-4">
-           <a href="/gcv-interactive/admin.html" class="text-gray-400 hover:text-gray-600 transition-colors" target="_blank">
-               <i class="fas fa-chart-line mr-1"></i> Estatísticas
-           </a>
-           <span class="text-gray-300">|</span>
-           <span class="text-gray-400">
-               <i class="fas fa-download mr-1"></i> Total: <span id="footer-download-count">0</span>
-           </span>
-       </div>
+       © 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana
    </footer>
 
    <script>
@@ -992,7 +961,7 @@
                languages: [],
                certifications: [],
                theme: "azure",
-               accentColor: "#f39c12",
+               accentColor: "#f39c12", // Laranja padrão
                photo: null,
                fontFamily: "Inter",
                fontSize: 12
@@ -1014,7 +983,7 @@
                "Courier New": "'Courier New', monospace"
            };
            
-           // Cores predefinidas
+           // Cores predefinidas com tons adequados
            const colorPresets = {
                "Laranja": "#f39c12",
                "Azul": "#2980b9",
@@ -1038,22 +1007,6 @@
            };
            
            let devMode = false;
-
-           // Função para mostrar notificação
-           function showNotification(message, type = 'success') {
-               const toast = document.createElement('div');
-               toast.className = 'download-toast';
-               toast.innerHTML = `
-                   <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} text-white"></i>
-                   <span>${message}</span>
-               `;
-               document.body.appendChild(toast);
-               
-               setTimeout(() => {
-                   toast.style.animation = 'slideIn 0.3s ease-out reverse';
-                   setTimeout(() => toast.remove(), 300);
-               }, 3000);
-           }
 
            // Carregar estatísticas do localStorage
            function loadDownloadStats() {
@@ -1086,64 +1039,23 @@
                }
            }
            
-           // ===== FUNÇÃO DE INCREMENTO MELHORADA =====
-           async function incrementCounter() {
-               try {
-                   // Incrementa contador local
-                   downloadStats.total++;
-                   downloadStats.today++;
-                   downloadStats.session++;
-                   
-                   // Registra no CounterAPI
-                   const pageId = 'gcv-interactive';
-                   const counterUrl = `https://api.counterapi.dev/v1/${pageId}/downloads/up`;
-                   
-                   console.log('📤 Registrando download no CounterAPI...');
-                   
-                   const response = await fetch(counterUrl);
-                   const data = await response.json();
-                   
-                   console.log('✅ Download registrado! Total global:', data.count);
-                   
-                   downloadStats.history.push({
-                       timestamp: new Date().toISOString(),
-                       name: cvData.name || 'Anônimo',
-                       globalCount: data.count
-                   });
-                   
-                   if (downloadStats.history.length > 100) {
-                       downloadStats.history = downloadStats.history.slice(-100);
-                   }
-                   
-                   saveDownloadStats();
-                   updateDisplay();
-                   
-                   // Mostra notificação de sucesso
-                   showNotification(`Download registrado! Total: ${data.count}`, 'success');
-                   
-                   return data.count;
-                   
-               } catch (error) {
-                   console.warn('❌ Erro ao registrar no CounterAPI:', error);
-                   
-                   // Fallback para o contador local
-                   downloadStats.history.push({
-                       timestamp: new Date().toISOString(),
-                       name: cvData.name || 'Anônimo'
-                   });
-                   
-                   if (downloadStats.history.length > 100) {
-                       downloadStats.history = downloadStats.history.slice(-100);
-                   }
-                   
-                   saveDownloadStats();
-                   updateDisplay();
-                   
-                   // Mostra notificação de aviso
-                   showNotification('Download registrado localmente (offline)', 'warning');
-                   
-                   return downloadStats.total;
+           function incrementCounter() {
+               downloadStats.total++;
+               downloadStats.today++;
+               downloadStats.session++;
+               
+               downloadStats.history.push({
+                   timestamp: new Date().toISOString(),
+                   name: cvData.name || 'Desconhecido'
+               });
+               
+               if (downloadStats.history.length > 100) {
+                   downloadStats.history = downloadStats.history.slice(-100);
                }
+               
+               saveDownloadStats();
+               updateDisplay();
+               return downloadStats;
            }
            
            function updateDisplay() {
@@ -1154,19 +1066,13 @@
                document.getElementById('statSessionDownloads').textContent = downloadStats.session;
                document.getElementById('statLastReset').textContent = downloadStats.lastReset;
                
-               // Atualiza contador no footer
-               const footerCount = document.getElementById('footer-download-count');
-               if (footerCount) {
-                   footerCount.textContent = downloadStats.total;
-               }
-               
                const daysActive = Math.ceil((new Date() - new Date(downloadStats.lastReset)) / (1000 * 60 * 60 * 24)) || 1;
                const average = Math.round(downloadStats.total / daysActive);
                document.getElementById('statAverage').textContent = average;
            }
            
            window.resetDownloadCounter = function() {
-               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores locais!\n\nOs dados no CounterAPI continuarão intactos.')) {
+               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores de download!\n\nTem certeza?')) {
                    downloadStats = {
                        total: 0,
                        today: 0,
@@ -1196,6 +1102,7 @@
                cvData.accentColor = color;
                document.documentElement.style.setProperty('--accent-color', color);
                
+               // Atualizar seleção visual
                document.querySelectorAll('.color-preset').forEach(el => {
                    if (el.dataset.color === color) {
                        el.classList.add('selected');
@@ -1402,8 +1309,7 @@
            // ===== FUNÇÃO DE DOWNLOAD PDF =====
            window.downloadPDF = async function() {
                try {
-                   // Registrar o download
-                   await incrementCounter();
+                   incrementCounter();
                    
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
@@ -1559,8 +1465,8 @@
                    document.getElementById('gcv-summary').textContent = cvData.summary || '';
                    
                    renderGcvSkills();
+                   renderGcvCertifications(); // ← CORRIGIDO: Agora as certificações aparecem
                    renderGcvLanguages();
-                   renderGcvCertifications();
                    renderGcvExperience();
                    renderGcvEducation();
                    renderGcvAwards();
@@ -1634,7 +1540,7 @@
                }
            }
 
-           // Funções de renderização
+           // Funções de renderização para cada template
            function renderDefaultSkills() {
                const container = document.getElementById('preview-skills');
                if (!container) return;
@@ -1838,6 +1744,20 @@
                });
            }
 
+           // CORREÇÃO: Função renderGcvCertifications agora funciona corretamente
+           function renderGcvCertifications() {
+               const container = document.getElementById('gcv-certifications');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.certifications && cvData.certifications.length > 0) {
+                   cvData.certifications.forEach(cert => {
+                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
+                   });
+               } else {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
+               }
+           }
+
            function renderGcvLanguages() {
                const container = document.getElementById('gcv-languages');
                if (!container) return;
@@ -1854,19 +1774,6 @@
                        </div>
                    `;
                });
-           }
-
-           function renderGcvCertifications() {
-               const container = document.getElementById('gcv-certifications');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.certifications && cvData.certifications.length > 0) {
-                   cvData.certifications.forEach(cert => {
-                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
-                   });
-               } else {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
-               }
            }
 
            function renderGcvExperience() {
@@ -2319,6 +2226,7 @@
                    `<option value="${size}" ${cvData.fontSize === size ? 'selected' : ''}>${size}px</option>`
                ).join('');
                
+               // Gerar cores predefinidas
                const colorPresetsHtml = Object.entries(colorPresets).map(([name, color]) => 
                    `<div class="color-preset ${cvData.accentColor === color ? 'selected' : ''}" 
                          style="background-color: ${color};" 
@@ -2466,7 +2374,9 @@
                    updatePhotoPreview();
                }
                
+               // Aplicar cor de destaque salva
                setAccentColor(cvData.accentColor);
+               
                setTheme(cvData.theme);
                applyZoom();
            });
