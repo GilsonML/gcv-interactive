@@ -198,7 +198,7 @@
            --border-color: var(--accent-color);
        }
        
-       /* ===== MODELO GCV (ANTIGO MARIA SILVA) ===== */
+       /* ===== MODELO GCV ===== */
        .theme-gcv {
            --sidebar-bg: #0b3b4b;
            --sidebar-text: #ffffff;
@@ -780,6 +780,10 @@
                                        <div id="preview-skills" class="space-y-1"></div>
                                    </section>
                                    <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">CERTIFICAÇÕES</h2>
+                                       <div id="preview-certifications" class="space-y-1"></div>
+                                   </section>
+                                   <section>
                                        <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
                                        <div id="preview-languages" class="space-y-1"></div>
                                    </section>
@@ -828,6 +832,10 @@
                                        <div id="preview-skills-pro" class="space-y-1"></div>
                                    </section>
                                    <section>
+                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">CERTIFICAÇÕES</h2>
+                                       <div id="preview-certifications-pro" class="space-y-1"></div>
+                                   </section>
+                                   <section>
                                        <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
                                        <div id="preview-languages-pro" class="space-y-1"></div>
                                    </section>
@@ -853,7 +861,7 @@
                            </div>
                        </div>
                        
-                       <!-- MODELO GCV (ANTIGO MARIA SILVA) -->
+                       <!-- MODELO GCV -->
                        <div id="gcv-template" style="display: none;">
                            <div class="flex">
                                <!-- Coluna Esquerda Colorida -->
@@ -900,6 +908,12 @@
                                        <h2>LÍNGUAS</h2>
                                        <div id="gcv-languages" class="space-y-1"></div>
                                    </div>
+                                   
+                                   <!-- EDUCAÇÃO -->
+                                   <div class="mb-6">
+                                       <h2>EDUCAÇÃO</h2>
+                                       <div id="gcv-education-sidebar" class="space-y-2"></div>
+                                   </div>
                                </div>
                                
                                <!-- Coluna Direita Branca -->
@@ -917,12 +931,6 @@
                                    <div class="mb-4">
                                        <h3>EXPERIÊNCIAS</h3>
                                        <div id="gcv-experience" class="space-y-4"></div>
-                                   </div>
-                                   
-                                   <!-- EDUCAÇÃO -->
-                                   <div class="mb-4">
-                                       <h3>EDUCAÇÃO</h3>
-                                       <div id="gcv-education" class="space-y-3"></div>
                                    </div>
                                    
                                    <!-- PRÊMIOS (OPCIONAL) -->
@@ -961,7 +969,7 @@
                languages: [],
                certifications: [],
                theme: "azure",
-               accentColor: "#f39c12", // Laranja padrão
+               accentColor: "#f39c12",
                photo: null,
                fontFamily: "Inter",
                fontSize: 12
@@ -983,7 +991,7 @@
                "Courier New": "'Courier New', monospace"
            };
            
-           // Cores predefinidas com tons adequados
+           // Cores predefinidas
            const colorPresets = {
                "Laranja": "#f39c12",
                "Azul": "#2980b9",
@@ -1082,6 +1090,11 @@
                    };
                    saveDownloadStats();
                    updateDisplay();
+                   
+                   // Também resetar CounterAPI
+                   fetch('https://api.counterapi.dev/v1/gcv-interactive/downloads/reset', {
+                       method: 'POST'
+                   }).catch(e => console.warn('Erro ao resetar CounterAPI:', e));
                }
            };
            
@@ -1102,7 +1115,6 @@
                cvData.accentColor = color;
                document.documentElement.style.setProperty('--accent-color', color);
                
-               // Atualizar seleção visual
                document.querySelectorAll('.color-preset').forEach(el => {
                    if (el.dataset.color === color) {
                        el.classList.add('selected');
@@ -1311,6 +1323,15 @@
                try {
                    incrementCounter();
                    
+                   // Atualizar CounterAPI
+                   try {
+                       await fetch('https://api.counterapi.dev/v1/gcv-interactive/downloads/update', {
+                           method: 'POST'
+                       });
+                   } catch (e) {
+                       console.warn('Erro ao atualizar CounterAPI:', e);
+                   }
+                   
                    const btn = event?.target?.closest('button');
                    const originalText = btn ? btn.innerHTML : 'Baixar PDF';
                    if (btn) {
@@ -1465,7 +1486,7 @@
                    document.getElementById('gcv-summary').textContent = cvData.summary || '';
                    
                    renderGcvSkills();
-                   renderGcvCertifications(); // ← CORRIGIDO: Agora as certificações aparecem
+                   renderGcvCertifications();
                    renderGcvLanguages();
                    renderGcvExperience();
                    renderGcvEducation();
@@ -1479,6 +1500,7 @@
                    document.getElementById('preview-summary-pro').textContent = cvData.summary || '';
                    
                    renderProfessionalSkills();
+                   renderProfessionalCertifications();
                    renderProfessionalLanguages();
                    renderProfessionalEducation();
                    renderProfessionalExperience();
@@ -1492,6 +1514,7 @@
                    document.getElementById('preview-summary').textContent = cvData.summary || '';
                    
                    renderDefaultSkills();
+                   renderDefaultCertifications();
                    renderDefaultLanguages();
                    renderDefaultEducation();
                    renderDefaultExperience();
@@ -1552,6 +1575,19 @@
                cvData.skills.forEach(skill => {
                    container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
                });
+           }
+
+           function renderDefaultCertifications() {
+               const container = document.getElementById('preview-certifications');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.certifications && cvData.certifications.length > 0) {
+                   cvData.certifications.forEach(cert => {
+                       container.innerHTML += `<div class="text-xs text-gray-700">- ${cert}</div>`;
+                   });
+               } else {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
+               }
            }
 
            function renderDefaultLanguages() {
@@ -1649,6 +1685,19 @@
                });
            }
 
+           function renderProfessionalCertifications() {
+               const container = document.getElementById('preview-certifications-pro');
+               if (!container) return;
+               container.innerHTML = '';
+               if (cvData.certifications && cvData.certifications.length > 0) {
+                   cvData.certifications.forEach(cert => {
+                       container.innerHTML += `<div class="text-xs text-gray-700">- ${cert}</div>`;
+                   });
+               } else {
+                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
+               }
+           }
+
            function renderProfessionalLanguages() {
                const container = document.getElementById('preview-languages-pro');
                if (!container) return;
@@ -1744,7 +1793,6 @@
                });
            }
 
-           // CORREÇÃO: Função renderGcvCertifications agora funciona corretamente
            function renderGcvCertifications() {
                const container = document.getElementById('gcv-certifications');
                if (!container) return;
@@ -1799,7 +1847,7 @@
            }
 
            function renderGcvEducation() {
-               const container = document.getElementById('gcv-education');
+               const container = document.getElementById('gcv-education-sidebar');
                if (!container) return;
                container.innerHTML = '';
                if (cvData.education.length === 0) {
@@ -1808,12 +1856,10 @@
                }
                cvData.education.forEach(edu => {
                    container.innerHTML += `
-                       <div class="education-item">
-                           <div class="education-header">
-                               <h5>${edu.school || ''}</h5>
-                               <span class="education-date">${edu.date || ''}</span>
-                           </div>
-                           <div class="education-degree">${edu.degree || ''}</div>
+                       <div class="mb-3">
+                           <div class="font-bold text-white text-xs">${edu.school || ''}</div>
+                           <div class="text-xs text-gray-300">${edu.degree || ''}</div>
+                           <div class="text-xs text-gray-400">${edu.date || ''}</div>
                        </div>
                    `;
                });
