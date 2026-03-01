@@ -1,2432 +1,511 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>GCV-INTERACTIVE - Gerador de Currículos</title>
-   <script src="https://cdn.tailwindcss.com"></script>
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-   <!-- jsPDF -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-   <!-- html2canvas -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-   <style>
-       /* Barra de Rolagem Personalizada */
-       ::-webkit-scrollbar { width: 8px; height: 8px; }
-       ::-webkit-scrollbar-track { background: #f1f1f1; }
-       ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
-       ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
-
-       /* Simulação de Papel A4 */
-       .a4-paper { 
-           width: 210mm; 
-           min-height: 297mm; 
-           max-height: 297mm;
-           background: white; 
-           box-shadow: 0 0 20px rgba(0,0,0,0.1); 
-           margin: 0 auto; 
-           position: relative; 
-           overflow: hidden;
-           box-sizing: border-box; 
-           padding: 0 !important;
-       }
-
-       @media print {
-           body * { visibility: hidden; }
-           #cv-content, #cv-content * { visibility: visible; }
-           #cv-content { 
-               position: absolute; 
-               left: 0; 
-               top: 0; 
-               width: 100%;
-               background: white;
-               color: black;
-               overflow: hidden;
-           }
-       }
-
-       /* Ajustes de espaçamento para caber em uma página */
-       .cv-content-compact p, 
-       .cv-content-compact section,
-       .cv-content-compact .mb-6,
-       .cv-content-compact .mb-4,
-       .cv-content-compact .mb-3,
-       .cv-content-compact .space-y-6 > *,
-       .cv-content-compact .space-y-5 > *,
-       .cv-content-compact .space-y-3 > * {
-           margin-bottom: 0.4rem !important;
-       }
-
-       /* Modo de Simulação PDF */
-       .pdf-simulation-mode {
-           position: fixed !important;
-           top: 0 !important;
-           left: 0 !important;
-           width: 100vw !important;
-           height: 100vh !important;
-           z-index: 9999 !important;
-           background: #525659 !important;
-           display: flex !important;
-           flex-direction: column !important;
-           align-items: center !important;
-           justify-content: flex-start !important;
-           overflow-y: auto !important;
-           padding: 40px 20px !important;
-       }
-
-       .pdf-toolbar {
-           position: fixed;
-           top: 0;
-           left: 0;
-           right: 0;
-           height: 60px;
-           background: #323639;
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           padding: 0 20px;
-           z-index: 10000;
-           color: white;
-       }
-
-       .pdf-container {
-           margin-top: 80px;
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           gap: 20px;
-           width: 100%;
-       }
-
-       .pdf-page {
-           background: white;
-           box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-           margin: 20px auto;
-           transform-origin: center top;
-       }
-
-       /* Estilos de Foto */
-       .photo-container {
-           position: relative;
-           width: 100px;
-           height: 100px;
-           border-radius: 8px;
-           overflow: hidden;
-           border: 1px solid #e5e7eb;
-           cursor: pointer;
-           transition: all 0.3s ease;
-       }
-
-       .photo-container:hover {
-           border-color: #9ca3af;
-       }
-
-       .photo-container img {
-           width: 100%;
-           height: 100%;
-           object-fit: cover;
-           object-position: center;
-       }
-
-       /* ===== VARIÁVEL DE COR DINÂMICA ===== */
-       :root {
-           --accent-color: #f39c12; /* Laranja padrão */
-       }
-       
-       /* Cores predefinidas com tons adequados */
-       .accent-orange { --accent-color: #f39c12; }
-       .accent-blue { --accent-color: #2980b9; }
-       .accent-green { --accent-color: #27ae60; }
-       .accent-gray { --accent-color: #7f8c8d; }
-       .accent-black { --accent-color: #2c3e50; }
-       .accent-red { --accent-color: #c0392b; }
-
-       /* ===== TEMAS SUAVES ===== */
-       .theme-azure {
-           --primary-color: #60a5fa;
-           --secondary-color: #3b82f6;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-blush {
-           --primary-color: #fca5a5;
-           --secondary-color: #ef4444;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-mist {
-           --primary-color: #9ca3af;
-           --secondary-color: #4b5563;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-sage {
-           --primary-color: #86efac;
-           --secondary-color: #22c55e;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-lavender {
-           --primary-color: #c4b5fd;
-           --secondary-color: #8b5cf6;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-classic {
-           --primary-color: #000000;
-           --secondary-color: #4b5563;
-           --border-color: var(--accent-color);
-       }
-       
-       /* ===== TEMAS PROFISSIONAIS ===== */
-       .theme-pro-1 {
-           --primary-color: #0f4c5c;
-           --secondary-color: #1e6f7e;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-pro-2 {
-           --primary-color: #1a4b7a;
-           --secondary-color: #2e6da9;
-           --border-color: var(--accent-color);
-       }
-       
-       .theme-pro-3 {
-           --primary-color: #2c5f8a;
-           --secondary-color: #4a7baa;
-           --border-color: var(--accent-color);
-       }
-       
-       /* ===== MODELO GCV ===== */
-       .theme-gcv {
-           --sidebar-bg: #0b3b4b;
-           --sidebar-text: #ffffff;
-       }
-       
-       .theme-gcv .gcv-sidebar {
-           background-color: var(--sidebar-bg);
-           color: var(--sidebar-text);
-           min-height: 297mm;
-           padding: 30px 20px;
-       }
-       
-       .theme-gcv .gcv-sidebar h2 {
-           color: white;
-           font-size: 16px;
-           font-weight: 600;
-           letter-spacing: 1px;
-           border-bottom: 2px solid var(--accent-color);
-           padding-bottom: 8px;
-           margin-bottom: 20px;
-           text-transform: uppercase;
-       }
-       
-       .theme-gcv .gcv-sidebar .contact-item {
-           margin-bottom: 20px;
-       }
-       
-       .theme-gcv .gcv-sidebar .contact-item .contact-label {
-           font-weight: 600;
-           font-size: 13px;
-           color: var(--accent-color);
-           margin-bottom: 5px;
-           text-transform: uppercase;
-       }
-       
-       .theme-gcv .gcv-sidebar .contact-item .contact-value {
-           font-size: 12px;
-           line-height: 1.5;
-           color: rgba(255,255,255,0.9);
-       }
-       
-       .theme-gcv .gcv-sidebar .skill-item,
-       .theme-gcv .gcv-sidebar .cert-item {
-           margin-bottom: 8px;
-           font-size: 12px;
-           display: flex;
-           align-items: center;
-           color: rgba(255,255,255,0.9);
-       }
-       
-       .theme-gcv .gcv-sidebar .skill-item:before,
-       .theme-gcv .gcv-sidebar .cert-item:before {
-           content: "•";
-           color: var(--accent-color);
-           font-size: 16px;
-           margin-right: 8px;
-       }
-       
-       .theme-gcv .gcv-sidebar .language-item {
-           margin-bottom: 8px;
-           font-size: 12px;
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           color: rgba(255,255,255,0.9);
-       }
-       
-       .theme-gcv .gcv-sidebar .language-percent {
-           color: var(--accent-color);
-           font-weight: 600;
-       }
-       
-       .theme-gcv .gcv-photo {
-           width: 120px;
-           height: 120px;
-           border-radius: 50%;
-           background-color: #e0e0e0;
-           margin: 0 auto 30px auto;
-           border: 3px solid var(--accent-color);
-           overflow: hidden;
-       }
-       
-       .theme-gcv .gcv-photo img {
-           width: 100%;
-           height: 100%;
-           object-fit: cover;
-       }
-       
-       .theme-gcv .gcv-photo-placeholder {
-           width: 100%;
-           height: 100%;
-           background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           color: white;
-           font-size: 48px;
-           font-weight: 300;
-       }
-       
-       .theme-gcv .gcv-main {
-           padding: 30px 25px;
-       }
-       
-       .theme-gcv .gcv-main h1 {
-           color: var(--sidebar-bg);
-           font-size: 32px;
-           font-weight: 700;
-           margin-bottom: 5px;
-           letter-spacing: 1px;
-       }
-       
-       .theme-gcv .gcv-main .profession {
-           color: #666666;
-           font-size: 16px;
-           font-weight: 500;
-           margin-bottom: 25px;
-           letter-spacing: 0.5px;
-       }
-       
-       .theme-gcv .gcv-main h3 {
-           color: var(--sidebar-bg);
-           font-size: 18px;
-           font-weight: 600;
-           border-bottom: 2px solid var(--accent-color);
-           padding-bottom: 5px;
-           margin-bottom: 20px;
-           text-transform: uppercase;
-       }
-       
-       .theme-gcv .gcv-main .about-text {
-           font-size: 13px;
-           line-height: 1.6;
-           color: #333333;
-           margin-bottom: 25px;
-           text-align: justify;
-       }
-       
-       .theme-gcv .gcv-main .experience-item {
-           margin-bottom: 25px;
-       }
-       
-       .theme-gcv .gcv-main .experience-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: baseline;
-           margin-bottom: 5px;
-       }
-       
-       .theme-gcv .gcv-main .experience-header h4 {
-           color: var(--sidebar-bg);
-           font-size: 16px;
-           font-weight: 600;
-       }
-       
-       .theme-gcv .gcv-main .experience-header .experience-date {
-           color: var(--accent-color);
-           font-size: 13px;
-           font-weight: 500;
-       }
-       
-       .theme-gcv .gcv-main .experience-company {
-           color: #666666;
-           font-size: 14px;
-           font-weight: 500;
-           margin-bottom: 8px;
-       }
-       
-       .theme-gcv .gcv-main .experience-item p {
-           font-size: 12px;
-           line-height: 1.5;
-           color: #666666;
-           text-align: justify;
-       }
-       
-       .theme-gcv .gcv-main .education-item {
-           margin-bottom: 15px;
-       }
-       
-       .theme-gcv .gcv-main .education-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: baseline;
-           margin-bottom: 2px;
-       }
-       
-       .theme-gcv .gcv-main .education-header h5 {
-           color: var(--sidebar-bg);
-           font-size: 14px;
-           font-weight: 600;
-       }
-       
-       .theme-gcv .gcv-main .education-header .education-date {
-           color: var(--accent-color);
-           font-size: 12px;
-           font-weight: 500;
-       }
-       
-       .theme-gcv .gcv-main .education-degree {
-           font-size: 12px;
-           color: #666666;
-           font-style: italic;
-           margin-top: 2px;
-       }
-       
-       /* Estilo do cabeçalho destacado para temas profissionais */
-       .theme-pro-1 .professional-header,
-       .theme-pro-2 .professional-header,
-       .theme-pro-3 .professional-header {
-           background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-           color: white;
-           padding: 20px 15px;
-           margin: -12mm -12mm 15px -12mm;
-       }
-       
-       .theme-pro-1 .professional-header h1,
-       .theme-pro-2 .professional-header h1,
-       .theme-pro-3 .professional-header h1 {
-           color: white;
-       }
-       
-       /* Aplicação das cores dos temas suaves */
-       .theme-azure .section-title,
-       .theme-blush .section-title,
-       .theme-mist .section-title,
-       .theme-sage .section-title,
-       .theme-lavender .section-title,
-       .theme-classic .section-title,
-       .theme-pro-1 .section-title,
-       .theme-pro-2 .section-title,
-       .theme-pro-3 .section-title {
-           border-bottom: 2px solid var(--accent-color);
-       }
-       
-       /* Texto justificado */
-       .a4-paper p, 
-       .a4-paper .text-justify {
-           text-align: justify;
-           text-justify: inter-word;
-       }
-       
-       .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-       @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-       
-       /* ===== MODO DESENVOLVEDOR ===== */
-       .dev-only { display: none; }
-       .dev-mode .dev-only { display: block; }
-       
-       .download-counter-badge {
-           position: fixed;
-           bottom: 20px;
-           left: 20px;
-           background: rgba(0,0,0,0.95);
-           color: #10b981;
-           padding: 15px 25px;
-           border-radius: 50px;
-           font-size: 16px;
-           font-weight: 600;
-           z-index: 10001;
-           backdrop-filter: blur(10px);
-           border: 2px solid #10b981;
-           box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-           display: none;
-           align-items: center;
-           gap: 15px;
-           letter-spacing: 0.5px;
-       }
-       
-       .dev-mode .download-counter-badge {
-           display: flex !important;
-       }
-       
-       .dev-stats-panel {
-           position: fixed;
-           top: 80px;
-           left: 20px;
-           background: rgba(17, 24, 39, 0.98);
-           color: white;
-           padding: 25px;
-           border-radius: 20px;
-           border: 2px solid #10b981;
-           z-index: 10000;
-           width: 320px;
-           transform: translateX(-120%);
-           transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-           border-left: 5px solid #10b981;
-           box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-           backdrop-filter: blur(15px);
-       }
-       
-       .dev-mode .dev-stats-panel { 
-           transform: translateX(0); 
-       }
-       
-       .dev-stats-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           margin-bottom: 20px;
-           padding-bottom: 15px;
-           border-bottom: 2px solid #374151;
-       }
-       
-       .dev-stats-header h3 {
-           font-size: 18px;
-           font-weight: 700;
-           color: #10b981;
-           text-transform: uppercase;
-           letter-spacing: 1.5px;
-       }
-       
-       .dev-stats-header span {
-           background: #10b981;
-           color: #111827;
-           padding: 5px 12px;
-           border-radius: 30px;
-           font-size: 12px;
-           font-weight: 700;
-       }
-       
-       .dev-stat-item {
-           display: flex;
-           justify-content: space-between;
-           margin-bottom: 15px;
-           font-size: 15px;
-           padding: 5px 0;
-       }
-       
-       .dev-stat-label { 
-           color: #9ca3af;
-           display: flex;
-           align-items: center;
-           gap: 8px;
-       }
-       
-       .dev-stat-value { 
-           color: #10b981; 
-           font-weight: 700;
-           font-size: 18px;
-           background: rgba(16, 185, 129, 0.15);
-           padding: 5px 15px;
-           border-radius: 30px;
-           border: 1px solid rgba(16, 185, 129, 0.5);
-       }
-       
-       .dev-reset-btn {
-           width: 100%;
-           background: #374151;
-           color: #ef4444;
-           padding: 12px;
-           border-radius: 12px;
-           font-size: 14px;
-           margin-top: 20px;
-           cursor: pointer;
-           border: 2px solid #ef4444;
-           font-weight: 600;
-           transition: all 0.3s;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           gap: 10px;
-       }
-       
-       .dev-reset-btn:hover {
-           background: #ef4444;
-           color: white;
-       }
-       
-       .dev-indicator {
-           position: fixed;
-           top: 80px;
-           right: 20px;
-           background: #10b981;
-           color: #111827;
-           padding: 12px 20px;
-           border-radius: 50px;
-           font-size: 14px;
-           font-weight: 700;
-           z-index: 10000;
-           display: none;
-           align-items: center;
-           gap: 10px;
-           box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
-           border: 2px solid white;
-       }
-       
-       .dev-mode .dev-indicator {
-           display: flex;
-       }
-
-       /* Cards de temas e cores */
-       .theme-card {
-           border: 1px solid #e5e7eb;
-           transition: all 0.2s;
-           cursor: pointer;
-           background: white;
-       }
-       
-       .theme-card:hover {
-           border-color: #9ca3af;
-       }
-       
-       .theme-card.selected {
-           border-color: #000000;
-           background-color: #f9fafb;
-       }
-       
-       .theme-preview {
-           height: 40px;
-           border-radius: 4px;
-           margin-bottom: 6px;
-           border: 1px solid #e5e7eb;
-       }
-       
-       .color-preset {
-           width: 30px;
-           height: 30px;
-           border-radius: 50%;
-           cursor: pointer;
-           border: 2px solid transparent;
-           transition: all 0.2s;
-       }
-       
-       .color-preset:hover {
-           transform: scale(1.1);
-       }
-       
-       .color-preset.selected {
-           border-color: #000;
-           box-shadow: 0 0 0 2px white;
-       }
-   </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCV-INTERACTIVE - Como Usar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Animações suaves */
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Destaque para números */
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Simulação de interface */
+        .mockup-screen {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .mockup-header {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+        
+        .mockup-dot:nth-child(2) {
+            background: #f59e0b;
+        }
+        
+        .mockup-dot:nth-child(3) {
+            background: #10b981;
+        }
+        
+        .mockup-content {
+            padding: 20px;
+        }
+        
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            width: 200px;
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
+        
+        /* Highlight para features */
+        .feature-highlight {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h1 class="font-bold text-xl text-gray-900">GCV<span class="text-blue-600">-INTERACTIVE</span></h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="#guia-rapido" class="text-gray-600 hover:text-gray-900">Guia Rápido</a>
+                    <a href="#passo-a-passo" class="text-gray-600 hover:text-gray-900">Passo a Passo</a>
+                    <a href="#dicas" class="text-gray-600 hover:text-gray-900">Dicas</a>
+                    <a href="https://gilsonml.github.io/gcv-interactive/" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-external-link-alt mr-2"></i>Abrir Gerador
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-   <!-- ===== ELEMENTOS VISÍVEIS APENAS EM MODO DESENVOLVEDOR ===== -->
-   <div class="dev-indicator no-print">
-       <i class="fas fa-code"></i> MODO DESENVOLVEDOR ATIVO
-       <span class="bg-black text-white px-3 py-1 rounded text-xs">Ctrl+Shift+D</span>
-   </div>
-   
-   <div class="download-counter-badge no-print" id="downloadCounterBadge">
-       <i class="fas fa-download text-2xl"></i>
-       <div class="flex flex-col">
-           <span class="text-xs text-gray-400">Total de Downloads</span>
-           <span class="text-3xl font-bold text-white" id="downloadCountDisplay">0</span>
-       </div>
-       <div class="h-10 w-px bg-gray-600 mx-2"></div>
-       <div class="flex flex-col">
-           <span class="text-xs text-gray-400">Hoje</span>
-           <span class="text-2xl font-bold text-white" id="todayCountDisplay">0</span>
-       </div>
-   </div>
-   
-   <div class="dev-stats-panel no-print" id="devStatsPanel">
-       <div class="dev-stats-header">
-           <h3><i class="fas fa-chart-line mr-2"></i>DEV STATS</h3>
-           <span>v2.0</span>
-       </div>
-       
-       <div class="dev-stat-item">
-           <span class="dev-stat-label"><i class="fas fa-database"></i> Total de Downloads:</span>
-           <span class="dev-stat-value" id="statTotalDownloads">0</span>
-       </div>
-       <div class="dev-stat-item">
-           <span class="dev-stat-label"><i class="fas fa-calendar-day"></i> Downloads Hoje:</span>
-           <span class="dev-stat-value" id="statTodayDownloads">0</span>
-       </div>
-       <div class="dev-stat-item">
-           <span class="dev-stat-label"><i class="fas fa-clock"></i> Sessão Atual:</span>
-           <span class="dev-stat-value" id="statSessionDownloads">0</span>
-       </div>
-       <div class="dev-stat-item">
-           <span class="dev-stat-label"><i class="fas fa-history"></i> Último Reset:</span>
-           <span class="dev-stat-value text-xs" id="statLastReset">Hoje</span>
-       </div>
-       
-       <div class="border-t border-gray-700 my-3 pt-3">
-           <div class="dev-stat-item">
-               <span class="dev-stat-label"><i class="fas fa-chart-bar"></i> Média/Dia:</span>
-               <span class="dev-stat-value" id="statAverage">0</span>
-           </div>
-       </div>
-       
-       <button class="dev-reset-btn" onclick="resetDownloadCounter()">
-           <i class="fas fa-trash-alt"></i> Resetar Todos os Contadores
-       </button>
-       
-       <p class="text-xs text-gray-600 text-center mt-3">
-           <i class="fas fa-eye-slash"></i> Apenas você pode ver estas estatísticas
-       </p>
-   </div>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">📋 Como Criar Seu Currículo</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+                Aprenda a usar o GCV-INTERACTIVE em poucos minutos e crie um currículo profissional totalmente personalizado.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#guia-rapido" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-play mr-2"></i>Começar
+                </a>
+                <a href="https://gilsonml.github.io/gcv-interactive/" target="_blank" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors">
+                    <i class="fas fa-external-link-alt mr-2"></i>Abrir o Sistema
+                </a>
+            </div>
+        </div>
+    </section>
 
-   <!-- Sobreposição de Visualização PDF -->
-   <div id="pdf-simulation-overlay" class="hidden fixed inset-0 z-[9999] bg-[#525659] flex-col">
-       <div class="pdf-toolbar">
-           <div class="flex items-center gap-4">
-               <div class="flex items-center gap-2 text-red-400">
-                   <i class="fas fa-file-pdf text-xl"></i>
-                   <span class="font-semibold text-sm" id="pdf-filename">Curriculo.pdf</span>
-               </div>
-           </div>
-           <div class="flex items-center gap-3">
-               <button onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium flex items-center gap-2">
-                   <i class="fas fa-download"></i> Baixar PDF
-               </button>
-               <button onclick="closePDFSimulation()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm font-medium">
-                   <i class="fas fa-times"></i> Fechar
-               </button>
-           </div>
-       </div>
-       <div class="pdf-container" id="pdf-container"></div>
-   </div>
+    <!-- Visão Geral -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">🚀 Visão Geral do Sistema</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center step-card bg-gray-50 p-6 rounded-xl">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-pencil-alt text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">1. Preencha os Dados</h3>
+                    <p class="text-gray-600">Digite suas informações pessoais, experiência, educação e habilidades</p>
+                </div>
+                
+                <div class="text-center step-card bg-gray-50 p-6 rounded-xl">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-palette text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">2. Personalize o Layout</h3>
+                    <p class="text-gray-600">Escolha entre 10+ temas e cores de destaque para seu currículo</p>
+                </div>
+                
+                <div class="text-center step-card bg-gray-50 p-6 rounded-xl">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-file-pdf text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">3. Baixe em PDF</h3>
+                    <p class="text-gray-600">Visualize e faça o download do seu currículo em formato PDF</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-   <!-- Cabeçalho -->
-   <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shadow-sm no-print shrink-0">
-       <div class="flex items-center gap-3">
-           <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-               <i class="fas fa-file-signature"></i>
-           </div>
-           <h1 class="font-bold text-xl text-gray-900">GCV<span class="text-blue-600">-INTERACTIVE</span></h1>
-       </div>
-       <div class="flex bg-gray-100 rounded-lg p-1 border border-gray-200 flex-wrap max-w-[600px]">
-           <button onclick="setTheme('azure')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md bg-white shadow-sm" data-theme="azure">Azure</button>
-           <button onclick="setTheme('blush')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="blush">Blush</button>
-           <button onclick="setTheme('mist')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="mist">Mist</button>
-           <button onclick="setTheme('sage')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="sage">Sage</button>
-           <button onclick="setTheme('lavender')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="lavender">Lavender</button>
-           <button onclick="setTheme('classic')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="classic">Classic</button>
-           <button onclick="setTheme('pro-1')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-1">Pro 1</button>
-           <button onclick="setTheme('pro-2')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-2">Pro 2</button>
-           <button onclick="setTheme('pro-3')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="pro-3">Pro 3</button>
-           <button onclick="setTheme('gcv')" class="theme-btn px-2 py-1 text-xs font-medium rounded-md text-gray-500" data-theme="gcv">GCV</button>
-       </div>
-   </header>
+    <!-- Guia Rápido -->
+    <section id="guia-rapido" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">⚡ Guia Rápido (2 minutos)</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="space-y-6">
+                        <!-- Passo 1 -->
+                        <div class="flex gap-4">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Acesse o Editor</h3>
+                                <p class="text-gray-600">Na aba "Conteúdo", preencha todos os campos com suas informações. Todos os campos começam vazios para você preencher do zero.</p>
+                                <div class="mt-3 bg-blue-50 p-3 rounded-lg">
+                                    <i class="fas fa-lightbulb text-blue-500 mr-2"></i>
+                                    <span class="text-sm text-blue-700">Dica: Comece pelo nome e profissão, depois vá adicionando experiências e habilidades</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Passo 2 -->
+                        <div class="flex gap-4">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Adicione Foto (opcional)</h3>
+                                <p class="text-gray-600">Clique no ícone de câmera para adicionar sua foto. A imagem será automaticamente ajustada ao tamanho ideal.</p>
+                                <div class="mt-3 flex gap-2">
+                                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">📸 Formatos: JPG, PNG</span>
+                                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">🎨 Ajuste automático</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Passo 3 -->
+                        <div class="flex gap-4">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Personalize o Layout</h3>
+                                <p class="text-gray-600">Vá até a aba "Layout" e escolha:</p>
+                                <ul class="mt-2 space-y-2">
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                                        <span><strong>Tipo de letra:</strong> Inter, Arial, Times New Roman, etc.</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                                        <span><strong>Tamanho:</strong> 9px a 14px para melhor legibilidade</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                                        <span><strong>Cor de destaque:</strong> Laranja, Azul, Verde, Vermelho, etc.</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                                        <span><strong>Temas:</strong> Suaves, Profissionais ou Modelo GCV</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Passo 4 -->
+                        <div class="flex gap-4">
+                            <div class="step-number">4</div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Visualize e Baixe</h3>
+                                <p class="text-gray-600">Clique em "VISUALIZAR PDF" para ver como ficou. Depois, no toolbar do PDF, clique em "Baixar PDF".</p>
+                                <div class="mt-3 bg-yellow-50 p-3 rounded-lg">
+                                    <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                                    <span class="text-sm text-yellow-700">O PDF será gerado em tamanho A4, pronto para impressão</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-   <!-- Área Principal -->
-   <div class="flex flex-1 overflow-hidden">
-       <!-- Editor -->
-       <aside class="w-[450px] bg-white border-r border-gray-200 flex flex-col overflow-hidden no-print">
-           <div class="flex border-b border-gray-200">
-               <button onclick="switchTab('content')" id="tab-content" class="flex-1 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600">Conteúdo</button>
-               <button onclick="switchTab('layout')" id="tab-layout" class="flex-1 py-4 text-sm font-medium text-gray-500">Layout</button>
-           </div>
-           <div class="flex-1 overflow-y-auto p-6 space-y-8" id="editor-scroll-area">
-               <!-- Conteúdo será carregado via JavaScript -->
-           </div>
-       </aside>
+    <!-- Passo a Passo Detalhado -->
+    <section id="passo-a-passo" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">📝 Passo a Passo Detalhado</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Coluna Esquerda - Editor -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                        <i class="fas fa-edit text-blue-600"></i>
+                        Editor de Conteúdo
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">📌 Informações Pessoais</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• <strong>Nome completo</strong> - Seu nome como aparecerá no currículo</li>
+                                <li>• <strong>Profissão/Formação/Vocação</strong> - Seu título profissional atual</li>
+                                <li>• <strong>Sobre mim</strong> - Resumo profissional (2-3 frases)</li>
+                                <li>• <strong>Email e Telefone</strong> - Para contato</li>
+                                <li>• <strong>Morada</strong> - Bairro, Município, Província</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">💼 Experiência</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Clique em "+ Adicionar" para cada experiência</li>
+                                <li>• Preencha: Cargo, Empresa, Período (ex: 2020-presente)</li>
+                                <li>• Descreva suas responsabilidades em parágrafo</li>
+                                <li>• Use Enter para criar nova linha na descrição</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🎓 Educação</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Grau: Licenciatura, Mestrado, etc.</li>
+                                <li>• Instituição: Nome da escola/universidade</li>
+                                <li>• Período: Ano de início-Ano de término (ex: 2014-2018)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🏆 Prêmios (opcional)</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Título do prêmio ou reconhecimento</li>
+                                <li>• Organização que concedeu</li>
+                                <li>• Ano de recebimento</li>
+                                <li>• <span class="text-green-600">Esta seção só aparece se você adicionar prêmios</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🗣️ Idiomas</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Nome do idioma (ex: Inglês, Francês)</li>
+                                <li>• Nível: Iniciante a Nativo</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🛠️ Habilidades</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Digite a habilidade e pressione Enter</li>
+                                <li>• Aparecerão como lista no currículo</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">📜 Certificações</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Digite o nome da certificação e pressione Enter</li>
+                                <li>• Aparecem na lateral esquerda do modelo GCV</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coluna Direita - Layout -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                        <i class="fas fa-palette text-purple-600"></i>
+                        Personalização
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🎨 Temas Disponíveis</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-white p-2 rounded border">
+                                    <span class="feature-highlight mb-2 inline-block">Suaves</span>
+                                    <p class="text-xs mt-1">Azure, Blush, Mist, Sage, Lavender, Classic</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border">
+                                    <span class="feature-highlight mb-2 inline-block">Profissionais</span>
+                                    <p class="text-xs mt-1">Pro 1 (Azul Petróleo), Pro 2 (Azul Noturno), Pro 3 (Azul Geada)</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border col-span-2">
+                                    <span class="feature-highlight mb-2 inline-block">Modelo GCV</span>
+                                    <p class="text-xs mt-1">Lateral colorida, foto circular, certificações na lateral</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🌈 Cores de Destaque</h4>
+                            <p class="text-sm text-gray-600 mb-3">Escolha a cor que preferir para linhas e marcadores:</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="w-8 h-8 rounded-full bg-[#f39c12] border-2 border-white shadow"></span>
+                                <span class="w-8 h-8 rounded-full bg-[#2980b9] border-2 border-white shadow"></span>
+                                <span class="w-8 h-8 rounded-full bg-[#27ae60] border-2 border-white shadow"></span>
+                                <span class="w-8 h-8 rounded-full bg-[#7f8c8d] border-2 border-white shadow"></span>
+                                <span class="w-8 h-8 rounded-full bg-[#2c3e50] border-2 border-white shadow"></span>
+                                <span class="w-8 h-8 rounded-full bg-[#c0392b] border-2 border-white shadow"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">🔤 Tipografia</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• <strong>Fontes:</strong> Inter, Merriweather, Roboto, Open Sans, Arial, Times New Roman, etc.</li>
+                                <li>• <strong>Tamanhos:</strong> 9px a 14px (recomendado: 12px)</li>
+                                <li>• Texto automaticamente justificado para melhor aparência</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">📱 Visualização</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Use os botões + e - para aumentar/diminuir zoom</li>
+                                <li>• "Ajustar" retorna ao zoom padrão</li>
+                                <li>• "VISUALIZAR PDF" abre o currículo em tela cheia</li>
+                                <li>• No toolbar do PDF, clique em "Baixar PDF" para salvar</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-       <!-- Visualização -->
-       <main class="flex-1 bg-gray-100/50 relative overflow-hidden flex flex-col">
-           <div class="absolute bottom-6 right-6 flex flex-col gap-2 no-print z-30">
-               <button onclick="adjustZoom(0.1)" class="w-10 h-10 bg-white rounded-full shadow-lg hover:bg-gray-50"><i class="fas fa-plus"></i></button>
-               <button onclick="adjustZoom(-0.1)" class="w-10 h-10 bg-white rounded-full shadow-lg hover:bg-gray-50"><i class="fas fa-minus"></i></button>
-               <button onclick="resetZoom()" class="w-10 h-10 bg-white rounded-full shadow-lg text-xs hover:bg-gray-50">Ajustar</button>
-           </div>
-           <div class="flex-1 overflow-auto p-8 flex justify-center items-start" id="preview-scroll-area">
-               <div id="cv-preview-container" class="transition-transform duration-200 origin-top" style="transform: scale(0.9);">
-                   <div id="cv-content" class="a4-paper theme-azure text-gray-800" style="font-family: 'Inter', sans-serif; font-size: 12px;">
-                       
-                       <!-- MODELO PADRÃO -->
-                       <div id="default-template" style="display: none; padding: 12mm;">
-                           <header class="flex gap-4 pb-3 items-start border-b border-gray-200">
-                               <div id="preview-photo" class="w-20 h-20 rounded bg-gray-100 bg-cover bg-center flex-shrink-0 hidden"></div>
-                               <div class="flex-1">
-                                   <h1 class="text-2xl font-bold text-gray-900 mb-1" id="preview-name"></h1>
-                                   <p class="text-base mb-2" id="preview-title"></p>
-                                   <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
-                                       <span><i class="fas fa-envelope mr-1"></i> <span id="preview-email"></span></span>
-                                       <span><i class="fas fa-phone mr-1"></i> <span id="preview-phone"></span></span>
-                                       <span><i class="fas fa-map-marker-alt mr-1"></i> <span id="preview-location"></span></span>
-                                   </div>
-                               </div>
-                           </header>
-                           <div class="grid grid-cols-3 gap-4 mt-4">
-                               <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
-                                       <div id="preview-skills" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">CERTIFICAÇÕES</h2>
-                                       <div id="preview-certifications" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
-                                       <div id="preview-languages" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
-                                       <div id="preview-education" class="space-y-2"></div>
-                                   </section>
-                               </div>
-                               <div class="col-span-2">
-                                   <section class="mb-3">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">SOBRE MIM</h2>
-                                       <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary"></p>
-                                   </section>
-                                   <section class="mb-3">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
-                                       <div id="preview-experience" class="space-y-3"></div>
-                                   </section>
-                                   <section id="preview-awards-section" class="mb-3" style="display: none;">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
-                                       <div id="preview-awards" class="space-y-2"></div>
-                                   </section>
-                               </div>
-                           </div>
-                       </div>
-                       
-                       <!-- MODELO PROFISSIONAL -->
-                       <div id="professional-template" style="display: none; padding: 12mm;">
-                           <div class="professional-header" style="margin: -12mm -12mm 15px -12mm;">
-                               <div class="flex items-center gap-4" style="padding: 20px 15px;">
-                                   <div id="preview-photo-professional" class="w-20 h-20 rounded-full bg-white bg-cover bg-center flex-shrink-0 hidden" style="border: 3px solid white;"></div>
-                                   <div class="flex-1">
-                                       <h1 class="text-3xl font-bold mb-1" id="preview-name-professional"></h1>
-                                       <p class="professional-title text-lg mb-2" id="preview-title-professional"></p>
-                                       <div class="professional-contact">
-                                           <span><i class="fas fa-envelope"></i> <span id="preview-email-professional"></span></span>
-                                           <span><i class="fas fa-phone"></i> <span id="preview-phone-professional"></span></span>
-                                           <span><i class="fas fa-map-marker-alt"></i> <span id="preview-location-professional"></span></span>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                           <div class="grid grid-cols-3 gap-4 mt-4">
-                               <div class="col-span-1 space-y-4 pr-3 border-r border-gray-200">
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">HABILIDADES</h2>
-                                       <div id="preview-skills-pro" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">CERTIFICAÇÕES</h2>
-                                       <div id="preview-certifications-pro" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">IDIOMAS</h2>
-                                       <div id="preview-languages-pro" class="space-y-1"></div>
-                                   </section>
-                                   <section>
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EDUCAÇÃO</h2>
-                                       <div id="preview-education-pro" class="space-y-2"></div>
-                                   </section>
-                               </div>
-                               <div class="col-span-2">
-                                   <section class="mb-3">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-1 section-title">SOBRE MIM</h2>
-                                       <p class="text-xs leading-relaxed text-gray-600 text-justify" id="preview-summary-pro"></p>
-                                   </section>
-                                   <section class="mb-3">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">EXPERIÊNCIA</h2>
-                                       <div id="preview-experience-pro" class="space-y-3"></div>
-                                   </section>
-                                   <section id="preview-awards-section-pro" class="mb-3" style="display: none;">
-                                       <h2 class="text-xs font-bold uppercase tracking-wider mb-2 section-title">PRÊMIOS</h2>
-                                       <div id="preview-awards-pro" class="space-y-2"></div>
-                                   </section>
-                               </div>
-                           </div>
-                       </div>
-                       
-                       <!-- MODELO GCV -->
-                       <div id="gcv-template" style="display: none;">
-                           <div class="flex">
-                               <!-- Coluna Esquerda Colorida -->
-                               <div class="w-1/3 gcv-sidebar">
-                                   <!-- Foto -->
-                                   <div class="gcv-photo">
-                                       <div id="gcv-photo" class="w-full h-full bg-cover bg-center hidden"></div>
-                                       <div id="gcv-photo-placeholder" class="gcv-photo-placeholder">
-                                           <span>👤</span>
-                                       </div>
-                                   </div>
-                                   
-                                   <!-- CONTACTOS -->
-                                   <div class="mb-6">
-                                       <h2>CONTACTOS</h2>
-                                       <div class="contact-item">
-                                           <div class="contact-label">Telefone:</div>
-                                           <div class="contact-value" id="gcv-phone"></div>
-                                       </div>
-                                       <div class="contact-item">
-                                           <div class="contact-label">Email:</div>
-                                           <div class="contact-value" id="gcv-email"></div>
-                                       </div>
-                                       <div class="contact-item">
-                                           <div class="contact-label">Endereço:</div>
-                                           <div class="contact-value" id="gcv-location"></div>
-                                       </div>
-                                   </div>
-                                   
-                                   <!-- HABILIDADES -->
-                                   <div class="mb-6">
-                                       <h2>HABILIDADES</h2>
-                                       <div id="gcv-skills" class="space-y-1"></div>
-                                   </div>
-                                   
-                                   <!-- CERTIFICAÇÕES -->
-                                   <div class="mb-6">
-                                       <h2>CERTIFICAÇÕES</h2>
-                                       <div id="gcv-certifications" class="space-y-1"></div>
-                                   </div>
-                                   
-                                   <!-- LÍNGUAS -->
-                                   <div class="mb-6">
-                                       <h2>LÍNGUAS</h2>
-                                       <div id="gcv-languages" class="space-y-1"></div>
-                                   </div>
-                                   
-                                   <!-- EDUCAÇÃO -->
-                                   <div class="mb-6">
-                                       <h2>EDUCAÇÃO</h2>
-                                       <div id="gcv-education-sidebar" class="space-y-2"></div>
-                                   </div>
-                               </div>
-                               
-                               <!-- Coluna Direita Branca -->
-                               <div class="w-2/3 gcv-main">
-                                   <h1 id="gcv-name"></h1>
-                                   <div class="profession" id="gcv-title"></div>
-                                   
-                                   <!-- SOBRE MIM -->
-                                   <div class="mb-4">
-                                       <h3>SOBRE MIM</h3>
-                                       <p class="about-text" id="gcv-summary"></p>
-                                   </div>
-                                   
-                                   <!-- EXPERIÊNCIAS -->
-                                   <div class="mb-4">
-                                       <h3>EXPERIÊNCIAS</h3>
-                                       <div id="gcv-experience" class="space-y-4"></div>
-                                   </div>
-                                   
-                                   <!-- PRÊMIOS (OPCIONAL) -->
-                                   <div id="gcv-awards-section" style="display: none;">
-                                       <h3>PRÊMIOS</h3>
-                                       <div id="gcv-awards" class="space-y-2"></div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </main>
-   </div>
+    <!-- Dicas e Truques -->
+    <section id="dicas" class="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">💡 Dicas e Truques</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-rocket text-3xl text-blue-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Comece pelo essencial</h3>
+                    <p class="text-gray-600 text-sm">Preencha primeiro nome, profissão e contato. Depois vá adicionando as seções gradualmente.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-sync-alt text-3xl text-purple-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Teste os temas</h3>
+                    <p class="text-gray-600 text-sm">Experimente diferentes combinações de tema e cor de destaque. O preview atualiza em tempo real!</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-image text-3xl text-green-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Foto profissional</h3>
+                    <p class="text-gray-600 text-sm">Use uma foto recente, com fundo neutro. O sistema ajusta automaticamente o enquadramento.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-list-ul text-3xl text-red-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Habilidades relevantes</h3>
+                    <p class="text-gray-600 text-sm">Liste habilidades específicas da vaga desejada. Seja objetivo e verdadeiro.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-history text-3xl text-yellow-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Experiência recente</h3>
+                    <p class="text-gray-600 text-sm">Comece pela experiência mais recente. Use o formato "Ano de início-presente" para emprego atual.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <i class="fas fa-check-circle text-3xl text-teal-600 mb-4"></i>
+                    <h3 class="font-semibold text-lg mb-2">Revise antes de baixar</h3>
+                    <p class="text-gray-600 text-sm">Sempre use o botão "VISUALIZAR PDF" para conferir se está tudo correto antes de fazer o download.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-   <!-- Footer -->
-   <footer class="bg-white border-t border-gray-200 py-2 px-6 text-center text-xs text-gray-600 no-print">
-       © 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana
-   </footer>
+    <!-- FAQ Rápido -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-12">❓ Perguntas Frequentes</h2>
+            
+            <div class="space-y-4">
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">🔹 Posso editar depois de baixar?</h3>
+                    <p class="text-gray-600 text-sm">Sim! O sistema mantém seus dados salvos no navegador. Você pode voltar e editar quando quiser.</p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">🔹 Os dados são salvos onde?</h3>
+                    <p class="text-gray-600 text-sm">No localStorage do seu navegador. Nenhum dado é enviado para servidores, garantindo sua privacidade.</p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">🔹 Como faço para limpar todos os dados?</h3>
+                    <p class="text-gray-600 text-sm">Use as ferramentas do desenvolvedor do navegador (F12) e limpe o localStorage do site.</p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">🔹 O PDF sai com boa qualidade?</h3>
+                    <p class="text-gray-600 text-sm">Sim! O sistema gera PDF em alta resolução (2.5x), perfeito para impressão ou envio por email.</p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">🔹 Posso usar em dispositivos móveis?</h3>
+                    <p class="text-gray-600 text-sm">O sistema é responsivo e funciona em celulares, mas a experiência é melhor em computadores.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-   <script>
-       (function() {
-           // Dados do usuário - INICIALMENTE VAZIOS
-           let cvData = {
-               name: "",
-               title: "",
-               email: "",
-               phone: "",
-               location: "",
-               summary: "",
-               skills: [],
-               experience: [],
-               education: [],
-               awards: [],
-               languages: [],
-               certifications: [],
-               theme: "azure",
-               accentColor: "#f39c12",
-               photo: null,
-               fontFamily: "Inter",
-               fontSize: 12
-           };
+    <!-- Call to Action Final -->
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Pronto para criar seu currículo?</h2>
+            <p class="text-xl mb-8 opacity-90">Comece agora mesmo, é gratuito!</p>
+            <a href="https://gilsonml.github.io/gcv-interactive/" target="_blank" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-3">
+                <i class="fas fa-external-link-alt"></i>
+                Abrir GCV-INTERACTIVE
+            </a>
+            <p class="mt-6 text-sm opacity-75">© 2026 GCV-INTERACTIVE - Gilson Fernandes. 🇦🇴 Feito para Juventude Angolana</p>
+        </div>
+    </section>
 
-           let currentZoom = 0.9;
-           
-           // Fontes disponíveis
-           const fontOptions = {
-               "Inter": "'Inter', sans-serif",
-               "Merriweather": "'Merriweather', serif",
-               "Roboto": "'Roboto', sans-serif",
-               "Open Sans": "'Open Sans', sans-serif",
-               "Arial": "Arial, sans-serif",
-               "Times New Roman": "'Times New Roman', serif",
-               "Helvetica": "Helvetica, Arial, sans-serif",
-               "Georgia": "Georgia, serif",
-               "Verdana": "Verdana, sans-serif",
-               "Courier New": "'Courier New', monospace"
-           };
-           
-           // Cores predefinidas
-           const colorPresets = {
-               "Laranja": "#f39c12",
-               "Azul": "#2980b9",
-               "Verde": "#27ae60",
-               "Cinzento": "#7f8c8d",
-               "Preto": "#2c3e50",
-               "Vermelho": "#c0392b"
-           };
-           
-           // Lista de temas
-           const professionalThemes = ['pro-1', 'pro-2', 'pro-3'];
-           const gcvTheme = 'gcv';
-           
-           // Sistema de contador de downloads
-           let downloadStats = {
-               total: 0,
-               today: 0,
-               session: 0,
-               lastReset: new Date().toDateString(),
-               history: []
-           };
-           
-           let devMode = false;
-
-           // Carregar estatísticas do localStorage
-           function loadDownloadStats() {
-               try {
-                   const saved = localStorage.getItem('gcv_dev_stats');
-                   if (saved) {
-                       downloadStats = JSON.parse(saved);
-                       const today = new Date().toDateString();
-                       
-                       if (downloadStats.lastReset !== today) {
-                           downloadStats.today = 0;
-                           downloadStats.lastReset = today;
-                       }
-                       
-                       downloadStats.session = 0;
-                   } else {
-                       saveDownloadStats();
-                   }
-               } catch (e) {
-                   console.warn('Erro ao carregar estatísticas:', e);
-               }
-               updateDisplay();
-           }
-           
-           function saveDownloadStats() {
-               try {
-                   localStorage.setItem('gcv_dev_stats', JSON.stringify(downloadStats));
-               } catch (e) {
-                   console.warn('Erro ao salvar estatísticas:', e);
-               }
-           }
-           
-           function incrementCounter() {
-               downloadStats.total++;
-               downloadStats.today++;
-               downloadStats.session++;
-               
-               downloadStats.history.push({
-                   timestamp: new Date().toISOString(),
-                   name: cvData.name || 'Desconhecido'
-               });
-               
-               if (downloadStats.history.length > 100) {
-                   downloadStats.history = downloadStats.history.slice(-100);
-               }
-               
-               saveDownloadStats();
-               updateDisplay();
-               return downloadStats;
-           }
-           
-           function updateDisplay() {
-               document.getElementById('downloadCountDisplay').textContent = downloadStats.total;
-               document.getElementById('todayCountDisplay').textContent = downloadStats.today;
-               document.getElementById('statTotalDownloads').textContent = downloadStats.total;
-               document.getElementById('statTodayDownloads').textContent = downloadStats.today;
-               document.getElementById('statSessionDownloads').textContent = downloadStats.session;
-               document.getElementById('statLastReset').textContent = downloadStats.lastReset;
-               
-               const daysActive = Math.ceil((new Date() - new Date(downloadStats.lastReset)) / (1000 * 60 * 60 * 24)) || 1;
-               const average = Math.round(downloadStats.total / daysActive);
-               document.getElementById('statAverage').textContent = average;
-           }
-           
-           window.resetDownloadCounter = function() {
-               if (confirm('⚠️ ATENÇÃO: Isso resetará TODOS os contadores de download!\n\nTem certeza?')) {
-                   downloadStats = {
-                       total: 0,
-                       today: 0,
-                       session: 0,
-                       lastReset: new Date().toDateString(),
-                       history: []
-                   };
-                   saveDownloadStats();
-                   updateDisplay();
-                   
-                   // Também resetar CounterAPI
-                   fetch('https://api.counterapi.dev/v1/gcv-interactive/downloads/reset', {
-                       method: 'POST'
-                   }).catch(e => console.warn('Erro ao resetar CounterAPI:', e));
-               }
-           };
-           
-           function toggleDevMode() {
-               devMode = !devMode;
-               document.body.classList.toggle('dev-mode', devMode);
-           }
-           
-           document.addEventListener('keydown', (e) => {
-               if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
-                   e.preventDefault();
-                   toggleDevMode();
-               }
-           });
-
-           // ===== FUNÇÃO PARA MUDAR COR DE DESTAQUE =====
-           window.setAccentColor = function(color) {
-               cvData.accentColor = color;
-               document.documentElement.style.setProperty('--accent-color', color);
-               
-               document.querySelectorAll('.color-preset').forEach(el => {
-                   if (el.dataset.color === color) {
-                       el.classList.add('selected');
-                   } else {
-                       el.classList.remove('selected');
-                   }
-               });
-               
-               try {
-                   localStorage.setItem('gcv_accent_color', color);
-               } catch (e) {}
-           };
-
-           // ===== FUNÇÕES DE FORMATAÇÃO =====
-           window.setFontFamily = function(font) {
-               cvData.fontFamily = font;
-               const cvContent = document.getElementById('cv-content');
-               cvContent.style.fontFamily = fontOptions[font] || fontOptions["Inter"];
-               saveSettings();
-           };
-           
-           window.setFontSize = function(size) {
-               cvData.fontSize = parseInt(size);
-               const cvContent = document.getElementById('cv-content');
-               cvContent.style.fontSize = size + 'px';
-               
-               const headings = cvContent.querySelectorAll('h1');
-               headings.forEach(h => h.style.fontSize = (size * 1.5) + 'px');
-               
-               const subHeadings = cvContent.querySelectorAll('h2');
-               subHeadings.forEach(h => h.style.fontSize = (size * 1.2) + 'px');
-               
-               saveSettings();
-               renderPreview();
-           };
-           
-           // ===== FUNÇÃO PRINCIPAL DE TEMAS =====
-           window.setTheme = function(theme) {
-               cvData.theme = theme;
-               const cv = document.getElementById('cv-content');
-               
-               cv.className = cv.className.replace(/theme-\w+/g, '').trim();
-               cv.classList.add(`theme-${theme}`);
-               
-               const defaultTemplate = document.getElementById('default-template');
-               const professionalTemplate = document.getElementById('professional-template');
-               const gcvTemplate = document.getElementById('gcv-template');
-               
-               if (theme === gcvTheme) {
-                   defaultTemplate.style.display = 'none';
-                   professionalTemplate.style.display = 'none';
-                   gcvTemplate.style.display = 'block';
-               } else if (professionalThemes.includes(theme)) {
-                   defaultTemplate.style.display = 'none';
-                   professionalTemplate.style.display = 'block';
-                   gcvTemplate.style.display = 'none';
-               } else {
-                   defaultTemplate.style.display = 'block';
-                   professionalTemplate.style.display = 'none';
-                   gcvTemplate.style.display = 'none';
-               }
-               
-               document.querySelectorAll('.theme-btn').forEach(btn => {
-                   if (btn.dataset.theme === theme) {
-                       btn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
-                       btn.classList.remove('text-gray-500');
-                   } else {
-                       btn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
-                       btn.classList.add('text-gray-500');
-                   }
-               });
-               
-               try {
-                   localStorage.setItem('gcv_theme', theme);
-               } catch (e) {}
-               
-               renderPreview();
-           };
-           
-           function saveSettings() {
-               try {
-                   localStorage.setItem('gcv_font_family', cvData.fontFamily);
-                   localStorage.setItem('gcv_font_size', cvData.fontSize);
-                   localStorage.setItem('gcv_accent_color', cvData.accentColor);
-               } catch (e) {}
-           }
-           
-           function loadSettings() {
-               try {
-                   const savedTheme = localStorage.getItem('gcv_theme');
-                   if (savedTheme) {
-                       cvData.theme = savedTheme;
-                       setTheme(savedTheme);
-                   }
-                   
-                   const savedFont = localStorage.getItem('gcv_font_family');
-                   if (savedFont && fontOptions[savedFont]) {
-                       cvData.fontFamily = savedFont;
-                       setFontFamily(savedFont);
-                   }
-                   
-                   const savedSize = localStorage.getItem('gcv_font_size');
-                   if (savedSize) {
-                       cvData.fontSize = parseInt(savedSize);
-                       setFontSize(savedSize);
-                   }
-                   
-                   const savedColor = localStorage.getItem('gcv_accent_color');
-                   if (savedColor) {
-                       cvData.accentColor = savedColor;
-                       setAccentColor(savedColor);
-                   }
-               } catch (e) {}
-           }
-
-           // ===== FUNÇÕES DE FOTO =====
-           window.handlePhotoUpload = function(input) {
-               if (input.files && input.files[0]) {
-                   const reader = new FileReader();
-                   
-                   reader.onload = function(e) {
-                       cvData.photo = e.target.result;
-                       updatePhotoPreview();
-                       
-                       try {
-                           localStorage.setItem('gcv_photo', cvData.photo);
-                       } catch (e) {}
-                   };
-                   
-                   reader.readAsDataURL(input.files[0]);
-               }
-           };
-
-           window.removePhoto = function() {
-               cvData.photo = null;
-               updatePhotoPreview();
-               try {
-                   localStorage.removeItem('gcv_photo');
-               } catch (e) {}
-           };
-
-           function updatePhotoPreview() {
-               const previewPhoto = document.getElementById('preview-photo');
-               const previewPhotoProfessional = document.getElementById('preview-photo-professional');
-               const gcvPhoto = document.getElementById('gcv-photo');
-               const gcvPlaceholder = document.getElementById('gcv-photo-placeholder');
-               const photoContainer = document.getElementById('photo-container-preview');
-               
-               if (cvData.photo) {
-                   if (previewPhoto) {
-                       previewPhoto.style.backgroundImage = `url('${cvData.photo}')`;
-                       previewPhoto.classList.remove('hidden');
-                   }
-                   
-                   if (previewPhotoProfessional) {
-                       previewPhotoProfessional.style.backgroundImage = `url('${cvData.photo}')`;
-                       previewPhotoProfessional.classList.remove('hidden');
-                   }
-                   
-                   if (gcvPhoto) {
-                       gcvPhoto.style.backgroundImage = `url('${cvData.photo}')`;
-                       gcvPhoto.classList.remove('hidden');
-                       if (gcvPlaceholder) gcvPlaceholder.style.display = 'none';
-                   }
-                   
-                   if (photoContainer) {
-                       photoContainer.innerHTML = `
-                           <img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
-                           <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded">
-                               <label class="cursor-pointer text-white hover:text-gray-200">
-                                   <i class="fas fa-camera"></i>
-                                   <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
-                               </label>
-                               <button onclick="removePhoto()" class="text-white hover:text-gray-200">
-                                   <i class="fas fa-trash"></i>
-                               </button>
-                           </div>
-                       `;
-                   }
-               } else {
-                   if (previewPhoto) previewPhoto.classList.add('hidden');
-                   if (previewPhotoProfessional) previewPhotoProfessional.classList.add('hidden');
-                   if (gcvPhoto) {
-                       gcvPhoto.classList.add('hidden');
-                       if (gcvPlaceholder) gcvPlaceholder.style.display = 'flex';
-                   }
-                   
-                   if (photoContainer) {
-                       photoContainer.innerHTML = `
-                           <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded">
-                               <span class="text-gray-400 text-4xl font-light">?</span>
-                           </div>
-                           <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded">
-                               <label class="cursor-pointer text-white hover:text-gray-200">
-                                   <i class="fas fa-camera"></i>
-                                   <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
-                               </label>
-                           </div>
-                       `;
-                   }
-               }
-           }
-
-           // ===== FUNÇÃO DE DOWNLOAD PDF =====
-           window.downloadPDF = async function() {
-               try {
-                   incrementCounter();
-                   
-                   // Atualizar CounterAPI
-                   try {
-                       await fetch('https://api.counterapi.dev/v1/gcv-interactive/downloads/update', {
-                           method: 'POST'
-                       });
-                   } catch (e) {
-                       console.warn('Erro ao atualizar CounterAPI:', e);
-                   }
-                   
-                   const btn = event?.target?.closest('button');
-                   const originalText = btn ? btn.innerHTML : 'Baixar PDF';
-                   if (btn) {
-                       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando PDF...';
-                       btn.disabled = true;
-                   }
-                   
-                   const nomeArquivo = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
-                   
-                   const originalElement = document.getElementById('cv-content');
-                   const cloneElement = originalElement.cloneNode(true);
-                   
-                   cloneElement.id = 'cv-content-clone';
-                   cloneElement.style.width = '210mm';
-                   cloneElement.style.minHeight = 'auto';
-                   cloneElement.style.maxHeight = '277mm';
-                   cloneElement.style.padding = '0';
-                   cloneElement.style.margin = '0';
-                   cloneElement.style.position = 'absolute';
-                   cloneElement.style.left = '-9999px';
-                   cloneElement.style.top = '0';
-                   cloneElement.style.background = 'white';
-                   cloneElement.style.transform = 'none';
-                   cloneElement.style.overflow = 'hidden';
-                   cloneElement.style.fontFamily = originalElement.style.fontFamily;
-                   cloneElement.style.fontSize = originalElement.style.fontSize;
-                   
-                   cloneElement.classList.add('cv-content-compact');
-                   
-                   document.body.appendChild(cloneElement);
-                   
-                   await new Promise(resolve => setTimeout(resolve, 100));
-                   
-                   const canvas = await html2canvas(cloneElement, {
-                       scale: 2.5,
-                       backgroundColor: '#ffffff',
-                       logging: false,
-                       allowTaint: false,
-                       useCORS: true
-                   });
-                   
-                   document.body.removeChild(cloneElement);
-                   
-                   const { jsPDF } = window.jspdf;
-                   
-                   const imgWidth = 210;
-                   const pageHeight = 297;
-                   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                   
-                   const doc = new jsPDF({
-                       orientation: 'portrait',
-                       unit: 'mm',
-                       format: 'a4'
-                   });
-                   
-                   let finalImgHeight = imgHeight;
-                   if (imgHeight > pageHeight) {
-                       finalImgHeight = pageHeight * 0.95;
-                   }
-                   
-                   const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                   doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalImgHeight, undefined, 'FAST');
-                   
-                   doc.save(nomeArquivo);
-                   
-                   if (btn) {
-                       btn.innerHTML = originalText;
-                       btn.disabled = false;
-                   }
-                   
-               } catch (error) {
-                   console.error('Erro:', error);
-                   alert('Erro ao gerar PDF. Tente novamente.');
-                   
-                   const btn = event?.target?.closest('button');
-                   if (btn) {
-                       btn.innerHTML = '<i class="fas fa-download"></i> Baixar PDF';
-                       btn.disabled = false;
-                   }
-               }
-           };
-
-           // ===== FUNÇÕES DO EDITOR =====
-           function setupInputListeners() {
-               document.querySelectorAll('[data-field]').forEach(input => {
-                   input.addEventListener('input', (e) => {
-                       cvData[e.target.dataset.field] = e.target.value;
-                       updatePreviewField(e.target.dataset.field, e.target.value);
-                       updatePhotoPreview();
-                   });
-               });
-           }
-
-           function setupSkillInput() {
-               const input = document.getElementById('skill-input');
-               if (input) {
-                   input.addEventListener('keydown', (e) => {
-                       if (e.key === 'Enter') {
-                           e.preventDefault();
-                           const val = e.target.value.trim();
-                           if (val) {
-                               cvData.skills.push(val);
-                               e.target.value = '';
-                               renderSkills();
-                               renderPreview();
-                           }
-                       }
-                   });
-               }
-           }
-
-           function setupCertificationInput() {
-               const input = document.getElementById('certification-input');
-               if (input) {
-                   input.addEventListener('keydown', (e) => {
-                       if (e.key === 'Enter') {
-                           e.preventDefault();
-                           const val = e.target.value.trim();
-                           if (val) {
-                               if (!cvData.certifications) cvData.certifications = [];
-                               cvData.certifications.push(val);
-                               e.target.value = '';
-                               renderCertificationsEditor();
-                               renderPreview();
-                           }
-                       }
-                   });
-               }
-           }
-
-           window.loadDataToForm = function() {
-               document.querySelectorAll('[data-field]').forEach(input => {
-                   const field = input.dataset.field;
-                   input.value = cvData[field] || '';
-               });
-               renderExperienceEditor();
-               renderEducationEditor();
-               renderAwardsEditor();
-               renderLanguagesEditor();
-               renderSkills();
-               renderCertificationsEditor();
-               updatePhotoPreview();
-           };
-
-           window.renderPreview = function() {
-               if (cvData.theme === gcvTheme) {
-                   document.getElementById('gcv-name').textContent = cvData.name || '';
-                   document.getElementById('gcv-title').textContent = cvData.title || '';
-                   document.getElementById('gcv-email').textContent = cvData.email || '';
-                   document.getElementById('gcv-phone').textContent = cvData.phone || '';
-                   document.getElementById('gcv-location').textContent = cvData.location || '';
-                   document.getElementById('gcv-summary').textContent = cvData.summary || '';
-                   
-                   renderGcvSkills();
-                   renderGcvCertifications();
-                   renderGcvLanguages();
-                   renderGcvExperience();
-                   renderGcvEducation();
-                   renderGcvAwards();
-               } else if (professionalThemes.includes(cvData.theme)) {
-                   document.getElementById('preview-name-professional').textContent = cvData.name || '';
-                   document.getElementById('preview-title-professional').textContent = cvData.title || '';
-                   document.getElementById('preview-email-professional').textContent = cvData.email || '';
-                   document.getElementById('preview-phone-professional').textContent = cvData.phone || '';
-                   document.getElementById('preview-location-professional').textContent = cvData.location || '';
-                   document.getElementById('preview-summary-pro').textContent = cvData.summary || '';
-                   
-                   renderProfessionalSkills();
-                   renderProfessionalCertifications();
-                   renderProfessionalLanguages();
-                   renderProfessionalEducation();
-                   renderProfessionalExperience();
-                   renderProfessionalAwards();
-               } else {
-                   document.getElementById('preview-name').textContent = cvData.name || '';
-                   document.getElementById('preview-title').textContent = cvData.title || '';
-                   document.getElementById('preview-email').textContent = cvData.email || '';
-                   document.getElementById('preview-phone').textContent = cvData.phone || '';
-                   document.getElementById('preview-location').textContent = cvData.location || '';
-                   document.getElementById('preview-summary').textContent = cvData.summary || '';
-                   
-                   renderDefaultSkills();
-                   renderDefaultCertifications();
-                   renderDefaultLanguages();
-                   renderDefaultEducation();
-                   renderDefaultExperience();
-                   renderDefaultAwards();
-               }
-               
-               updatePhotoPreview();
-           };
-
-           function updatePreviewField(field, value) {
-               if (cvData.theme === gcvTheme) {
-                   const map = {
-                       'name': 'gcv-name',
-                       'title': 'gcv-title',
-                       'email': 'gcv-email',
-                       'phone': 'gcv-phone',
-                       'location': 'gcv-location',
-                       'summary': 'gcv-summary'
-                   };
-                   if (map[field]) {
-                       const el = document.getElementById(map[field]);
-                       if (el) el.textContent = value || '';
-                   }
-               } else if (professionalThemes.includes(cvData.theme)) {
-                   const map = {
-                       'name': 'preview-name-professional',
-                       'title': 'preview-title-professional',
-                       'email': 'preview-email-professional',
-                       'phone': 'preview-phone-professional',
-                       'location': 'preview-location-professional',
-                       'summary': 'preview-summary-pro'
-                   };
-                   if (map[field]) {
-                       const el = document.getElementById(map[field]);
-                       if (el) el.textContent = value || '';
-                   }
-               } else {
-                   const map = {
-                       'name': 'preview-name', 'title': 'preview-title', 'email': 'preview-email',
-                       'phone': 'preview-phone', 'location': 'preview-location', 'summary': 'preview-summary'
-                   };
-                   if (map[field]) {
-                       const el = document.getElementById(map[field]);
-                       if (el) el.textContent = value || '';
-                   }
-               }
-           }
-
-           // Funções de renderização para cada template
-           function renderDefaultSkills() {
-               const container = document.getElementById('preview-skills');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.skills.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
-                   return;
-               }
-               cvData.skills.forEach(skill => {
-                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
-               });
-           }
-
-           function renderDefaultCertifications() {
-               const container = document.getElementById('preview-certifications');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.certifications && cvData.certifications.length > 0) {
-                   cvData.certifications.forEach(cert => {
-                       container.innerHTML += `<div class="text-xs text-gray-700">- ${cert}</div>`;
-                   });
-               } else {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
-               }
-           }
-
-           function renderDefaultLanguages() {
-               const container = document.getElementById('preview-languages');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.languages.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
-                   return;
-               }
-               cvData.languages.forEach(lang => {
-                   container.innerHTML += `
-                       <div class="text-xs">
-                           <span class="text-gray-700">${lang.name || ''}</span>
-                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderDefaultEducation() {
-               const container = document.getElementById('preview-education');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.education.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
-                   return;
-               }
-               cvData.education.forEach(edu => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
-                           <div class="text-xs text-gray-600">${edu.school || ''}</div>
-                           <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderDefaultExperience() {
-               const container = document.getElementById('preview-experience');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.experience.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
-                   return;
-               }
-               cvData.experience.forEach(job => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
-                               <span class="text-xs text-gray-500">${job.date || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1">${job.company || ''}</div>
-                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderDefaultAwards() {
-               const section = document.getElementById('preview-awards-section');
-               const container = document.getElementById('preview-awards');
-               if (!section || !container) return;
-               if (cvData.awards.length === 0) {
-                   section.style.display = 'none';
-                   return;
-               }
-               section.style.display = 'block';
-               container.innerHTML = '';
-               cvData.awards.forEach(award => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
-                               <span class="text-xs text-gray-500">${award.year || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1">${award.organization || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderProfessionalSkills() {
-               const container = document.getElementById('preview-skills-pro');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.skills.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
-                   return;
-               }
-               cvData.skills.forEach(skill => {
-                   container.innerHTML += `<div class="text-xs text-gray-700">- ${skill}</div>`;
-               });
-           }
-
-           function renderProfessionalCertifications() {
-               const container = document.getElementById('preview-certifications-pro');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.certifications && cvData.certifications.length > 0) {
-                   cvData.certifications.forEach(cert => {
-                       container.innerHTML += `<div class="text-xs text-gray-700">- ${cert}</div>`;
-                   });
-               } else {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
-               }
-           }
-
-           function renderProfessionalLanguages() {
-               const container = document.getElementById('preview-languages-pro');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.languages.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
-                   return;
-               }
-               cvData.languages.forEach(lang => {
-                   container.innerHTML += `
-                       <div class="text-xs">
-                           <span class="text-gray-700">${lang.name || ''}</span>
-                           <span class="text-gray-500 ml-1">${lang.level || ''}</span>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderProfessionalEducation() {
-               const container = document.getElementById('preview-education-pro');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.education.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
-                   return;
-               }
-               cvData.education.forEach(edu => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <h3 class="font-bold text-gray-800 text-xs">${edu.degree || ''}</h3>
-                           <div class="text-xs text-gray-600">${edu.school || ''}</div>
-                           <div class="text-xs text-gray-400 italic">${edu.date || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderProfessionalExperience() {
-               const container = document.getElementById('preview-experience-pro');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.experience.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
-                   return;
-               }
-               cvData.experience.forEach(job => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${job.role || ''}</h3>
-                               <span class="text-xs text-gray-500">${job.date || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1">${job.company || ''}</div>
-                           <p class="text-xs text-gray-600 text-justify">${job.description || ''}</p>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderProfessionalAwards() {
-               const section = document.getElementById('preview-awards-section-pro');
-               const container = document.getElementById('preview-awards-pro');
-               if (!section || !container) return;
-               if (cvData.awards.length === 0) {
-                   section.style.display = 'none';
-                   return;
-               }
-               section.style.display = 'block';
-               container.innerHTML = '';
-               cvData.awards.forEach(award => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h3 class="font-bold text-gray-800 text-xs">${award.title || ''}</h3>
-                               <span class="text-xs text-gray-500">${award.year || ''}</span>
-                           </div>
-                           <div class="text-xs font-semibold mb-1">${award.organization || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderGcvSkills() {
-               const container = document.getElementById('gcv-skills');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.skills.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada</p>';
-                   return;
-               }
-               cvData.skills.forEach(skill => {
-                   container.innerHTML += `<div class="skill-item">${skill}</div>`;
-               });
-           }
-
-           function renderGcvCertifications() {
-               const container = document.getElementById('gcv-certifications');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.certifications && cvData.certifications.length > 0) {
-                   cvData.certifications.forEach(cert => {
-                       container.innerHTML += `<div class="cert-item">${cert}</div>`;
-                   });
-               } else {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma certificação adicionada</p>';
-               }
-           }
-
-           function renderGcvLanguages() {
-               const container = document.getElementById('gcv-languages');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.languages.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum idioma adicionado</p>';
-                   return;
-               }
-               cvData.languages.forEach(lang => {
-                   container.innerHTML += `
-                       <div class="language-item">
-                           <span>${lang.name || ''}</span>
-                           <span class="language-percent">${lang.level || ''}</span>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderGcvExperience() {
-               const container = document.getElementById('gcv-experience');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.experience.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma experiência adicionada</p>';
-                   return;
-               }
-               cvData.experience.forEach(job => {
-                   container.innerHTML += `
-                       <div class="experience-item">
-                           <div class="experience-header">
-                               <h4>${job.role || ''}</h4>
-                               <span class="experience-date">${job.date || ''}</span>
-                           </div>
-                           <div class="experience-company">${job.company || ''}</div>
-                           <p>${job.description || ''}</p>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderGcvEducation() {
-               const container = document.getElementById('gcv-education-sidebar');
-               if (!container) return;
-               container.innerHTML = '';
-               if (cvData.education.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma formação adicionada</p>';
-                   return;
-               }
-               cvData.education.forEach(edu => {
-                   container.innerHTML += `
-                       <div class="mb-3">
-                           <div class="font-bold text-white text-xs">${edu.school || ''}</div>
-                           <div class="text-xs text-gray-300">${edu.degree || ''}</div>
-                           <div class="text-xs text-gray-400">${edu.date || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderGcvAwards() {
-               const section = document.getElementById('gcv-awards-section');
-               const container = document.getElementById('gcv-awards');
-               if (!section || !container) return;
-               if (cvData.awards.length === 0) {
-                   section.style.display = 'none';
-                   return;
-               }
-               section.style.display = 'block';
-               container.innerHTML = '';
-               cvData.awards.forEach(award => {
-                   container.innerHTML += `
-                       <div class="mb-2">
-                           <div class="flex justify-between items-baseline">
-                               <h4 class="font-bold text-gray-800 text-xs">${award.title || ''}</h4>
-                               <span class="text-xs text-gray-500">${award.year || ''}</span>
-                           </div>
-                           <div class="text-xs text-gray-600">${award.organization || ''}</div>
-                       </div>
-                   `;
-               });
-           }
-
-           function renderExperienceEditor() {
-               const container = document.getElementById('experience-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.experience.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma experiência adicionada. Clique em "Adicionar" para começar.</p>';
-                   return;
-               }
-               
-               cvData.experience.forEach((job, index) => {
-                   const div = document.createElement('div');
-                   div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
-                   div.innerHTML = `
-                       <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
-                           <button onclick="deleteItem('experience', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                       </div>
-                       <input type="text" value="${(job.role || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'role', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Cargo">
-                       <input type="text" value="${(job.company || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'company', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Empresa">
-                       <input type="text" value="${(job.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('experience', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 mb-2 border-none focus:ring-0" placeholder="Ano de início-presente">
-                       <textarea onchange="updateItem('experience', ${index}, 'description', this.value)" class="w-full bg-white text-xs p-2 rounded border" rows="2" placeholder="Descrição...">${(job.description || '').replace(/"/g, '&quot;')}</textarea>
-                   `;
-                   container.appendChild(div);
-               });
-           }
-
-           function renderEducationEditor() {
-               const container = document.getElementById('education-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.education.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma formação adicionada. Clique em "Adicionar" para começar.</p>';
-                   return;
-               }
-               
-               cvData.education.forEach((edu, index) => {
-                   const div = document.createElement('div');
-                   div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
-                   div.innerHTML = `
-                       <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
-                           <button onclick="deleteItem('education', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                       </div>
-                       <input type="text" value="${(edu.degree || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'degree', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Grau">
-                       <input type="text" value="${(edu.school || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'school', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Instituição">
-                       <input type="text" value="${(edu.date || '').replace(/"/g, '&quot;')}" onchange="updateItem('education', ${index}, 'date', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano de início-Ano de termino">
-                   `;
-                   container.appendChild(div);
-               });
-           }
-
-           function renderAwardsEditor() {
-               const container = document.getElementById('awards-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.awards.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhum prêmio adicionado. Clique em "Adicionar" para começar.</p>';
-                   return;
-               }
-               
-               cvData.awards.forEach((award, index) => {
-                   const div = document.createElement('div');
-                   div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
-                   div.innerHTML = `
-                       <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
-                           <button onclick="deleteItem('awards', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                       </div>
-                       <input type="text" value="${(award.title || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'title', this.value)" class="w-full bg-transparent font-bold text-sm mb-1 border-none focus:ring-0" placeholder="Prêmio">
-                       <input type="text" value="${(award.organization || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'organization', this.value)" class="w-full bg-transparent text-xs text-gray-600 mb-1 border-none focus:ring-0" placeholder="Organização">
-                       <input type="text" value="${(award.year || '').replace(/"/g, '&quot;')}" onchange="updateItem('awards', ${index}, 'year', this.value)" class="w-full bg-transparent text-xs text-gray-400 border-none focus:ring-0" placeholder="Ano">
-                   `;
-                   container.appendChild(div);
-               });
-           }
-
-           function renderLanguagesEditor() {
-               const container = document.getElementById('languages-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.languages.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhum idioma adicionado. Clique em "Adicionar" para começar.</p>';
-                   return;
-               }
-               
-               const levels = ["Iniciante", "Básico", "Intermediário", "Avançado", "Fluente", "Nativo"];
-               cvData.languages.forEach((lang, index) => {
-                   const div = document.createElement('div');
-                   div.className = 'bg-gray-50 border rounded-lg p-3 relative group';
-                   div.innerHTML = `
-                       <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100">
-                           <button onclick="deleteItem('languages', ${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                       </div>
-                       <div class="grid grid-cols-2 gap-2">
-                           <input type="text" value="${(lang.name || '').replace(/"/g, '&quot;')}" onchange="updateItem('languages', ${index}, 'name', this.value)" class="w-full bg-transparent font-bold text-sm border-none focus:ring-0" placeholder="Idioma">
-                           <select onchange="updateItem('languages', ${index}, 'level', this.value)" class="w-full bg-white text-xs border rounded px-2 py-1">
-                               ${levels.map(level => `<option value="${level}" ${lang.level === level ? 'selected' : ''}>${level}</option>`).join('')}
-                           </select>
-                       </div>
-                   `;
-                   container.appendChild(div);
-               });
-           }
-
-           function renderSkills() {
-               const container = document.getElementById('skills-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               
-               if (cvData.skills.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhuma habilidade adicionada. Digite uma habilidade e pressione Enter.</p>';
-                   return;
-               }
-               
-               cvData.skills.forEach((skill, index) => {
-                   const span = document.createElement('span');
-                   span.className = 'bg-white border px-2 py-1 rounded text-xs flex items-center gap-2';
-                   span.innerHTML = `${skill} <button onclick="deleteSkill(${index})" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>`;
-                   container.appendChild(span);
-               });
-           }
-
-           function renderCertificationsEditor() {
-               const container = document.getElementById('certifications-editor-list');
-               if (!container) return;
-               container.innerHTML = '';
-               if (!cvData.certifications || cvData.certifications.length === 0) {
-                   container.innerHTML = '<p class="text-xs text-gray-400 italic p-2">Nenhuma certificação adicionada. Digite e pressione Enter.</p>';
-                   return;
-               }
-               cvData.certifications.forEach((cert, index) => {
-                   const span = document.createElement('span');
-                   span.className = 'bg-white border px-2 py-1 rounded text-xs flex items-center gap-2';
-                   span.innerHTML = `${cert} <button onclick="deleteCertification(${index})" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>`;
-                   container.appendChild(span);
-               });
-           }
-
-           window.deleteCertification = function(index) {
-               cvData.certifications.splice(index, 1);
-               renderCertificationsEditor();
-               renderPreview();
-           };
-
-           // Ações globais
-           window.addItem = function(type) {
-               if (type === 'experience') {
-                   if (!cvData.experience) cvData.experience = [];
-                   cvData.experience.unshift({ role: "", company: "", date: "", description: "" });
-                   renderExperienceEditor();
-               } else if (type === 'education') {
-                   if (!cvData.education) cvData.education = [];
-                   cvData.education.unshift({ degree: "", school: "", date: "" });
-                   renderEducationEditor();
-               } else if (type === 'awards') {
-                   if (!cvData.awards) cvData.awards = [];
-                   cvData.awards.unshift({ title: "", organization: "", year: "" });
-                   renderAwardsEditor();
-               } else if (type === 'languages') {
-                   if (!cvData.languages) cvData.languages = [];
-                   cvData.languages.unshift({ name: "", level: "Intermediário" });
-                   renderLanguagesEditor();
-               }
-               renderPreview();
-           };
-
-           window.updateItem = function(type, index, field, value) {
-               if (cvData[type] && cvData[type][index]) {
-                   cvData[type][index][field] = value;
-                   renderPreview();
-               }
-           };
-
-           window.deleteItem = function(type, index) {
-               if (cvData[type]) {
-                   cvData[type].splice(index, 1);
-                   if (type === 'experience') renderExperienceEditor();
-                   else if (type === 'education') renderEducationEditor();
-                   else if (type === 'awards') renderAwardsEditor();
-                   else if (type === 'languages') renderLanguagesEditor();
-                   renderPreview();
-               }
-           };
-
-           window.deleteSkill = function(index) {
-               cvData.skills.splice(index, 1);
-               renderSkills();
-               renderPreview();
-           };
-
-           window.simulatePDF = function() {
-               showPDFPreview();
-           };
-
-           function showPDFPreview() {
-               const overlay = document.getElementById('pdf-simulation-overlay');
-               const container = document.getElementById('pdf-container');
-               const original = document.getElementById('cv-content');
-               
-               document.getElementById('pdf-filename').textContent = (cvData.name || 'Curriculo').replace(/\s+/g, '_') + '.pdf';
-               
-               container.innerHTML = '';
-               const clone = original.cloneNode(true);
-               clone.id = 'cv-content-pdf';
-               clone.style.transform = 'none';
-               clone.style.margin = '0 auto';
-               clone.style.width = '210mm';
-               clone.style.padding = '0';
-               clone.classList.add('pdf-page');
-               
-               container.appendChild(clone);
-               overlay.classList.remove('hidden');
-               overlay.classList.add('flex');
-               document.body.style.overflow = 'hidden';
-           }
-
-           window.closePDFSimulation = function() {
-               document.getElementById('pdf-simulation-overlay').classList.add('hidden');
-               document.body.style.overflow = '';
-           };
-
-           window.switchTab = function(tab) {
-               const contentTab = document.getElementById('tab-content');
-               const layoutTab = document.getElementById('tab-layout');
-               const editorArea = document.getElementById('editor-scroll-area');
-               
-               if (tab === 'content') {
-                   contentTab.className = 'flex-1 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600';
-                   layoutTab.className = 'flex-1 py-4 text-sm font-medium text-gray-500';
-                   editorArea.innerHTML = getContentHTML();
-                   loadDataToForm();
-                   setupSkillInput();
-                   setupCertificationInput();
-                   setupInputListeners();
-               } else {
-                   layoutTab.className = 'flex-1 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600';
-                   contentTab.className = 'flex-1 py-4 text-sm font-medium text-gray-500';
-                   editorArea.innerHTML = getLayoutHTML();
-                   setTimeout(() => {
-                       const fontSelect = document.getElementById('font-family-select');
-                       if (fontSelect) fontSelect.value = cvData.fontFamily;
-                       
-                       const sizeSelect = document.getElementById('font-size-select');
-                       if (sizeSelect) sizeSelect.value = cvData.fontSize;
-                   }, 100);
-               }
-           };
-
-           function getContentHTML() {
-               return `
-                   <div class="space-y-4">
-                       <h3 class="text-sm font-bold text-gray-900 uppercase">Informações Pessoais</h3>
-                       
-                       <!-- Campo de Upload de Foto -->
-                       <div class="flex items-center gap-4 mb-4">
-                           <div id="photo-container-preview" class="relative w-20 h-20 rounded overflow-hidden bg-gray-100">
-                               ${cvData.photo ? 
-                                   `<img src="${cvData.photo}" alt="Foto" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded">
-                                        <label class="cursor-pointer text-white hover:text-gray-200">
-                                            <i class="fas fa-camera"></i>
-                                            <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
-                                        </label>
-                                        <button onclick="removePhoto()" class="text-white hover:text-gray-200">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>` :
-                                   `<div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                                        <span class="text-gray-400 text-4xl font-light">?</span>
-                                    </div>
-                                    <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded">
-                                        <label class="cursor-pointer text-white hover:text-gray-200">
-                                            <i class="fas fa-camera"></i>
-                                            <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
-                                        </label>
-                                    </div>`
-                               }
-                           </div>
-                           <div class="flex-1">
-                               <label class="block text-xs text-gray-500 mb-1">Foto do perfil</label>
-                               <div class="flex gap-2">
-                                   <label class="flex-1 bg-gray-800 hover:bg-gray-900 text-white text-xs font-medium px-3 py-2 rounded cursor-pointer text-center transition-colors">
-                                       <i class="fas fa-camera mr-1"></i> Adicionar Foto
-                                       <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(this)">
-                                   </label>
-                                   ${cvData.photo ? `
-                                       <button onclick="removePhoto()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs">
-                                           <i class="fas fa-trash"></i>
-                                       </button>
-                                   ` : ''}
-                               </div>
-                           </div>
-                       </div>
-
-                       <div class="grid grid-cols-2 gap-4">
-                           <div class="col-span-2">
-                               <input type="text" data-field="name" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Nome completo" value="">
-                           </div>
-                           <div class="col-span-2">
-                               <input type="text" data-field="title" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Profissão/Formação/Vocação" value="">
-                           </div>
-                           <div class="col-span-2">
-                               <textarea data-field="summary" rows="2" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Sobre mim"></textarea>
-                           </div>
-                           <div>
-                               <input type="email" data-field="email" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Email" value="">
-                           </div>
-                           <div>
-                               <input type="text" data-field="phone" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Telefone" value="">
-                           </div>
-                           <div class="col-span-2">
-                               <input type="text" data-field="location" class="w-full bg-gray-50 border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Morada: Bairro, Município, Província" value="">
-                           </div>
-                       </div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <div class="flex justify-between items-center">
-                           <h3 class="text-sm font-bold text-gray-900 uppercase">Experiência</h3>
-                           <button onclick="addItem('experience')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
-                       </div>
-                       <div id="experience-editor-list" class="space-y-3"></div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <div class="flex justify-between items-center">
-                           <h3 class="text-sm font-bold text-gray-900 uppercase">Educação</h3>
-                           <button onclick="addItem('education')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
-                       </div>
-                       <div id="education-editor-list" class="space-y-3"></div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <div class="flex justify-between items-center">
-                           <h3 class="text-sm font-bold text-gray-900 uppercase">Prêmios</h3>
-                           <button onclick="addItem('awards')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
-                       </div>
-                       <div id="awards-editor-list" class="space-y-3"></div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <div class="flex justify-between items-center">
-                           <h3 class="text-sm font-bold text-gray-900 uppercase">Idiomas</h3>
-                           <button onclick="addItem('languages')" class="text-xs bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded transition-colors">+ Adicionar</button>
-                       </div>
-                       <div id="languages-editor-list" class="space-y-3"></div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <h3 class="text-sm font-bold text-gray-900 uppercase">Habilidades</h3>
-                       <div class="bg-gray-50 border border-gray-200 rounded p-3">
-                           <input type="text" id="skill-input" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Digite uma habilidade e pressione Enter">
-                           <p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> Pressione Enter para adicionar</p>
-                       </div>
-                       <div id="skills-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded p-2"></div>
-                       
-                       <hr class="border-gray-200">
-                       
-                       <h3 class="text-sm font-bold text-gray-900 uppercase">Certificações</h3>
-                       <div class="bg-gray-50 border border-gray-200 rounded p-3">
-                           <input type="text" id="certification-input" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400" placeholder="Digite uma certificação e pressione Enter">
-                           <p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> Pressione Enter para adicionar</p>
-                       </div>
-                       <div id="certifications-editor-list" class="flex flex-wrap gap-2 min-h-[40px] bg-gray-50 rounded p-2"></div>
-                       
-                       <div class="pt-6">
-                           <button onclick="simulatePDF()" class="w-full bg-gray-800 hover:bg-gray-900 text-white py-3 rounded font-bold flex items-center justify-center gap-3 transition-all">
-                               <i class="fas fa-file-pdf text-lg"></i> VISUALIZAR PDF
-                           </button>
-                       </div>
-                   </div>
-               `;
-           }
-
-           function getLayoutHTML() {
-               const fontOptionsHtml = Object.keys(fontOptions).map(font => 
-                   `<option value="${font}" ${cvData.fontFamily === font ? 'selected' : ''}>${font}</option>`
-               ).join('');
-               
-               const sizeOptions = [9, 10, 11, 12, 13, 14].map(size => 
-                   `<option value="${size}" ${cvData.fontSize === size ? 'selected' : ''}>${size}px</option>`
-               ).join('');
-               
-               // Gerar cores predefinidas
-               const colorPresetsHtml = Object.entries(colorPresets).map(([name, color]) => 
-                   `<div class="color-preset ${cvData.accentColor === color ? 'selected' : ''}" 
-                         style="background-color: ${color};" 
-                         data-color="${color}"
-                         onclick="setAccentColor('${color}')"
-                         title="${name}"></div>`
-               ).join('');
-               
-               return `
-                   <div class="space-y-6">
-                       <h3 class="text-sm font-bold text-gray-900 uppercase">Configurações de Layout</h3>
-                       
-                       <div class="bg-gray-50 rounded-lg p-4 space-y-4">
-                           <div>
-                               <h4 class="font-medium text-sm mb-3">Tipo de Letra</h4>
-                               <select id="font-family-select" onchange="setFontFamily(this.value)" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400">
-                                   ${fontOptionsHtml}
-                               </select>
-                           </div>
-                           
-                           <div>
-                               <h4 class="font-medium text-sm mb-3">Tamanho da Letra</h4>
-                               <select id="font-size-select" onchange="setFontSize(this.value)" class="w-full bg-white border rounded px-3 py-2 text-sm focus:ring-1 focus:ring-gray-400">
-                                   ${sizeOptions}
-                               </select>
-                           </div>
-                           
-                           <div>
-                               <h4 class="font-medium text-sm mb-3">Cor de Destaque</h4>
-                               <p class="text-xs text-gray-500 mb-2">Escolha a cor para linhas e marcadores</p>
-                               <div class="flex flex-wrap gap-2">
-                                   ${colorPresetsHtml}
-                               </div>
-                           </div>
-                       </div>
-                       
-                       <div class="bg-gray-50 rounded-lg p-4">
-                           <h4 class="font-medium text-sm mb-3">Temas Suaves</h4>
-                           <p class="text-xs text-gray-500 mb-4">Apenas linhas divisórias e cabeçalho/lateral</p>
-                           
-                           <div class="grid grid-cols-3 gap-2">
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'azure' ? 'selected' : ''}" onclick="setTheme('azure')">
-                                   <div class="theme-preview" style="background: #60a5fa;"></div>
-                                   <p class="text-xs font-medium text-center">Azure</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'blush' ? 'selected' : ''}" onclick="setTheme('blush')">
-                                   <div class="theme-preview" style="background: #fca5a5;"></div>
-                                   <p class="text-xs font-medium text-center">Blush</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'mist' ? 'selected' : ''}" onclick="setTheme('mist')">
-                                   <div class="theme-preview" style="background: #9ca3af;"></div>
-                                   <p class="text-xs font-medium text-center">Mist</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'sage' ? 'selected' : ''}" onclick="setTheme('sage')">
-                                   <div class="theme-preview" style="background: #86efac;"></div>
-                                   <p class="text-xs font-medium text-center">Sage</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'lavender' ? 'selected' : ''}" onclick="setTheme('lavender')">
-                                   <div class="theme-preview" style="background: #c4b5fd;"></div>
-                                   <p class="text-xs font-medium text-center">Lavender</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'classic' ? 'selected' : ''}" onclick="setTheme('classic')">
-                                   <div class="theme-preview" style="background: #000000;"></div>
-                                   <p class="text-xs font-medium text-center">Classic</p>
-                               </div>
-                           </div>
-                           
-                           <h4 class="font-medium text-sm mt-4 mb-3">Temas Profissionais</h4>
-                           <div class="grid grid-cols-3 gap-2">
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-1' ? 'selected' : ''}" onclick="setTheme('pro-1')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #0f4c5c 0%, #1e6f7e 100%);"></div>
-                                   <p class="text-xs font-medium text-center">Pro 1</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-2' ? 'selected' : ''}" onclick="setTheme('pro-2')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #1a4b7a 0%, #2e6da9 100%);"></div>
-                                   <p class="text-xs font-medium text-center">Pro 2</p>
-                               </div>
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'pro-3' ? 'selected' : ''}" onclick="setTheme('pro-3')">
-                                   <div class="theme-preview" style="background: linear-gradient(135deg, #2c5f8a 0%, #4a7baa 100%);"></div>
-                                   <p class="text-xs font-medium text-center">Pro 3</p>
-                               </div>
-                           </div>
-                           
-                           <h4 class="font-medium text-sm mt-4 mb-3">Modelo GCV</h4>
-                           <div class="grid grid-cols-1 gap-2">
-                               <div class="theme-card p-2 rounded border ${cvData.theme === 'gcv' ? 'selected' : ''}" onclick="setTheme('gcv')">
-                                   <div class="theme-preview" style="background: linear-gradient(90deg, #0b3b4b 0%, #0b3b4b 33%, #ffffff 33%, #ffffff 100%);"></div>
-                                   <p class="text-xs font-medium text-center">GCV</p>
-                               </div>
-                           </div>
-                       </div>
-                       
-                       <div class="bg-gray-50 rounded-lg p-4">
-                           <h4 class="font-medium text-sm mb-3">Pré-visualização</h4>
-                           <div class="text-sm p-4 bg-white rounded border" style="font-family: ${fontOptions[cvData.fontFamily]}; font-size: ${cvData.fontSize}px; border-left: 4px solid ${cvData.accentColor};">
-                               <p class="font-bold" style="color: ${cvData.accentColor};">Exemplo de texto</p>
-                               <p class="text-gray-600 text-justify">Este é um exemplo de como ficará seu currículo com as configurações atuais. As linhas e marcadores usarão a cor de destaque escolhida.</p>
-                           </div>
-                       </div>
-                       
-                       <p class="text-center text-gray-400 text-sm py-4">
-                           <i class="fas fa-check-circle text-green-500 mr-2"></i> 
-                           Configurações salvas automaticamente
-                       </p>
-                   </div>
-               `;
-           }
-
-           window.adjustZoom = function(delta) {
-               currentZoom = Math.min(1.5, Math.max(0.5, currentZoom + delta));
-               applyZoom();
-           };
-
-           window.resetZoom = function() {
-               currentZoom = 0.9;
-               applyZoom();
-           };
-
-           function applyZoom() {
-               document.getElementById('cv-preview-container').style.transform = `scale(${currentZoom})`;
-           }
-
-           function loadSavedPhoto() {
-               try {
-                   const savedPhoto = localStorage.getItem('gcv_photo');
-                   if (savedPhoto) {
-                       cvData.photo = savedPhoto;
-                       updatePhotoPreview();
-                   }
-               } catch (e) {}
-           }
-
-           document.addEventListener('DOMContentLoaded', () => {
-               loadDownloadStats();
-               loadSavedPhoto();
-               loadSettings();
-               
-               const editorArea = document.getElementById('editor-scroll-area');
-               if (editorArea) {
-                   editorArea.innerHTML = getContentHTML();
-                   loadDataToForm();
-                   setupSkillInput();
-                   setupCertificationInput();
-                   setupInputListeners();
-                   updatePhotoPreview();
-               }
-               
-               // Aplicar cor de destaque salva
-               setAccentColor(cvData.accentColor);
-               
-               setTheme(cvData.theme);
-               applyZoom();
-           });
-       })();
-   </script>
+    <!-- Botão Voltar ao Topo -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+            class="fixed bottom-6 right-6 bg-gray-800 text-white w-12 h-12 rounded-full shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </body>
 </html>
